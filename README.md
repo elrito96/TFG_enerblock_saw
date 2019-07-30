@@ -46,9 +46,7 @@ First you will need to pull the git repository into your local repository.
 	│   │   &nbsp;&nbsp;&nbsp; └── <a href=".//processor/enerblock_processor/__pycache__/main.cpython-35.pyc">main.cpython-35.pyc</a><br>
 	│   ├── <a href=".//processor/enerblock-tp">enerblock-tp</a><br>
 	│   └── <a href=".//processor/start_tp.sh">start_tp.sh</a><br>
-	├── <a href=".//README.md">README.md</a><br>
-	├── <a href=".//README%20-%20Opci%C3%B3n%201">README - Opción 1</a><br>
-	└──  <a href=".//README%20-%20Opci%C3%B3n%202">README - Opción 2</a><br>
+	└── <a href=".//README.md">README.md</a><br>
 
 
 8 directories, 26 files
