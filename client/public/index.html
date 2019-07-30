@@ -1,0 +1,149 @@
+<!doctype html>
+<html><head>
+		<meta charset="UTF-8">
+		<title>My Web Page</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<style>
+			table, th, td {
+			  border: 1px solid black;
+			  border-collapse: collapse;
+			}
+			th, td {
+			  padding: 5px;
+			  text-align: left;
+			}
+			#divSale{
+				width : 50%;
+        background: Lightgrey;
+				margin: 0 auto;
+				padding: 10px;
+			}
+			#genSaleId{
+				float:right;
+			}
+			h3{
+				text-align: center;
+		  }
+			#clock{
+				font-size: 2.5em;
+				text-align: center;
+			}
+			#datehour{
+				font-size: 30px;
+    		font-weight: bold;
+			}
+			#dateday{
+				font-size: 20px;
+    		font-weight: bold;
+			}
+			#saleContainer{
+				width: 100vw;
+		    display: flex;
+		    flex-flow: row;
+		    justify-content: center;
+		    align-items: center;
+			}
+			#divSale{
+				border-radius: 10px;
+		    border: 2px solid darkgrey;
+		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+			}
+			#saleTitle{
+				text-align: center;
+    		font-size: -webkit-xxx-large;
+    		border-bottom: 3px dashed;
+			}
+			#divKeys{
+				width: 100%;
+		    display: flex;
+		    flex-flow: row;
+		    justify-content: center;
+		    align-items: center;
+			}
+			#keys{
+				display : none;
+			}
+		</style>
+		<link rel="shortcut icon" type="image/png" href="./favicon.png">
+
+	</head>
+	<!-- <body background="https://media.tenor.com/images/b5d0524fbcfad4cbc2016564445a8a95/tenor.gif")> -->
+	<body>
+		<h3> Sawtooth web client working with enerblock TP</h3>
+		<div id="clock" align="center">
+			<div id="datehour">11:36:02 am</div>
+		  <div id="dateday">July 30th 2019</div>
+		</div>
+
+		<div id="saleContainer" >
+			<div class="form-group" id="divSale">
+				<h2 id="saleTitle" >Create sell</h2>
+				<label> Insert amount of kWh to sell </label>
+				<input id="amount" class="form-control" type="text" placeholder="Enter sell amount ...">
+				<label> Insert price in Euro per kWh </label>
+				<input id="price" class="form-control" type="text" placeholder="Enter price...">
+				<label> The sale's date of creation </label>
+				<input id="writedate" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
+				<label> The sale's validity date  </label>
+				<input id="validwritedate" class="form-control" type="text" placeholder="Enter valid wd...">
+				<label> The seller's public key </label>
+				<input id="sellerpubkey" class="form-control" type="text" placeholder="Enter pubkey..." value="03a4c7aa44de643b71b7a929c06d6e64a5409e2e96552e84ecb058d44e4950cc5d">
+				<label> The seller's private key </label>
+				<input id="sellerprivatekey" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
+				<label> The sale ID (UUID v4 format)</label>
+				<input id="saleID" class="form-control" type="text" placeholder="Press button to gen sale ID">
+				<br>
+				<span>
+					<input id="createSubmit" type="button" value="Create" class="btn btn-primary">
+					<button id="genSaleId" class="btn btn-default">Click to gen sale ID</button>
+				</span>
+		</div>
+</div>
+
+
+		<br>
+
+		<br>
+		<br>
+		<!-- <div>
+			<IMG SRC="https://media.tenor.com/images/b5d0524fbcfad4cbc2016564445a8a95/tenor.gif" align="bottom-right" width="40" height="40">
+		</div> -->
+
+    <div id="divKeys">
+    <button id="show" class="btn btn-default">Click to show keys</button>
+	<button id="hide" class="btn btn-default">Click to hide keys</button>
+    </div>
+
+		<div id="keys">
+			<table>
+				<tbody><tr>
+					<th>Name</th>
+					<th colspan="2">Key</th>
+				</tr>
+				<tr>
+					<td rowspan="2">Alice</td>
+					<td>public</td>
+					<td>03a4c7aa44de643b71b7a929c06d6e64a5409e2e96552e84ecb058d44e4950cc5d</td>
+					</tr><tr>
+					<td>private</td>
+					<td>cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338</td>
+					</tr>
+
+				<tr>
+					<td rowspan="2">Bob</td>
+					<td>public</td>
+					<td>039bc48a60b714e6d0836d06ef13f39e1ce7a419fbff15e37bad911f800e1ceb3c</td>
+					</tr><tr>
+					<td>private</td>
+					<td>58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef</td>
+					</tr>
+
+			</tbody></table>
+		</div>
+
+
+		<div class="mypanel"></div>
+		  <script src="./dist/bundle.js"></script>
+
+
+</body></html>
