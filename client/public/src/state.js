@@ -24,37 +24,9 @@ const FAMILY = 'enerblock'
 const VERSION = '1.0'
 const PREFIX = '5a45ce'
 
-// Fetch key-pairs from localStorage
-const getKeys = () => {
-  const storedKeys = localStorage.getItem(KEY_NAME)
-  if (!storedKeys) return []
 
-  return storedKeys.split(';').map((pair) => {
-    const separated = pair.split(',')
-    return {
-      public: separated[0],
-      private: separated[1]
-    }
-  })
-}
 
-// Create new key-pair
-const makeKeyPair = () => {
-  const context = createContext('secp256k1')
-  const privateKey = context.newRandomPrivateKey()
-  return {
-    public: context.getPublicKey(privateKey).asHex(),
-    private: privateKey.asHex()
-  }
-}
-
-// Save key-pairs to localStorage
-const saveKeys = keys => {
-  const paired = keys.map(pair => [pair.public, pair.private].join(','))
-  localStorage.setItem(KEY_NAME, paired.join(';'))
-}
-
-// Fetch current Sawtooth Tuna Chain state from validator
+// Fetch current Blockchain state from validator
 const getState = cb => {
   $.get(`${API_URL}/state?address=${PREFIX}`, ({ data }) => {
     cb(data.reduce((processed, datum) => {
@@ -137,9 +109,6 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
 }
 
 module.exports = {
-  getKeys,
-  makeKeyPair,
-  saveKeys,
   getState,
   submitUpdate
 }
