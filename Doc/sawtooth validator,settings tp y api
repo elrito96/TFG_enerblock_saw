@@ -1,0 +1,3 @@
+sudo -u sawtooth sawtooth-validator -vv
+sudo -u sawtooth sawtooth-rest-api -vvv
+sudo -u sawtooth settings-tp -vv

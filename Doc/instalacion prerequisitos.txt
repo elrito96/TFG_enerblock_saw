@@ -1,0 +1,34 @@
+sudo apt install curl
+
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo groupadd docker 
+sudo usermod -aG docker $USER 
+
+sudo apt update
+sudo apt install docker-compose
+
+sudo bash -c "cat >/etc/apt/sources.list.d/nodesource.list" <<EOL
+deb https://deb.nodesource.com/node_6.x xenial main
+deb-src https://deb.nodesource.com/node_6.x xenial main
+EOL
+curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
+sudo apt update
+sudo apt install nodejs 
+sudo apt install npm
+
+sudo apt update
+	-sudo curl -fsSL https://storage.googleapis.com/golang/go1.12.6.linux-amd64.tar.gz -o golanguage.tar.gz 
+ó
+	-sudo curl -O https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz  
+sudo tar -xvf golanguage.tar.gz 
+sudo mv go /usr/local 
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.profile
+source ~/.profile
+sudo curl -O https://storage.googleapis.com/golang/go1.12.6.linux-amd64.tar.gz 
+
+para docker portainer
+docker volume create portainer_data
+docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+
+
