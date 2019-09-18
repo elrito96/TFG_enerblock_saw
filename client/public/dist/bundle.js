@@ -32963,6 +32963,14 @@ $(document).ready(function(){
   $("#genSaleId").click(function(){
 		$("#saleID").val(uuidv4());
 	});
+  $("#closeButton").click(function(){
+		$("#resultContainer").css("visibility", "hidden");
+	});
+  // This allows to close the result container by clicking anywhere in the message, might delete later
+  $("#resultContainer").click(function(){
+		$("#resultContainer").css("visibility", "hidden");
+	});
+
 });
 
 
@@ -32978,6 +32986,7 @@ $('#createSubmit').on('click', function () {
   const sellerPubKey = $('#sellerpubkey').val()
   const sellerprivatekey = $('#sellerprivatekey').val()
   console.log("SALE NAME ID ==================== "+saleName)
+  console.log("abundle main");
   if (amount && price && writedate && validwritedate && sellerpubkey && sellerprivatekey)
     app.update('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, sellerprivatekey)
 })
@@ -33115,10 +33124,36 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
     headers: {'Content-Type': 'application/octet-stream'},
     processData: false,
     success: function( resp ) {
+      console.log(resp);
       var id = resp.link.split('?')[1]
-      $.get(`${API_URL}/batch_statuses?${id}&wait`, ({ data }) => cb(true))
+      var response = '';
+      $.get(`${API_URL}/batch_statuses?${id}&wait`, function(data){
+        var msg = '';
+        $('#resultContainer').css("visibility", "visible")
+        var transactionStatus = data.data[0];
+        console.log(transactionStatus)
+        console.log(transactionStatus.status)
+        if(transactionStatus.status == "COMMITTED"){
+          msg = 'Sale posted successfully';
+          $('#divResult').css("background-color","rgb(92,184,92)");
+        }else if (transactionStatus.status == "INVALID"){
+          msg = transactionStatus.invalid_transactions[0].message;
+          $('#divResult').css("background-color","rgba(238, 238, 0, 0.85)");
+        }
+        $('#saleMsg').html(msg);
+      });
+
     },
-    error: () => cb(false)
+    error: function (errorResponse) { /*() => cb(false)*/
+      $('#resultContainer').css("visibility", "visible")
+      $('#divResult').css("background-color","rgba(243, 101, 101)");
+      console.log(errorResponse)
+      var msg = 'Error posting the sale, probably connection error';
+      console.log(msg);
+      $('#saleMsg').html(msg);
+      $('#saleMsg').css("color","white");
+      cb(false);
+    }
   })
 }
 

@@ -28,7 +28,7 @@ def parse_args(args):
 
     parser.add_argument(
         '-C', '--connect',
-        default='tcp://localhost:4004',
+        default='tcp://validator:4004',
         help='Endpoint for the validator connection')
 
     parser.add_argument(

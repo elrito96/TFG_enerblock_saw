@@ -29,7 +29,7 @@ RUN \
 
 EXPOSE 4004/tcp
 
-WORKDIR /project/enerblock_saw_tuna/processor
-ENV PATH "$PATH:/project/enerblock_saw_tuna/processor"
+WORKDIR /processor
+ENV PATH "$PATH:/processor"
 
-CMD bash -c './enerblock-tp'
+CMD python3 -B '/processor/enerblock-tp'

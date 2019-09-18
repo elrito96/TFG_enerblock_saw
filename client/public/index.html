@@ -43,6 +43,32 @@
 		    justify-content: center;
 		    align-items: center;
 			}
+			#resultContainer{
+				visibility: hidden;
+				margin-top: 20px;
+				width: 100vw;
+		    display: flex;
+		    flex-flow: row;
+		    justify-content: center;
+		    align-items: center;
+			}
+			#divResult{
+				padding-right: 15px;
+				padding-left: 15px;
+				border-radius: 10px;
+		    border: 2px solid darkgrey;
+		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+			}
+			#closeButton{
+				float: right;
+				margin-top: 10px;
+				background-color:Transparent;
+				border: 0;
+			}
+			#closeIcon{
+				font-size: 40px;
+				font-weight: 1000;
+			}
 			#divSale{
 				border-radius: 10px;
 		    border: 2px solid darkgrey;
@@ -97,11 +123,18 @@
 					<input id="createSubmit" type="button" value="Create" class="btn btn-primary">
 					<button id="genSaleId" class="btn btn-default">Click to gen sale ID</button>
 				</span>
+			</div>
 		</div>
-</div>
+		<div id=resultContainer>
 
+				<div id=divResult>
+					<button id="closeButton">
+						<i id="closeIcon">&times;</i>
+					</button>
+					<h3 id="saleMsg"></h3>
 
-		<br>
+			</div>
+		</div>
 
 		<br>
 		<br>

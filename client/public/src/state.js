@@ -24,9 +24,37 @@ const FAMILY = 'enerblock'
 const VERSION = '1.0'
 const PREFIX = '5a45ce'
 
+// Fetch key-pairs from localStorage
+const getKeys = () => {
+  const storedKeys = localStorage.getItem(KEY_NAME)
+  if (!storedKeys) return []
 
+  return storedKeys.split(';').map((pair) => {
+    const separated = pair.split(',')
+    return {
+      public: separated[0],
+      private: separated[1]
+    }
+  })
+}
 
-// Fetch current Blockchain state from validator
+// Create new key-pair
+const makeKeyPair = () => {
+  const context = createContext('secp256k1')
+  const privateKey = context.newRandomPrivateKey()
+  return {
+    public: context.getPublicKey(privateKey).asHex(),
+    private: privateKey.asHex()
+  }
+}
+
+// Save key-pairs to localStorage
+const saveKeys = keys => {
+  const paired = keys.map(pair => [pair.public, pair.private].join(','))
+  localStorage.setItem(KEY_NAME, paired.join(';'))
+}
+
+// Fetch current Sawtooth Tuna Chain state from validator
 const getState = cb => {
   $.get(`${API_URL}/state?address=${PREFIX}`, ({ data }) => {
     cb(data.reduce((processed, datum) => {
@@ -101,14 +129,43 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
     headers: {'Content-Type': 'application/octet-stream'},
     processData: false,
     success: function( resp ) {
+      console.log(resp);
       var id = resp.link.split('?')[1]
-      $.get(`${API_URL}/batch_statuses?${id}&wait`, ({ data }) => cb(true))
+      var response = '';
+      $.get(`${API_URL}/batch_statuses?${id}&wait`, function(data){
+        var msg = '';
+        $('#resultContainer').css("visibility", "visible")
+        var transactionStatus = data.data[0];
+        console.log(transactionStatus)
+        console.log(transactionStatus.status)
+        if(transactionStatus.status == "COMMITTED"){
+          msg = 'Sale posted successfully';
+          $('#divResult').css("background-color","rgb(92,184,92)");
+        }else if (transactionStatus.status == "INVALID"){
+          msg = transactionStatus.invalid_transactions[0].message;
+          $('#divResult').css("background-color","rgba(238, 238, 0, 0.85)");
+        }
+        $('#saleMsg').html(msg);
+      });
+
     },
-    error: () => cb(false)
+    error: function (errorResponse) { /*() => cb(false)*/
+      $('#resultContainer').css("visibility", "visible")
+      $('#divResult').css("background-color","rgba(243, 101, 101)");
+      console.log(errorResponse)
+      var msg = 'Error posting the sale, probably connection error';
+      console.log(msg);
+      $('#saleMsg').html(msg);
+      $('#saleMsg').css("color","white");
+      cb(false);
+    }
   })
 }
 
 module.exports = {
+  getKeys,
+  makeKeyPair,
+  saveKeys,
   getState,
   submitUpdate
 }

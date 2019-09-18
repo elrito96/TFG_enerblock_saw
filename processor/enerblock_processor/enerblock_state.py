@@ -115,8 +115,18 @@ class EnerblockState(object):
     TODO: Only permit delete when no one has bought (and maybe while it's still valid, as we would like keep a history of everything)
     '''
 
-    '''Another option is to delete a sale ALWAYS after someone has bought it, which might make senseself.
-    TODO: Still need to implement the creation of a new sale when the buyer does not buy all of the energyself.
+    '''Another option is to delete a sale ALWAYS after someone has bought it, which might make sense.
+    TODO: Still need to implement the creation of a new sale when the buyer does not buy all of the energy.
+	IMPORTANT FROM THIS TODO ^^^: When you buy from someone you have 2 possibilities:
+	1- Buy all of the sale: You create a buy transaction, create a buy state (with the amount sold and bought being the same and 
+		other fields, and finally you MODIFY the sale state, changing the amount to sell to 0.
+	2- Buy some of the sale: You create a buy transaction, create a buy state (with the amount sold and bought and
+		other fields, and finally you MODIFY the sale state, changing the amount to sell to the difference, so other
+		participants can still buy it (The dates of creaton and validity stay the same, and all the transactions are recorded.
+	Let's say for example, Prosumer A sells 100. Consumer B buys 10, so he creates a transaction of buy, sends to validator,
+	transaction processor, this one makes a buy state, saying he had 100 and you bought 10, MODIFIES current sale state, changing
+	the 100 to 90, end. Consumer C sees the system and 90 are on sale, decides to buy 50, same than with Consumer B, does
+	the same and changes the sale state from 90 to 40 ...
     '''
 
     def delete_sell(self, saleName):

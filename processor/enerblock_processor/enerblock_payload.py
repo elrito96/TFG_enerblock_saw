@@ -51,10 +51,19 @@ class EnerblockPayload(object):
         validWritedate = data.get('validWritedate')
         saleName = data.get('saleName')
 
+        #Validate that the amount to sell is not null, or anything different from a positive int
         if not kwhAmountSell:
             raise InvalidTransaction('Amount to sell is required')
+        if not kwhAmountSell.isdigit() or kwhAmountSell == "0":
+            raise InvalidTransaction('Amount to sell must be a positive integer number')
+
+        #Validate that the amount to sell is not null, or anything different from a positive decimal
         if not pricePerKwh:
             raise InvalidTransaction('Price per kwh is required')
+        if not pricePerKwh.replace('.','',1).isdigit():
+            raise InvalidTransaction('Price per kwh must be a positive number')
+
+
         if not createWritedate:
             raise InvalidTransaction('Date of creation of sale is required')
         if not validWritedate:

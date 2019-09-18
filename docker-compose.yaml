@@ -16,7 +16,16 @@
 version: '2.0'
 
 services:
-  
+
+  enerblock-tp:
+    build: ./processor
+    container_name: enerblock-python-tp
+    image: enerblock-tp-image
+    volumes:
+      - ./processor/:/processor
+    depends_on:
+      - validator
+
   my-web-page:
     build: ./client
     image: enerblock-client
@@ -40,7 +49,7 @@ services:
     depends_on:
       - validator
     entrypoint: |
-      sawtooth-rest-api -vvv
+      sawtooth-rest-api -v
         --connect tcp://validator:4004
         --bind sawtooth-rest-api:8008
 
@@ -49,7 +58,7 @@ services:
     image: hyperledger/sawtooth-settings-tp:1.0
     depends_on:
       - validator
-    command: settings-tp -vv --connect tcp://validator:4004
+    command: settings-tp -v --connect tcp://validator:4004
 
   validator:
     container_name: sawtooth-validator
@@ -66,7 +75,7 @@ services:
         sawset genesis -k /root/.sawtooth/keys/my_key.priv &&
         sawadm genesis config-genesis.batch
         fi;
-        sawtooth-validator -vvv \
+        sawtooth-validator -v \
           --endpoint tcp://validator:8800 \
           --bind component:tcp://eth0:4004 \
           --bind network:tcp://eth0:8800

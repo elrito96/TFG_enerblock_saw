@@ -47,6 +47,14 @@ $(document).ready(function(){
   $("#genSaleId").click(function(){
 		$("#saleID").val(uuidv4());
 	});
+  $("#closeButton").click(function(){
+		$("#resultContainer").css("visibility", "hidden");
+	});
+  // This allows to close the result container by clicking anywhere in the message, might delete later
+  $("#resultContainer").click(function(){
+		$("#resultContainer").css("visibility", "hidden");
+	});
+
 });
 
 
@@ -62,6 +70,7 @@ $('#createSubmit').on('click', function () {
   const sellerPubKey = $('#sellerpubkey').val()
   const sellerprivatekey = $('#sellerprivatekey').val()
   console.log("SALE NAME ID ==================== "+saleName)
+  console.log("abundle main");
   if (amount && price && writedate && validwritedate && sellerpubkey && sellerprivatekey)
     app.update('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, sellerprivatekey)
 })
