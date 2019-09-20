@@ -25,6 +25,7 @@
 				text-align: center;
 		  }
 			#clock{
+				padding-top: 110px;
 				font-size: 2.5em;
 				text-align: center;
 			}
@@ -89,52 +90,139 @@
 			#keys{
 				display : none;
 			}
+			#bars{
+				position:absolute;
+
+			}
+			/*-- Topbar section */
+			#topbar {
+			  overflow: hidden;
+			  background-color: #333;
+			  top: 0;
+			  width: 100vw;
+				text-align: center;
+			}
+			#topbar_h2{
+				color:white;
+				font-weight: bold;
+			}
+
+			/*-- Sidebar section */
+			#sidebar {
+				width: 100%;
+				display: flex;
+			  list-style-type: none;
+			  margin: 0;
+			  padding: 0;
+			  background-color: #D4D3D3;
+				cursor: pointer;
+			}
+
+			.sidebar_li a {
+			  display: block;
+			  color: #000;
+			  padding: 8px 16px;
+			  text-decoration: none;
+			}
+
+			.sidebar_li a.active {
+			  background-color: #4CAF50;
+			  color: white;
+			}
+
+			.sidebar_li a:hover:not(.active) {
+			  background-color: #555;
+			  color: white;
+			}
+			#sidebarDiv {
+				height: 100%;
+			}
+			#ViewSalesPage {
+				display: block;
+			}
+			#CreateSalePage {
+				margin-top:50px;
+				display: none;
+			}
+			#CreateBuyPage {
+				display: none;
+			}
+
 		</style>
 		<link rel="shortcut icon" type="image/png" href="./favicon.png">
 
 	</head>
 	<!-- <body background="https://media.tenor.com/images/b5d0524fbcfad4cbc2016564445a8a95/tenor.gif")> -->
 	<body>
-		<h3> Sawtooth web client working with enerblock TP</h3>
+		<div id="bars">
+			<div id="topbar">
+				<h2 id = "topbar_h2"> Sawtooth - Energy exchange application </h2>
+			</div>
+
+			<div class="sidebarDiv">
+				<ul id="sidebar">
+					<li class="sidebar_li" id="ViewSalesSide"><a class="active" id="ViewSalesA">View sales</a></li>
+			  	<li class="sidebar_li" id="CreateSaleSide"><a id="CreateSaleA" class="">Create sale</a></li>
+			  	<li class="sidebar_li" id="CreateBuySide"><a id="CreateBuyA" class="">Create buy petition </a></li>
+				</ul>
+			</div>
+
+		</div>
 		<div id="clock" align="center">
 			<div id="datehour">11:36:02 am</div>
 		  <div id="dateday">July 30th 2019</div>
 		</div>
+		<br>
 
-		<div id="saleContainer" >
-			<div class="form-group" id="divSale">
-				<h2 id="saleTitle" >Create sell</h2>
-				<label> Insert amount of kWh to sell </label>
-				<input id="amount" class="form-control" type="text" placeholder="Enter sell amount ...">
-				<label> Insert price in Euro per kWh </label>
-				<input id="price" class="form-control" type="text" placeholder="Enter price...">
-				<label> The sale's date of creation </label>
-				<input id="writedate" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
-				<label> The sale's validity date  </label>
-				<input id="validwritedate" class="form-control" type="text" placeholder="Enter valid wd...">
-				<label> The seller's public key </label>
-				<input id="sellerpubkey" class="form-control" type="text" placeholder="Enter pubkey..." value="03a4c7aa44de643b71b7a929c06d6e64a5409e2e96552e84ecb058d44e4950cc5d">
-				<label> The seller's private key </label>
-				<input id="sellerprivatekey" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
-				<label> The sale ID (UUID v4 format)</label>
-				<input id="saleID" class="form-control" type="text" placeholder="Press button to gen sale ID">
-				<br>
-				<span>
-					<input id="createSubmit" type="button" value="Create" class="btn btn-primary">
-					<button id="genSaleId" class="btn btn-default">Click to gen sale ID</button>
-				</span>
+		<!-- Section of the view sales -->
+				<div id = "ViewSalesPage">
+						<h1 style = "text-align:center"> View Sales</h1>
+
+				</div>
+
+
+
+		<!-- Section of the create sale -->
+		<div id = "CreateSalePage">
+			<div id="saleContainer" >
+				<div class="form-group" id="divSale">
+					<h2 id="saleTitle" >Create sell</h2>
+					<label> Insert amount of kWh to sell </label>
+					<input id="amount" class="form-control" type="text" placeholder="Enter sell amount ...">
+					<label> Insert price in Euro per kWh </label>
+					<input id="price" class="form-control" type="text" placeholder="Enter price...">
+					<label> The sale's date of creation </label>
+					<input id="writedate" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
+					<label> The sale's validity date  </label>
+					<input id="validwritedate" class="form-control" type="text" placeholder="Enter valid wd...">
+					<label> The seller's public key </label>
+					<input id="sellerpubkey" class="form-control" type="text" placeholder="Enter pubkey..." value="03a4c7aa44de643b71b7a929c06d6e64a5409e2e96552e84ecb058d44e4950cc5d">
+					<label> The seller's private key </label>
+					<input id="sellerprivatekey" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
+					<label> The sale ID (UUID v4 format)</label>
+					<input id="saleID" class="form-control" type="text" placeholder="Press button to gen sale ID">
+					<br>
+					<span>
+						<input id="createSubmit" type="button" value="Create" class="btn btn-primary">
+						<button id="genSaleId" class="btn btn-default">Click to gen sale ID</button>
+					</span>
+				</div>
+			</div>
+			<div id=resultContainer>
+					<div id=divResult>
+						<button id="closeButton">
+							<i id="closeIcon">&times;</i>
+						</button>
+						<h3 id="saleMsg"></h3>
+					</div>
 			</div>
 		</div>
-		<div id=resultContainer>
 
-				<div id=divResult>
-					<button id="closeButton">
-						<i id="closeIcon">&times;</i>
-					</button>
-					<h3 id="saleMsg"></h3>
-
-			</div>
+		<!-- Section of the create buy -->
+		<div id = "CreateBuyPage">
+				<h1 style = "text-align:center"> Create Buy petition</h1>
 		</div>
+
 
 		<br>
 		<br>

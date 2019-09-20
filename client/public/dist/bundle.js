@@ -32924,7 +32924,17 @@ const {
 const uuidv4 = require('uuid/v4');
 
 // Application Object
-const app = { user: null, keys: [], assets: [], transfers: [] }
+const app = { user: null, keys: [], salePetitions: [], buys: [] , buyPetitions: [], sales: []}
+
+app.refresh = function (){
+  getState(
+    ({ salePetitions, buys}) => {
+      this.salePetitions = salePetitions;
+      this.buys = buys;
+      console.log(this.salePetitions)
+    }
+  )
+}
 
 app.update = function (operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, sellerprivatekey) {
 	  console.log("main.js/update");
@@ -32953,26 +32963,68 @@ $.getScript("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.
   setInterval(update, 1000);
 });
 
+/* Jquery  that will deal with */
 $(document).ready(function(){
+  // Public and private keys table
 	$("#hide").click(function(){
 		$("#keys").hide();
 	});
 	$("#show").click(function(){
 		$("#keys").show();
 	});
+
+  //Sale id generator
   $("#genSaleId").click(function(){
 		$("#saleID").val(uuidv4());
 	});
+
+  // X icon to close the result container
   $("#closeButton").click(function(){
 		$("#resultContainer").css("visibility", "hidden");
 	});
-  // This allows to close the result container by clicking anywhere in the message, might delete later
+  // Close the result container by clicking anywhere in the message, might delete later
   $("#resultContainer").click(function(){
 		$("#resultContainer").css("visibility", "hidden");
 	});
 
+  // Actions to show and hide elements when View Sales is clicked in the side bar
+  $("#ViewSalesSide").click(function(){
+		$("#CreateSalePage").css("display", "none");
+    $("#CreateBuyPage").css("display", "none");
+    $("#ViewSalesPage").css("display", "block");
+
+    $("#ViewSalesA").addClass("active");
+    $("#CreateSaleA").removeClass("active");
+    $("#CreateBuyA").removeClass("active");
+
+    app.refresh();
+	});
+
+  // Actions to show and hide elements when Create Sale is clicked in the side bar
+  $("#CreateSaleSide").click(function(){
+		$("#ViewSalesPage").css("display", "none");
+    $("#CreateBuyPage").css("display", "none");
+    $("#CreateSalePage").css("display", "block");
+
+    $("#CreateSaleA").addClass("active");
+    $("#ViewSalesA").removeClass("active");
+    $("#CreateBuyA").removeClass("active");
+	});
+
+  // Actions to show and hide elements when Create Buy is clicked in the side bar
+  $("#CreateBuySide").click(function(){
+		$("#ViewSalesPage").css("display", "none");
+    $("#CreateSalePage").css("display", "none");
+    $("#CreateBuyPage").css("display", "block");
+
+    $("#CreateBuyA").addClass("active");
+    $("#ViewSalesA").removeClass("active");
+    $("#CreateSaleA").removeClass("active");
+	});
+
 });
 
+// Load Sales
 
 
 // Create Asset
@@ -33049,17 +33101,17 @@ const saveKeys = keys => {
   localStorage.setItem(KEY_NAME, paired.join(';'))
 }
 
-// Fetch current Sawtooth Tuna Chain state from validator
+// Fetch current Enerblock state from validator
 const getState = cb => {
   $.get(`${API_URL}/state?address=${PREFIX}`, ({ data }) => {
     cb(data.reduce((processed, datum) => {
       if (datum.data !== '') {
         const parsed = JSON.parse(atob(datum.data))
-        if (datum.address[7] === '0') processed.assets.push(parsed)
-        if (datum.address[7] === '1') processed.transfers.push(parsed)
+        if (datum.address[7] === '0') processed.salePetitions.push(parsed)
+        if (datum.address[7] === '1') processed.buys.push(parsed)
       }
       return processed
-    }, {assets: [], transfers: []}))
+    }, {salePetitions: [], buys: []}))
   })
 }
 

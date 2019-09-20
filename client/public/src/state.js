@@ -54,17 +54,17 @@ const saveKeys = keys => {
   localStorage.setItem(KEY_NAME, paired.join(';'))
 }
 
-// Fetch current Sawtooth Tuna Chain state from validator
+// Fetch current Enerblock state from validator
 const getState = cb => {
   $.get(`${API_URL}/state?address=${PREFIX}`, ({ data }) => {
     cb(data.reduce((processed, datum) => {
       if (datum.data !== '') {
         const parsed = JSON.parse(atob(datum.data))
-        if (datum.address[7] === '0') processed.assets.push(parsed)
-        if (datum.address[7] === '1') processed.transfers.push(parsed)
+        if (datum.address[7] === '0') processed.salePetitions.push(parsed)
+        if (datum.address[7] === '1') processed.buys.push(parsed)
       }
       return processed
-    }, {assets: [], transfers: []}))
+    }, {salePetitions: [], buys: []}))
   })
 }
 
