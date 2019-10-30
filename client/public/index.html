@@ -2,7 +2,8 @@
 <html><head>
 		<meta charset="UTF-8">
 		<title>My Web Page</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	  <!-- Bootstrap css -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<style>
 			table, th, td {
 			  border: 1px solid black;
@@ -13,8 +14,8 @@
 			  text-align: left;
 			}
 			#divSale{
-				width : 50%;
-        background: Lightgrey;
+				width : 70%;
+        background: Gainsboro;
 				margin: 0 auto;
 				padding: 10px;
 			}
@@ -91,7 +92,7 @@
 				display : none;
 			}
 			#bars{
-				position:absolute;
+				position:fixed;
 
 			}
 			/*-- Topbar section */
@@ -147,9 +148,59 @@
 			#CreateBuyPage {
 				display: none;
 			}
+			#ViewSalesTableDiv{
+				display: flex;
+				flex-flow: row;
+				justify-content: center;
+				align-items: center;
+			}
+			#ViewSalesTable{
+				width: 75vw;
+				border: 2px solid darkgrey;
+		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+			}
+			#validWritedateDiv{
+				display:flex;
+				flex-flow:row;
+				align-items:center;
+			}
+			#validwritedate{
+				margin-left: 3px;
+				margin-right: 3px;
+				margin-top:24px;
+			}
+			#validwritedateDate{
+				margin: 3px;
+				display:block;
+				flex-flow: column;
+			}#validwritedateHour{
+				/*width:100px;*/
+				margin: 3px;
+			}
+			#validwritedateMin{
+			  /*width:100px;*/
+				margin: 3px;
+			}
+			#validwritedateSec{
+				/*width:100px;*/
+				margin: 3px;
+			}
+			.DateLabels{
+				color: magenta;
+			}
+			th{
+				text-align: center;
+			}
+			tbody{
+				background-color: Gainsboro;
+			}
+			body{
+				background-image: radial-gradient(circle, red, yellow, green);
+			}
 
 		</style>
 		<link rel="shortcut icon" type="image/png" href="./favicon.png">
+
 
 	</head>
 	<!-- <body background="https://media.tenor.com/images/b5d0524fbcfad4cbc2016564445a8a95/tenor.gif")> -->
@@ -172,11 +223,27 @@
 			<div id="datehour">11:36:02 am</div>
 		  <div id="dateday">July 30th 2019</div>
 		</div>
-		<br>
 
 		<!-- Section of the view sales -->
 				<div id = "ViewSalesPage">
 						<h1 style = "text-align:center"> View Sales</h1>
+						<div id ="ViewSalesTableDiv">
+							<table id="ViewSalesTable" class="table">
+								<thead class="thead-dark">
+									<tr>
+										<th>Energy to sell</th>
+										<th>Price per KhW</th>
+										<th>Sale creation date</th>
+										<th>Sale validity date</th>
+										<th>Sale ID</th>
+										<th>Seller public key</th>
+									</tr>
+								</thead>
+								<tbody id ="salesData">
+
+								</tbody>
+							</table>
+						</div>
 
 				</div>
 
@@ -187,14 +254,32 @@
 			<div id="saleContainer" >
 				<div class="form-group" id="divSale">
 					<h2 id="saleTitle" >Create sell</h2>
+
+
 					<label> Insert amount of kWh to sell </label>
 					<input id="amount" class="form-control" type="text" placeholder="Enter sell amount ...">
 					<label> Insert price in Euro per kWh </label>
 					<input id="price" class="form-control" type="text" placeholder="Enter price...">
-					<label> The sale's date of creation </label>
+					<label> The sale's creation date (DD/MM/YYYY HH:MM:SS format) </label>
 					<input id="writedate" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
-					<label> The sale's validity date  </label>
-					<input id="validwritedate" class="form-control" type="text" placeholder="Enter valid wd...">
+					<label> The sale's validity date (DD/MM/YYYY HH:MM:SS format) </label>
+					<div id="validWritedateDiv" class = "pull-left">
+						<div>
+							<input id="validwritedate" class="form-control" type="text" readonly="">
+						</div>
+						<div>
+							<span class="DateLabels">Date</span>
+							<input id="validWritedateDate" type="date" class="form-control" required>
+						</div>
+						<div>
+							<span class="DateLabels">Hour</span>
+							<select id="validwritedateHour" class="form-control"></select>
+						</div>
+						<div>
+							<span class="DateLabels">Minute</span>
+							<select id="validwritedateMin" class="form-control"></select>
+						</div>
+					</div>
 					<label> The seller's public key </label>
 					<input id="sellerpubkey" class="form-control" type="text" placeholder="Enter pubkey..." value="03a4c7aa44de643b71b7a929c06d6e64a5409e2e96552e84ecb058d44e4950cc5d">
 					<label> The seller's private key </label>
@@ -258,13 +343,10 @@
 					<td>private</td>
 					<td>58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef</td>
 					</tr>
-
-			</tbody></table>
+       	</tbody>
+			</table>
 		</div>
-
-
 		<div class="mypanel"></div>
-		  <script src="./dist/bundle.js"></script>
-
-
-</body></html>
+		<script src="./dist/bundle.js"></script>
+	</body>
+</html>

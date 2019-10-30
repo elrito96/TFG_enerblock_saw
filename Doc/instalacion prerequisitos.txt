@@ -28,7 +28,6 @@ source ~/.profile
 sudo curl -O https://storage.googleapis.com/golang/go1.12.6.linux-amd64.tar.gz 
 
 para docker portainer
-docker volume create portainer_data
-docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+docker run -d -p 9000:9000 --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker/volumes/teide-portainer:/data --name portainer portainer/portainer:latest
 
 

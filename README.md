@@ -93,8 +93,3 @@ Having these 5 elements up and running, you just have to open your browser and w
 - If at any moment you wish to reset all the content in the blockchain, you only need to execute the <b>'docker-compose down'</b> command in the same directory as the .yaml file. This will delete the network and the containers.
 
 - Python does not generate pycache folder due to permission problems.
-
-- Currently version 1.1, to change to version 1.0:
--- Remove enerblock-tp from docker-compose file.
--- Change in main.py, add_argument validator to localhost
--- Execute the enerblock-tp with python 3
