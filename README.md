@@ -72,7 +72,7 @@ ProxyPassReverse /api http://localhost:8008\n\`
 
 Changing localhost for the ip of your pc in your local network.
 
-To mount these containers use the following command in the same directory where is the .yalm file:
+After this, you are good to mount the containers using the following command in the same directory where is the .yalm file:
 
 `docker-compose up`
 
