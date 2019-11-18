@@ -14,6 +14,7 @@
 # -----------------------------------------------------------------------------
 
 import json
+from datetime import datetime
 '''import hashlib
 import random'''
 
@@ -63,11 +64,25 @@ class EnerblockPayload(object):
         if not pricePerKwh.replace('.','',1).isdigit():
             raise InvalidTransaction('Price per kwh must be a positive number')
 
-
+        #Validate creation date not null
         if not createWritedate:
             raise InvalidTransaction('Date of creation of sale is required')
+        #Validate creation date format
+        print(" Creation dat is === ",createWritedate)
+        try:
+            datetime.strptime(createWritedate, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            raise InvalidTransaction("Incorrect data format, creation Date should be YYYY-MM-DD hh:mm:ss")
+
+        #Validate validity date not null
         if not validWritedate:
             raise InvalidTransaction('Date limit of sale is required')
+        #Validate valid date format
+        try:
+            datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            raise InvalidTransaction("Incorrect data format, validity Date should be YYYY-MM-DD hh:mm:ss")
+
         if not saleName:
             raise InvalidTransaction('Sale id (saleName) is required')
 

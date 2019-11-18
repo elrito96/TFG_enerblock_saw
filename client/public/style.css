@@ -1,0 +1,193 @@
+
+			table, th, td {
+			  border: 1px solid black;
+			  border-collapse: collapse;
+			}
+			th, td {
+			  padding: 5px;
+			  text-align: left;
+			}
+			#divSale{
+				width : 70%;
+        background: Gainsboro;
+				margin: 0 auto;
+				padding: 10px;
+			}
+			#genSaleId{
+				float:right;
+			}
+			h3{
+				text-align: center;
+		  }
+			#clock{
+				padding-top: 110px;
+				font-size: 2.5em;
+				text-align: center;
+			}
+			#datehour{
+				font-size: 30px;
+    		font-weight: bold;
+			}
+			#dateday{
+				font-size: 20px;
+    		font-weight: bold;
+			}
+			#saleContainer{
+				width: 100vw;
+		    display: flex;
+		    flex-flow: row;
+		    justify-content: center;
+		    align-items: center;
+			}
+			#resultContainer{
+				visibility: hidden;
+				margin-top: 20px;
+				width: 100vw;
+		    display: flex;
+		    flex-flow: row;
+		    justify-content: center;
+		    align-items: center;
+			}
+			#divResult{
+				padding-right: 15px;
+				padding-left: 15px;
+				border-radius: 10px;
+		    border: 2px solid darkgrey;
+		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+			}
+			#closeButton{
+				float: right;
+				margin-top: 10px;
+				background-color:Transparent;
+				border: 0;
+			}
+			#closeIcon{
+				font-size: 40px;
+				font-weight: 1000;
+			}
+			#divSale{
+				border-radius: 10px;
+		    border: 2px solid darkgrey;
+		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+			}
+			#saleTitle{
+				text-align: center;
+    		font-size: -webkit-xxx-large;
+    		border-bottom: 3px dashed;
+			}
+			#divKeys{
+				width: 100%;
+		    display: flex;
+		    flex-flow: row;
+		    justify-content: center;
+		    align-items: center;
+			}
+			#keys{
+				display : none;
+			}
+			#bars{
+				position:fixed;
+
+			}
+			/*-- Topbar section */
+			#topbar {
+			  overflow: hidden;
+			  background-color: #333;
+			  top: 0;
+			  width: 100vw;
+				text-align: center;
+			}
+			#topbar_h2{
+				color:white;
+				font-weight: bold;
+			}
+
+			/*-- Sidebar section */
+			#sidebar {
+				width: 100%;
+				display: flex;
+			  list-style-type: none;
+			  margin: 0;
+			  padding: 0;
+			  background-color: #D4D3D3;
+				cursor: pointer;
+			}
+
+			.sidebar_li a {
+			  display: block;
+			  color: #000;
+			  padding: 8px 16px;
+			  text-decoration: none;
+			}
+
+			.sidebar_li a.active {
+			  background-color: #4CAF50;
+			  color: white;
+			}
+
+			.sidebar_li a:hover:not(.active) {
+			  background-color: #555;
+			  color: white;
+			}
+			#sidebarDiv {
+				height: 100%;
+			}
+			#ViewSalesPage {
+				display: block;
+			}
+			#CreateSalePage {
+				margin-top:50px;
+				display: none;
+			}
+			#CreateBuyPage {
+				display: none;
+			}
+			#ViewSalesTableDiv{
+				display: flex;
+				flex-flow: row;
+				justify-content: center;
+				align-items: center;
+			}
+			#ViewSalesTable{
+				width: 75vw;
+				border: 2px solid darkgrey;
+		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+			}
+			#validWritedateDiv{
+				display:flex;
+				flex-flow:row;
+				align-items:center;
+			}
+			#validwritedate{
+				margin-left: 3px;
+				margin-right: 3px;
+				margin-top:24px;
+			}
+			#validwritedateDate{
+				margin: 3px;
+				display:block;
+				flex-flow: column;
+			}#validwritedateHour{
+				/*width:100px;*/
+				margin: 3px;
+			}
+			#validwritedateMin{
+			  /*width:100px;*/
+				margin: 3px;
+			}
+			#validwritedateSec{
+				/*width:100px;*/
+				margin: 3px;
+			}
+			.DateLabels{
+				color: magenta;
+			}
+			th{
+				text-align: center;
+			}
+			tbody{
+				background-color: Gainsboro;
+			}
+			body{
+				background-image: radial-gradient(circle, red, yellow, green);
+			}

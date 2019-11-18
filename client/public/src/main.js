@@ -2,7 +2,7 @@
 // const bootstrap = require('bootstrap');
 
 const $ = require("jquery");
-//require('bootstrap');
+require('bootstrap');
 // require('materialize-css');
 
 
@@ -18,7 +18,7 @@ const uuidv4 = require('uuid/v4');
 const app = { user: null, keys: [], salePetitions: [], buys: [] , buyPetitions: [], sales: []}
 
 
-
+// Load Sales
 app.refresh = function (){
   getState(
     ({ salePetitions, buys}) => {
@@ -28,7 +28,8 @@ app.refresh = function (){
       $('#salesData').empty();
       /* Construction of sales table*/
       for(i = 0; i<salePetitions.length; i++){
-        var row = $('<tr><td>'+salePetitions[i].kwhAmountSell+'</td>'+
+        var row = $('<tr data-toggle="modal" data-id="'+i+'" data-target="#buyModal">'+
+                        '<td>'+salePetitions[i].kwhAmountSell+'</td>'+
                         '<td>'+salePetitions[i].pricePerKwh+'</td>'+
                         '<td>'+salePetitions[i].createWritedate+'</td>'+
                         '<td>'+salePetitions[i].validWritedate+'</td>'+
@@ -64,7 +65,8 @@ $.getScript("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.
       .innerHTML = moment().format('h:mm:ss a');
       document.getElementById("dateday")
       .innerHTML = moment().format('MMMM Do YYYY');
-      $("#writedate").val( moment().format('YYYY/MM/DD kk:mm:ss'));
+      $("#writedate").val( moment().format('YYYY-MM-DD kk:mm:ss'));
+      $("#writedateBuyModal").val( moment().format('YYYY-MM-DD kk:mm:ss'));
 
   })();
   setInterval(update, 1000);
@@ -78,6 +80,19 @@ function pad(d) {
 $(document).ready(function(){
   // Load sales when page loads
   app.refresh();
+
+  // Update cost of buy when changing amount
+  $('#amountBuyModal').on('keyup',function(){
+
+    var amount = $('#amountBuyModal').val();
+
+    var price = $('#costSelected').text();
+
+    console.log(amount)
+    console.log(price)
+    $('#totalCostBuyModal').val(amount * price)
+  })
+
   // Load options in selected
 
   // Minutes
@@ -121,6 +136,12 @@ $(document).ready(function(){
   $("#genSaleId").click(function(){
 		$("#saleID").val(uuidv4());
 	});
+
+  // Buy id generator
+  $("#genBuyId").click(function(){
+		$("#buyIDBuyModal").val(uuidv4());
+	});
+
 
   // X icon to close the result container
   $("#closeButton").click(function(){
@@ -175,15 +196,14 @@ $(document).ready(function(){
 
 });
 
-
+// Function to update the valid writedate field to send in payload
 function updateValidWritedate(){
   var dayPicked = document.getElementById("validWritedateDate")
   var hourPicked = document.getElementById("validwritedateHour")
   var minPicked = document.getElementById("validwritedateMin")
-  var validWr = dayPicked.value.substring(0,4)+"/"+dayPicked.value.substring(5,7)+"/"+dayPicked.value.substring(8,10)+" "+hourPicked.value+":"+minPicked.value+":00";
+  var validWr = dayPicked.value.substring(0,4)+"-"+dayPicked.value.substring(5,7)+"-"+dayPicked.value.substring(8,10)+" "+hourPicked.value+":"+minPicked.value+":00";
   $('#validwritedate').val(validWr);
 }
-// Load Sales
 
 
 // Create Asset
@@ -201,3 +221,51 @@ $('#createSubmit').on('click', function () {
   if (amount && price && writedate && validwritedate && sellerpubkey && sellerprivatekey)
     app.update('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, sellerprivatekey)
 })
+
+// Buy selected sale of Energy
+$('#buyModal').modal({
+        keyboarnd: true,
+        backdrop: "static",
+        show:false,
+
+    }).on('show.bs.modal', function(){
+        var getIdFromRow = $(event.target).closest('tr').data('id');
+
+        // Ajax calls to populate modal
+        $(this).find('#saleDetails').html(
+          $('<b> Amount to sell: ' + app.salePetitions[getIdFromRow].kwhAmountSell + '<br>'+
+            'Price per KhW : ' + app.salePetitions[getIdFromRow].pricePerKwh + '<br>'+
+            'Creation Date : ' + app.salePetitions[getIdFromRow].createWritedate + '<br>'+
+            'Validity Date : ' + app.salePetitions[getIdFromRow].validWritedate + '<br>'+
+            'Seller Public Key : ' + app.salePetitions[getIdFromRow].sellerPubKey + '<br>'+
+            '</b>' + '<label id="costSelected">'+ app.salePetitions[getIdFromRow].pricePerKwh + '</label>'
+          )
+        )
+
+
+    });
+
+
+//
+// $(function(){
+//           $('#buyModal').modal({
+//               keyboard : true,
+//               backdrop : "static",
+//               show     : false,
+//           }).on('show.bs.modal', function(){
+//               var getIdFromRow = $(this).data('id');
+//               console.log("idFromRow");
+//               console.log(getIdFromRow);
+//
+//               getIdFromRow = 0;
+//               //make your ajax call populate items or what even you need
+//               $(this).find('#saleDetails').html($('<b> Energy Id selected: ' + getIdFromRow  + '</b>'))
+//               $(this).find('#saleDetails').append($('<b> Amount to sell: ' + app.salePetitions[getIdFromRow].kwhAmountSell  + '</b>'))
+//
+//           });
+//
+//           $(".table-striped").find('tr[data-target]').on('click', function(){
+//              //or do your operations here instead of on show of modal to populate values to modal.
+//               $('#buyModal').data('saleid',$(this).data('id'));
+//           });
+//       });
