@@ -65,7 +65,14 @@ The first 2 elements are necessary in any Sawtooth node. The container for the S
 boring. The container for the web client will also run a proxy server that will permit the client to access the API as it would
 be in "localhost". This is necessary due to Sawtooth not supporting CORS. Finally, the last container will run our transaction processor service.
 
-To mount these containers use the following command in the same directory where is the .yalm file:
+Before anything you must go to the client/proxy Dockerfile in /client/Dockerfile and change the ip in lines 6 and 7 so you have something like :
+
+`ProxyPass /api http://localhost:8008\n\
+ProxyPassReverse /api http://localhost:8008\n\`
+
+Changing localhost for the ip of your pc in your local network.
+
+After this, you are good to mount the containers using the following command in the same directory where is the .yalm file:
 
 `docker-compose up`
 
