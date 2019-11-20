@@ -58,8 +58,7 @@ class EnerblockTransactionHandler(TransactionHandler):
                     payload.pricePerKwh)
         print("Handler after getting the payload and state, will create sale")
         if payload.operation == 'putOnSale':
-            _create_sale(operation = payload.operation,
-                         kwhAmountSell = payload.kwhAmountSell,
+            _create_sale(kwhAmountSell = payload.kwhAmountSell,
                          pricePerKwh = payload.pricePerKwh,
                          createWritedate = payload.createWritedate,
                          validWritedate = payload.validWritedate,
@@ -68,8 +67,7 @@ class EnerblockTransactionHandler(TransactionHandler):
                          state=state)
 
         elif payload.operation == 'buy':
-            _create_buy(operation = payload.operation,
-                        kwhAmountSell = payload.kwhAmountSell,
+            _create_buy(kwhAmountSell = payload.kwhAmountSell,
                         pricePerKwh = payload.pricePerKwh,
                         createWritedate = payload.createWritedate,
                         validWritedate = payload.validWritedate,
@@ -86,20 +84,24 @@ class EnerblockTransactionHandler(TransactionHandler):
                 payload.action))
 
 
-def _create_sale(operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, state):
+def _create_sale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, state):
     if state.get_sale(saleName) is not None:
         raise InvalidTransaction(
             'Invalid action: This sell already exists: {}'.format(saleName))
     print("Set sale id: "+saleName)
-    state.set_sale(operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+    state.set_sale('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
 
 
-def _create_buy(operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey, state):
-    if state.get_asset(saleName) is not None:
+def _create_buy(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey, state):
+    if state.get_buy(buyName) is not None:
         raise InvalidTransaction(
             'Invalid action: This buy already exists: {}'.format(buyName))
 
-    state.set_buy(operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey)
+    print("-* Buying, buy id *-: "+buyName)
+    state.set_buy('buy', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey)
+    # Change sale state, updating amount of energy
+    newSaleAmount = int(kwhAmountSell) - int(kwhAmountBuy)
+    state.set_sale('putOnSale', str(newSaleAmount) , pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
 
 
 '''

@@ -60,29 +60,40 @@
 				      <div class="modal-header">
 				        <h3>Energy Buy Modal</h3>
 				      </div>
-				      <div id="saleDetails" class="modal-body"></div>
+							<div class="modal-body">
+					      <div id="saleDetails">
+
+								</div>
+
+								<div class="form-group" id="divBuyModal">
+									<label> How much energy you want to buy (KwH): </label>
+									<input id="amountBuyModal" class="form-control" type="number" placeholder="0">
+									<label> Total cost of energy (Euro): </label>
+									<input id="totalCostBuyModal" class="form-control" type="text" placeholder="0" readonly="">
+									<label> Date of buy: </label>
+									<input id="writedateBuyModal" class="form-control" type="text" readonly="">
+									<label> Insert your private key: </label>
+									<input id="buyerPrivateKeyBuyModal" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
+									<label> The buy ID (UUID v4 format)</label>
+									<input id="buyIDBuyModal" class="form-control" type="text" placeholder="Press button to gen buy ID">
+									<br>
+									<span>
+										<input id="createBuySubmit" type="button" value="Buy" class="btn btn-primary">
+										<button id="genBuyId" class="btn btn-default">Click to gen buy ID</button>
+									</span>
+								</div>
+							</div>
 							<hr>
 
-							<div class="form-group" id="divBuyModal">
-								<label> How much energy you want to buy: </label>
-								<input id="amountBuyModal" class="form-control" type="number" placeholder="0">
-								<label> Total cost of energy to buy: </label>
-								<input id="totalCostBuyModal" class="form-control" type="text" placeholder="0" readonly="">
-								<label> Date of buy: </label>
-								<input id="writedateBuyModal" class="form-control" type="text" readonly="">
-								<label> Insert your private key: </label>
-								<input id="buyerPrivateKeyBuyModal" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
-								<label> The buy ID (UUID v4 format)</label>
-								<input id="buyIDBuyModal" class="form-control" type="text" placeholder="Press button to gen buy ID">
-								<br>
-								<span>
-									<input id="createBuySubmit" type="button" value="Buy" class="btn btn-primary">
-									<button id="genBuyId" class="btn btn-default">Click to gen buy ID</button>
-								</span>
-							</div>
-
-				      <div id="saleItems" class="modal-body"></div>
 				      <div class="modal-footer">
+								<div id=resultBuyContainer>
+										<div id=divResultBuy>
+											<button id="closeButton">
+												<i id="closeIcon">&times;</i>
+											</button>
+											<h3 id="buyMsg"></h3>
+										</div>
+								</div>
 				        <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
 				      </div>
 				    </div>
@@ -133,8 +144,6 @@
 							<select id="validwritedateMin" class="form-control"></select>
 						</div>
 					</div>
-					<label> The seller's public key </label>
-					<input id="sellerpubkey" class="form-control" type="text" placeholder="Enter pubkey..." value="03a4c7aa44de643b71b7a929c06d6e64a5409e2e96552e84ecb058d44e4950cc5d">
 					<label> The seller's private key </label>
 					<input id="sellerprivatekey" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
 					<label> The sale ID (UUID v4 format)</label>

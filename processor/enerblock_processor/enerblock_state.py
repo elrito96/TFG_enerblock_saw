@@ -91,7 +91,7 @@ class EnerblockState(object):
             {address: state_data}, timeout=self.TIMEOUT)
 
     def set_buy(self, operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey):
-        address = _get_transfer_address(name)
+        address = _get_buy_address(buyName)
         state_data = _serialize(
             {
                 "operation": operation,
@@ -118,7 +118,7 @@ class EnerblockState(object):
     '''Another option is to delete a sale ALWAYS after someone has bought it, which might make sense.
     TODO: Still need to implement the creation of a new sale when the buyer does not buy all of the energy.
 	IMPORTANT FROM THIS TODO ^^^: When you buy from someone you have 2 possibilities:
-	1- Buy all of the sale: You create a buy transaction, create a buy state (with the amount sold and bought being the same and 
+	1- Buy all of the sale: You create a buy transaction, create a buy state (with the amount sold and bought being the same and
 		other fields, and finally you MODIFY the sale state, changing the amount to sell to 0.
 	2- Buy some of the sale: You create a buy transaction, create a buy state (with the amount sold and bought and
 		other fields, and finally you MODIFY the sale state, changing the amount to sell to the difference, so other

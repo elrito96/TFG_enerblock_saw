@@ -40025,12 +40025,22 @@ app.refresh = function (){
   )
 }
 
-app.update = function (operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, sellerprivatekey) {
-	  console.log("main.js/update");
-    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey },
+app.updateCreateSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey) {
+    const operation = 'putOnSale'
+    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName },
       sellerprivatekey,
       success => success ? console.log("Transaction submited") : null
     )
+}
+
+app.updateBuyFromSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey) {
+    const operation = 'buy'
+    console.log("app.updateBuyFromSale -------------")
+    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName },
+      buyerPrivKey,
+      success => success ? console.log("Transaction submited")  : null
+    )
+    //app.update();
 }
 
 // $.getJSON("localhost:8000/api/state?address=5a45ce00f3ecb37267b0a881da01275e1afce861eca6055216afb126d7e3b361b5ba43", function(json){
@@ -40062,15 +40072,10 @@ $(document).ready(function(){
   // Load sales when page loads
   app.refresh();
 
-  // Update cost of buy when changing amount
-  $('#amountBuyModal').on('keyup',function(){
-
+  // Update total cost when changing amount
+  $('#amountBuyModal').on('keyup change',function(){
     var amount = $('#amountBuyModal').val();
-
-    var price = $('#costSelected').text();
-
-    console.log(amount)
-    console.log(price)
+    var price = $('#priceSelectedSaleBuy').text();
     $('#totalCostBuyModal').val(amount * price)
   })
 
@@ -40187,21 +40192,41 @@ function updateValidWritedate(){
 }
 
 
-// Create Asset
+// Create Put on sale
 $('#createSubmit').on('click', function () {
-  console.log("main.js/createSubmit");
+  console.log(" Creating sale petition ");
   const kwhAmountSell = $('#amount').val()
   const pricePerKwh = $('#price').val()
   const createWritedate = $('#writedate').val()
   const validWritedate = $('#validwritedate').val()
   const saleName = $('#saleID').val()
-  const sellerPubKey = $('#sellerpubkey').val()
   const sellerprivatekey = $('#sellerprivatekey').val()
   console.log("SALE NAME ID ==================== "+saleName)
   console.log("abundle main");
-  if (amount && price && writedate && validwritedate && sellerpubkey && sellerprivatekey)
-    app.update('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, sellerprivatekey)
+  app.updateCreateSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey)
 })
+
+
+
+// Create buy sale
+$('#createBuySubmit').on('click', function () {
+  console.log("Buying from sale");
+  // Info about sale
+  const kwhAmountSell = $('#amountSelectedSaleBuy').text();
+  const pricePerKwh = $('#priceSelectedSaleBuy').text();
+  const createWritedate = $('#createWdSelectedSaleBuy').text();
+  const validWritedate = $('#validWdSelectedSaleBuy').text();
+  const saleName = $('#idSelectedSaleBuy').text();
+  const sellerPubKey = $('#sellerSelectedSaleBuy').text();
+
+  // Info about buy
+  const kwhAmountBuy = $('#amountBuyModal').val()
+  const buyWritedate = $('#writedateBuyModal').val()
+  const buyName = $('#buyIDBuyModal').val()
+  const buyerPrivKey = $('#buyerPrivateKeyBuyModal').val()
+  app.updateBuyFromSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey)
+})
+
 
 // Buy selected sale of Energy
 $('#buyModal').modal({
@@ -40214,15 +40239,16 @@ $('#buyModal').modal({
 
         // Ajax calls to populate modal
         $(this).find('#saleDetails').html(
-          $('<b> Amount to sell: ' + app.salePetitions[getIdFromRow].kwhAmountSell + '<br>'+
-            'Price per KhW : ' + app.salePetitions[getIdFromRow].pricePerKwh + '<br>'+
-            'Creation Date : ' + app.salePetitions[getIdFromRow].createWritedate + '<br>'+
-            'Validity Date : ' + app.salePetitions[getIdFromRow].validWritedate + '<br>'+
-            'Seller Public Key : ' + app.salePetitions[getIdFromRow].sellerPubKey + '<br>'+
-            '</b>' + '<label id="costSelected">'+ app.salePetitions[getIdFromRow].pricePerKwh + '</label>'
+          $('<b> Amount to sell (KwH): </b> <label id="amountSelectedSaleBuy">' + app.salePetitions[getIdFromRow].kwhAmountSell + '</label><br>'+
+            '<b>Price per KhW : </b> <label id="priceSelectedSaleBuy">' + app.salePetitions[getIdFromRow].pricePerKwh + '</label><br>'+
+            '<b>Creation Date : </b> <label id="createWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].createWritedate + '</label><br>'+
+            '<b>Validity Date : </b> <label id="validWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].validWritedate + '</label><br>'+
+            '<b>Seller Public Key : </b> <label id="sellerSelectedSaleBuy">' + app.salePetitions[getIdFromRow].sellerPubKey + '</label><br>'+
+            '<label id="idSelectedSaleBuy">' + app.salePetitions[getIdFromRow].saleName + '</label>'
           )
         )
-
+        $('#amountBuyModal').val("");
+        $('#totalCostBuyModal').val(0);
 
     });
 
@@ -40389,18 +40415,26 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
       var response = '';
       $.get(`${API_URL}/batch_statuses?${id}&wait`, function(data){
         var msg = '';
-        $('#resultContainer').css("visibility", "visible")
         var transactionStatus = data.data[0];
         console.log(transactionStatus)
         console.log(transactionStatus.status)
-        if(transactionStatus.status == "COMMITTED"){
-          msg = 'Sale posted successfully';
+        if(transactionStatus.status == "COMMITTED" && payload.operation == "putOnSale"){
+          $('#resultContainer').css("visibility", "visible")
+          msg = 'Sale posted successfully in Blockchain';
           $('#divResult').css("background-color","rgb(92,184,92)");
-        }else if (transactionStatus.status == "INVALID"){
+        }else if(transactionStatus.status == "COMMITTED" && payload.operation == "buy"){
+          $('#resultBuyContainer').css("visibility", "visible")
+          msg = 'Buy done correctly';
+          $('#divResultBuy').css("background-color","rgb(92,184,92)");
+        }
+
+        else if (transactionStatus.status == "INVALID" ){
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResult').css("background-color","rgba(238, 238, 0, 0.85)");
+          $('#divResultBuy').css("background-color","rgba(238, 238, 0, 0.85)");
         }
         $('#saleMsg').html(msg);
+        $('#buyMsg').html(msg);
       });
 
     },

@@ -134,18 +134,26 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
       var response = '';
       $.get(`${API_URL}/batch_statuses?${id}&wait`, function(data){
         var msg = '';
-        $('#resultContainer').css("visibility", "visible")
         var transactionStatus = data.data[0];
         console.log(transactionStatus)
         console.log(transactionStatus.status)
-        if(transactionStatus.status == "COMMITTED"){
-          msg = 'Sale posted successfully';
+        if(transactionStatus.status == "COMMITTED" && payload.operation == "putOnSale"){
+          $('#resultContainer').css("visibility", "visible")
+          msg = 'Sale posted successfully in Blockchain';
           $('#divResult').css("background-color","rgb(92,184,92)");
-        }else if (transactionStatus.status == "INVALID"){
+        }else if(transactionStatus.status == "COMMITTED" && payload.operation == "buy"){
+          $('#resultBuyContainer').css("visibility", "visible")
+          msg = 'Buy done correctly';
+          $('#divResultBuy').css("background-color","rgb(92,184,92)");
+        }
+
+        else if (transactionStatus.status == "INVALID" ){
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResult').css("background-color","rgba(238, 238, 0, 0.85)");
+          $('#divResultBuy').css("background-color","rgba(238, 238, 0, 0.85)");
         }
         $('#saleMsg').html(msg);
+        $('#buyMsg').html(msg);
       });
 
     },
