@@ -77,6 +77,12 @@
 				background-color:Transparent;
 				border: 0;
 			}
+			#closeButtonBuy{
+				float: right;
+				margin-top: 10px;
+				background-color:Transparent;
+				border: 0;
+			}
 			#closeIcon{
 				font-size: 40px;
 				font-weight: 1000;

@@ -40006,6 +40006,7 @@ app.refresh = function (){
       this.salePetitions = salePetitions;
       this.buys = buys;
       /* Clear table contents */
+      console.log(" - Vaciar tabla de ventas y construir nueva tabla -")
       $('#salesData').empty();
       /* Construction of sales table*/
       for(i = 0; i<salePetitions.length; i++){
@@ -40024,7 +40025,19 @@ app.refresh = function (){
     }
   )
 }
+const updateSalesTable = () => {
+  console.log(" Ocultar Create, mostrar Sales")
+  //window.history.pushState('', '', '/ViewSales');
+  $("#CreateSalePage").css("display", "none");
+  $("#CreateBuyPage").css("display", "none");
+  $("#ViewSalesPage").css("display", "block");
 
+  $("#ViewSalesA").addClass("active");
+  $("#CreateSaleA").removeClass("active");
+  $("#CreateBuyA").removeClass("active");
+
+  app.refresh();
+}
 app.updateCreateSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey) {
     const operation = 'putOnSale'
     submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName },
@@ -40038,7 +40051,7 @@ app.updateBuyFromSale = function (kwhAmountSell, pricePerKwh, createWritedate, v
     console.log("app.updateBuyFromSale -------------")
     submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName },
       buyerPrivKey,
-      success => success ? console.log("Transaction submited")  : null
+      success => success ? updateSalesTable() : null
     )
     //app.update();
 }
@@ -40138,23 +40151,20 @@ $(document).ready(function(){
 		$("#resultContainer").css("visibility", "hidden");
 	});
 
+  $("#closeButtonBuy").click(function(){
+		$("#resultBuyContainer").css("visibility", "hidden");
+	});
+  // Close the result container by clicking anywhere in the message, might delete later
+  $("#resultBuyContainer").click(function(){
+		$("#resultBuyContainer").css("visibility", "hidden");
+	});
+
 
 
   // Actions to show and hide elements when View Sales is clicked in the side bar
   $("#ViewSalesSide").click(function(){
-
-    //window.history.pushState('', '', '/ViewSales');
-		$("#CreateSalePage").css("display", "none");
-    $("#CreateBuyPage").css("display", "none");
-    $("#ViewSalesPage").css("display", "block");
-
-    $("#ViewSalesA").addClass("active");
-    $("#CreateSaleA").removeClass("active");
-    $("#CreateBuyA").removeClass("active");
-
-    app.refresh();
+    updateSalesTable();
 	});
-
   // Actions to show and hide elements when Create Sale is clicked in the side bar
   $("#CreateSaleSide").click(function(){
     //window.history.pushState('', '', '/CreateSale');
@@ -40230,28 +40240,29 @@ $('#createBuySubmit').on('click', function () {
 
 // Buy selected sale of Energy
 $('#buyModal').modal({
-        keyboarnd: true,
-        backdrop: "static",
-        show:false,
+  keyboarnd: true,
+  backdrop: "static",
+  show:false,
+}).on('show.bs.modal', function(){
+  var getIdFromRow = $(event.target).closest('tr').data('id');
 
-    }).on('show.bs.modal', function(){
-        var getIdFromRow = $(event.target).closest('tr').data('id');
+  // Ajax calls to populate modal
+  $(this).find('#saleDetails').html(
+    $('<b> Amount to sell (KwH): </b> <label id="amountSelectedSaleBuy">' + app.salePetitions[getIdFromRow].kwhAmountSell + '</label><br>'+
+      '<b>Price per KhW : </b> <label id="priceSelectedSaleBuy">' + app.salePetitions[getIdFromRow].pricePerKwh + '</label><br>'+
+      '<b>Creation Date : </b> <label id="createWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].createWritedate + '</label><br>'+
+      '<b>Validity Date : </b> <label id="validWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].validWritedate + '</label><br>'+
+      '<b>Seller Public Key : </b> <label id="sellerSelectedSaleBuy">' + app.salePetitions[getIdFromRow].sellerPubKey + '</label><br>'+
+      '<label id="idSelectedSaleBuy">' + app.salePetitions[getIdFromRow].saleName + '</label>'
+    )
+  )
+  $('#amountBuyModal').val("");
+  $('#totalCostBuyModal').val(0);
 
-        // Ajax calls to populate modal
-        $(this).find('#saleDetails').html(
-          $('<b> Amount to sell (KwH): </b> <label id="amountSelectedSaleBuy">' + app.salePetitions[getIdFromRow].kwhAmountSell + '</label><br>'+
-            '<b>Price per KhW : </b> <label id="priceSelectedSaleBuy">' + app.salePetitions[getIdFromRow].pricePerKwh + '</label><br>'+
-            '<b>Creation Date : </b> <label id="createWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].createWritedate + '</label><br>'+
-            '<b>Validity Date : </b> <label id="validWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].validWritedate + '</label><br>'+
-            '<b>Seller Public Key : </b> <label id="sellerSelectedSaleBuy">' + app.salePetitions[getIdFromRow].sellerPubKey + '</label><br>'+
-            '<label id="idSelectedSaleBuy">' + app.salePetitions[getIdFromRow].saleName + '</label>'
-          )
-        )
-        $('#amountBuyModal').val("");
-        $('#totalCostBuyModal').val(0);
-
-    });
-
+});
+module.exports = {
+  app
+}
 
 //
 // $(function(){
@@ -40296,6 +40307,7 @@ const {
   Signer
 } = require('sawtooth-sdk/signing')
 const secp256k1 = require('sawtooth-sdk/signing/secp256k1')
+const app = require('./main')
 
 // Config variables
 const KEY_NAME = 'transfer-chain.keys'
@@ -40426,11 +40438,21 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
           $('#resultBuyContainer').css("visibility", "visible")
           msg = 'Buy done correctly';
           $('#divResultBuy').css("background-color","rgb(92,184,92)");
+          // Actualizar modal
+          var amountBefore = +($('#amountSelectedSaleBuy').text());
+          var amountBought = $('#amountBuyModal').val();
+          var newAmout = amountBefore - amountBought;
+          $('#amountSelectedSaleBuy').text(newAmout);
+          // Actualizar tabla en el return success 
         }
 
-        else if (transactionStatus.status == "INVALID" ){
+        else if (transactionStatus.status == "INVALID" && payload.operation == "putOnSale"){
+          $('#resultContainer').css("visibility", "visible")
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResult').css("background-color","rgba(238, 238, 0, 0.85)");
+        }else if (transactionStatus.status == "INVALID" && payload.operation == "buy"){
+          $('#resultBuyContainer').css("visibility", "visible")
+          msg = transactionStatus.invalid_transactions[0].message;
           $('#divResultBuy').css("background-color","rgba(238, 238, 0, 0.85)");
         }
         $('#saleMsg').html(msg);
@@ -40460,7 +40482,7 @@ module.exports = {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":159,"crypto":167,"jquery":48,"sawtooth-sdk/protobuf":89,"sawtooth-sdk/signing":92,"sawtooth-sdk/signing/secp256k1":93}],113:[function(require,module,exports){
+},{"./main":111,"buffer":159,"crypto":167,"jquery":48,"sawtooth-sdk/protobuf":89,"sawtooth-sdk/signing":92,"sawtooth-sdk/signing/secp256k1":93}],113:[function(require,module,exports){
 var asn1 = exports;
 
 asn1.bignum = require('bn.js');

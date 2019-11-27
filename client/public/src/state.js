@@ -15,6 +15,7 @@ const {
   Signer
 } = require('sawtooth-sdk/signing')
 const secp256k1 = require('sawtooth-sdk/signing/secp256k1')
+const app = require('./main')
 
 // Config variables
 const KEY_NAME = 'transfer-chain.keys'
@@ -145,11 +146,21 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
           $('#resultBuyContainer').css("visibility", "visible")
           msg = 'Buy done correctly';
           $('#divResultBuy').css("background-color","rgb(92,184,92)");
+          // Actualizar modal
+          var amountBefore = +($('#amountSelectedSaleBuy').text());
+          var amountBought = $('#amountBuyModal').val();
+          var newAmout = amountBefore - amountBought;
+          $('#amountSelectedSaleBuy').text(newAmout);
+          // Actualizar tabla en el return success 
         }
 
-        else if (transactionStatus.status == "INVALID" ){
+        else if (transactionStatus.status == "INVALID" && payload.operation == "putOnSale"){
+          $('#resultContainer').css("visibility", "visible")
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResult').css("background-color","rgba(238, 238, 0, 0.85)");
+        }else if (transactionStatus.status == "INVALID" && payload.operation == "buy"){
+          $('#resultBuyContainer').css("visibility", "visible")
+          msg = transactionStatus.invalid_transactions[0].message;
           $('#divResultBuy').css("background-color","rgba(238, 238, 0, 0.85)");
         }
         $('#saleMsg').html(msg);

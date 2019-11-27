@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # -----------------------------------------------------------------------------
-
+import logging
 import json
 from datetime import datetime
 '''import hashlib
 import random'''
 
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
+LOGGER = logging.getLogger(__name__)
 
 '''def _hash(data):
     #Compute the SHA-512 hash and return the result as hex characters.
@@ -52,49 +53,9 @@ class EnerblockPayload(object):
         validWritedate = data.get('validWritedate')
         saleName = data.get('saleName')
 
-        #Validate that the amount to sell is not null, or anything different from a positive int
-        if not kwhAmountSell:
-            raise InvalidTransaction('Amount to sell is required')
-        if not kwhAmountSell.isdigit() or kwhAmountSell == "0":
-            raise InvalidTransaction('Amount to sell must be a positive integer number')
-
-        #Validate that the amount to sell is not null, or anything different from a positive decimal
-        if not pricePerKwh:
-            raise InvalidTransaction('Price per kwh is required')
-        if not pricePerKwh.replace('.','',1).isdigit():
-            raise InvalidTransaction('Price per kwh must be a positive number')
-
-        #Validate creation date not null
-        if not createWritedate:
-            raise InvalidTransaction('Date of creation of sale is required')
-        #Validate creation date format
-        print(" Creation dat is === ",createWritedate)
-        try:
-            datetime.strptime(createWritedate, '%Y-%m-%d %H:%M:%S')
-        except ValueError:
-            raise InvalidTransaction("Incorrect data format, creation Date should be YYYY-MM-DD hh:mm:ss")
-
-        #Validate validity date not null
-        if not validWritedate:
-            raise InvalidTransaction('Date limit of sale is required')
-        #Validate valid date format
-        try:
-            datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
-        except ValueError:
-            raise InvalidTransaction("Incorrect data format, validity Date should be YYYY-MM-DD hh:mm:ss")
-
-        if not saleName:
-            raise InvalidTransaction('Sale id (saleName) is required')
-
-        self._operation = operation
-        self._kwhAmountSell = kwhAmountSell
-        self._pricePerKwh = pricePerKwh
-        self._createWritedate = createWritedate
-        self._validWritedate = validWritedate
-        self._saleName = saleName
-
         # Sell section
         if operation == 'putOnSale':
+            LOGGER.info('Entra if operation putonsale')
             sellerPubKey = transactionCreator
 
             if not sellerPubKey:
@@ -102,8 +63,49 @@ class EnerblockPayload(object):
 
             self._sellerPubKey = sellerPubKey
 
+            #Validate that the amount to sell is not null, or anything different from a positive int
+            if not kwhAmountSell:
+                raise InvalidTransaction('Amount to sell is required')
+            if not kwhAmountSell.isdigit() or kwhAmountSell == "0":
+                raise InvalidTransaction('Amount to sell must be a positive integer number')
+
+            #Validate that the amount to sell is not null, or anything different from a positive decimal
+            if not pricePerKwh:
+                raise InvalidTransaction('Price per kwh is required')
+            if not pricePerKwh.replace('.','',1).isdigit():
+                raise InvalidTransaction('Price per kwh must be a positive number')
+
+            #Validate creation date not null
+            if not createWritedate:
+                raise InvalidTransaction('Date of creation of sale is required')
+            #Validate creation date format
+            print(" Creation dat is === ",createWritedate)
+            try:
+                datetime.strptime(createWritedate, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise InvalidTransaction("Incorrect data format, creation Date should be YYYY-MM-DD hh:mm:ss")
+
+            #Validate validity date not null
+            if not validWritedate:
+                raise InvalidTransaction('Date limit of sale is required')
+            #Validate valid date format
+            try:
+                datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise InvalidTransaction("Incorrect data format, validity Date should be YYYY-MM-DD hh:mm:ss")
+
+            if not saleName:
+                raise InvalidTransaction('Sale id (saleName) is required')
+
+            self._operation = operation
+            self._kwhAmountSell = kwhAmountSell
+            self._pricePerKwh = pricePerKwh
+            self._createWritedate = createWritedate
+            self._validWritedate = validWritedate
+            self._saleName = saleName
+
         # Buy section
-        else:
+        elif operation == "buy":
             sellerPubKey = data.get('sellerPubKey')
             kwhAmountBuy = data.get('kwhAmountBuy')
             buyWritedate = data.get('buyWritedate')
@@ -111,6 +113,10 @@ class EnerblockPayload(object):
             buyName = data.get('buyName')
             buyerPubKey = transactionCreator
 
+            if kwhAmountSell == "0":
+                raise InvalidTransaction("Can't buy when no energy is offered")
+            if int(kwhAmountBuy) > int(kwhAmountSell):
+                raise InvalidTransaction("Can't buy more than the offered amount")
             if not sellerPubKey:
                 raise InvalidTransaction('There is no seller in this transaction')
             if not kwhAmountBuy:
@@ -124,12 +130,16 @@ class EnerblockPayload(object):
             if not buyerPubKey:
                 raise InvalidTransaction('A buyer is required to buy')
 
-
+            self._operation = operation
+            self._kwhAmountSell = kwhAmountSell
+            self._pricePerKwh = pricePerKwh
+            self._createWritedate = createWritedate
+            self._validWritedate = validWritedate
+            self._saleName = saleName
             self._sellerPubKey = sellerPubKey
             self._kwhAmountBuy = kwhAmountBuy
             self._buyWritedate = buyWritedate
             self._buyName = buyName
-            self._saleName = saleName
             self._buyerPubKey = buyerPubKey
 
     @property
