@@ -70,9 +70,8 @@ const getState = cb => {
 }
 
 // Submit signed Transaction to validator
-const submitUpdate = (payload, privateKeyHex, cb) => {
-  console.log("state.js/submitUpdate");
-  console.log("PAYLOAD BELOW");
+const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
+  console.log(" ### PAYLOAD sent BELOW ### ");
   console.log(payload);
   // Create signer
   const context = createContext('secp256k1')
@@ -91,7 +90,6 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
     dependencies: [],
     payloadSha512: createHash('sha512').update(payloadBytes).digest('hex')
   }).finish()
-  console.log("Create the Transaction");
   // Create the Transaction
   const transactionHeaderSignature = signer.sign(transactionHeaderBytes)
 
@@ -100,14 +98,12 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
     headerSignature: transactionHeaderSignature,
     payload: payloadBytes
   })
-  console.log("Create the BatchHeader");
   // Create the BatchHeader
   const batchHeaderBytes = protobuf.BatchHeader.encode({
     signerPublicKey: signer.getPublicKey().asHex(),
     transactionIds: [transaction.headerSignature]
   }).finish()
 
-  console.log("Create the Batch");
   // Create the Batch
   const batchHeaderSignature = signer.sign(batchHeaderBytes)
 
@@ -116,13 +112,12 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
     headerSignature: batchHeaderSignature,
     transactions: [transaction]
   })
-  console.log("Encode the Batch in a BatchList");
   // Encode the Batch in a BatchList
   const batchListBytes = protobuf.BatchList.encode({
     batches: [batch]
   }).finish()
 
-  console.log("Submit BatchList to Validator");
+  console.log(" ### Transaction created and sent to Validator ###");
   // Submit BatchList to Validator
   $.post({
     url: `${API_URL}/batches`,
@@ -132,7 +127,6 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
     success: function( resp ) {
       console.log(resp);
       var id = resp.link.split('?')[1]
-      var response = '';
       $.get(`${API_URL}/batch_statuses?${id}&wait`, function(data){
         var msg = '';
         var transactionStatus = data.data[0];
@@ -142,41 +136,62 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
           $('#resultContainer').css("visibility", "visible")
           msg = 'Sale posted successfully in Blockchain';
           $('#divResult').css("background-color","rgb(92,184,92)");
+          $('#saleMsg').html(msg);
         }else if(transactionStatus.status == "COMMITTED" && payload.operation == "buy"){
           $('#resultBuyContainer').css("visibility", "visible")
           msg = 'Buy done correctly';
           $('#divResultBuy').css("background-color","rgb(92,184,92)");
+          $('#buyMsg').html(msg);
           // Actualizar modal
           var amountBefore = +($('#amountSelectedSaleBuy').text());
           var amountBought = $('#amountBuyModal').val();
           var newAmout = amountBefore - amountBought;
           $('#amountSelectedSaleBuy').text(newAmout);
-          // Actualizar tabla en el return success 
+          //Actualizar tabla
+
+          var id = $('#idSelectedSaleBuy').text();
+          // Loop table, update the amount of the bought offer
+          console.log(" UPDATING TABLE id == "+id)
+          $('#ViewSalesTable > tbody  > tr').each(function(index, tr) {
+            var $tr = $(tr)
+            console.log(index);
+            console.log(tr);
+            var rowId = $tr.find('td:eq(4)').text();
+            if(rowId == $('#idSelectedSaleBuy').text(newAmout)){
+              console.log(" Esta es la fila a editar ")
+            }
+            console.log(rowId);
+          });
+
+
         }
 
         else if (transactionStatus.status == "INVALID" && payload.operation == "putOnSale"){
           $('#resultContainer').css("visibility", "visible")
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResult').css("background-color","rgba(238, 238, 0, 0.85)");
+          $('#saleMsg').html(msg);
         }else if (transactionStatus.status == "INVALID" && payload.operation == "buy"){
           $('#resultBuyContainer').css("visibility", "visible")
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResultBuy').css("background-color","rgba(238, 238, 0, 0.85)");
+          $('#buyMsg').html(msg);
         }
-        $('#saleMsg').html(msg);
-        $('#buyMsg').html(msg);
-      });
 
+      });
     },
     error: function (errorResponse) { /*() => cb(false)*/
       $('#resultContainer').css("visibility", "visible")
+      $('#resultBuyContainer').css("visibility", "visible")
       $('#divResult').css("background-color","rgba(243, 101, 101)");
+      $('#divResultBuy').css("background-color","rgba(238, 238, 0, 0.85)");
       console.log(errorResponse)
       var msg = 'Error posting the sale, probably connection error';
       console.log(msg);
       $('#saleMsg').html(msg);
+      $('#buyMsg').html(msg);
       $('#saleMsg').css("color","white");
-      cb(false);
+      $('#buyMsg').css("color","white");
     }
   })
 }

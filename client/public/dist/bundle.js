@@ -40001,6 +40001,7 @@ const app = { user: null, keys: [], salePetitions: [], buys: [] , buyPetitions: 
 
 // Load Sales
 app.refresh = function (){
+  console.log(" -- App.refresh function) --")
   getState(
     ({ salePetitions, buys}) => {
       this.salePetitions = salePetitions;
@@ -40025,8 +40026,8 @@ app.refresh = function (){
     }
   )
 }
-const updateSalesTable = () => {
-  console.log(" Ocultar Create, mostrar Sales")
+app.updateSalesTable = function(){
+  console.log(" -- Ocultar Create, mostrar Sales --")
   //window.history.pushState('', '', '/ViewSales');
   $("#CreateSalePage").css("display", "none");
   $("#CreateBuyPage").css("display", "none");
@@ -40042,20 +40043,25 @@ app.updateCreateSale = function (kwhAmountSell, pricePerKwh, createWritedate, va
     const operation = 'putOnSale'
     submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName },
       sellerprivatekey,
-      success => success ? console.log("Transaction submited") : null
+      success => success ? console.log("Transaction submited") : null,
+      null
     )
 }
 
 app.updateBuyFromSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey) {
     const operation = 'buy'
+    var newAmount =
     console.log("app.updateBuyFromSale -------------")
     submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName },
       buyerPrivKey,
-      success => success ? updateSalesTable() : null
+      success => success ? console.log("Transaction submited") : null
     )
-    //app.update();
 }
-
+// function(){
+//                   console.log(" Buy succesful transaction submited ");
+//                   app.updateSalesTable();
+//                   console.log(" Buy succesful after update table ");
+//                 }
 // $.getJSON("localhost:8000/api/state?address=5a45ce00f3ecb37267b0a881da01275e1afce861eca6055216afb126d7e3b361b5ba43", function(json){
 // 	console.log(json.head);
 // 	$(".mypanel").html(json.head);
@@ -40079,6 +40085,7 @@ $.getScript("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.
 function pad(d) {
     return (d < 10) ? '0' + d.toString() : d.toString();
 }
+
 
 /* Jquery  that will deal with initialization of web page */
 $(document).ready(function(){
@@ -40152,18 +40159,24 @@ $(document).ready(function(){
 	});
 
   $("#closeButtonBuy").click(function(){
-		$("#resultBuyContainer").css("visibility", "hidden");
-	});
+    $("#resultBuyContainer").css("visibility", "hidden");
+  });
+  // Hide result container after closing modal, for it to not appear next modal open
+  $("#buyModalCloseBtn").click(function(){
+    $("#resultBuyContainer").css("visibility", "hidden");
+  });
   // Close the result container by clicking anywhere in the message, might delete later
   $("#resultBuyContainer").click(function(){
-		$("#resultBuyContainer").css("visibility", "hidden");
-	});
+    $("#resultBuyContainer").css("visibility", "hidden");
+  });
+
+
 
 
 
   // Actions to show and hide elements when View Sales is clicked in the side bar
   $("#ViewSalesSide").click(function(){
-    updateSalesTable();
+    app.updateSalesTable();
 	});
   // Actions to show and hide elements when Create Sale is clicked in the side bar
   $("#CreateSaleSide").click(function(){
@@ -40247,6 +40260,7 @@ $('#buyModal').modal({
   var getIdFromRow = $(event.target).closest('tr').data('id');
 
   // Ajax calls to populate modal
+  $('#resultBuyContainer').css("visibility", "hidden")
   $(this).find('#saleDetails').html(
     $('<b> Amount to sell (KwH): </b> <label id="amountSelectedSaleBuy">' + app.salePetitions[getIdFromRow].kwhAmountSell + '</label><br>'+
       '<b>Price per KhW : </b> <label id="priceSelectedSaleBuy">' + app.salePetitions[getIdFromRow].pricePerKwh + '</label><br>'+
@@ -40362,9 +40376,8 @@ const getState = cb => {
 }
 
 // Submit signed Transaction to validator
-const submitUpdate = (payload, privateKeyHex, cb) => {
-  console.log("state.js/submitUpdate");
-  console.log("PAYLOAD BELOW");
+const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
+  console.log(" ### PAYLOAD sent BELOW ### ");
   console.log(payload);
   // Create signer
   const context = createContext('secp256k1')
@@ -40383,7 +40396,6 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
     dependencies: [],
     payloadSha512: createHash('sha512').update(payloadBytes).digest('hex')
   }).finish()
-  console.log("Create the Transaction");
   // Create the Transaction
   const transactionHeaderSignature = signer.sign(transactionHeaderBytes)
 
@@ -40392,14 +40404,12 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
     headerSignature: transactionHeaderSignature,
     payload: payloadBytes
   })
-  console.log("Create the BatchHeader");
   // Create the BatchHeader
   const batchHeaderBytes = protobuf.BatchHeader.encode({
     signerPublicKey: signer.getPublicKey().asHex(),
     transactionIds: [transaction.headerSignature]
   }).finish()
 
-  console.log("Create the Batch");
   // Create the Batch
   const batchHeaderSignature = signer.sign(batchHeaderBytes)
 
@@ -40408,13 +40418,12 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
     headerSignature: batchHeaderSignature,
     transactions: [transaction]
   })
-  console.log("Encode the Batch in a BatchList");
   // Encode the Batch in a BatchList
   const batchListBytes = protobuf.BatchList.encode({
     batches: [batch]
   }).finish()
 
-  console.log("Submit BatchList to Validator");
+  console.log(" ### Transaction created and sent to Validator ###");
   // Submit BatchList to Validator
   $.post({
     url: `${API_URL}/batches`,
@@ -40424,7 +40433,6 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
     success: function( resp ) {
       console.log(resp);
       var id = resp.link.split('?')[1]
-      var response = '';
       $.get(`${API_URL}/batch_statuses?${id}&wait`, function(data){
         var msg = '';
         var transactionStatus = data.data[0];
@@ -40434,41 +40442,59 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
           $('#resultContainer').css("visibility", "visible")
           msg = 'Sale posted successfully in Blockchain';
           $('#divResult').css("background-color","rgb(92,184,92)");
+          $('#saleMsg').html(msg);
         }else if(transactionStatus.status == "COMMITTED" && payload.operation == "buy"){
           $('#resultBuyContainer').css("visibility", "visible")
           msg = 'Buy done correctly';
           $('#divResultBuy').css("background-color","rgb(92,184,92)");
+          $('#buyMsg').html(msg);
           // Actualizar modal
           var amountBefore = +($('#amountSelectedSaleBuy').text());
           var amountBought = $('#amountBuyModal').val();
           var newAmout = amountBefore - amountBought;
           $('#amountSelectedSaleBuy').text(newAmout);
-          // Actualizar tabla en el return success 
+          //Actualizar tabla
+
+          var id = $('#idSelectedSaleBuy').text();
+          // Loop table, update the amount of the bought offer
+          console.log(" UPDATING TABLE id == "+id)
+          $('#ViewSalesTable > tbody  > tr').each(function(index, tr) {
+            var $tr = $(tr)
+            console.log(index);
+            console.log(tr);
+            var rowId = $tr.find('td:eq(4)').text();
+            console.log(rowId);
+          });
+
+
         }
 
         else if (transactionStatus.status == "INVALID" && payload.operation == "putOnSale"){
           $('#resultContainer').css("visibility", "visible")
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResult').css("background-color","rgba(238, 238, 0, 0.85)");
+          $('#saleMsg').html(msg);
         }else if (transactionStatus.status == "INVALID" && payload.operation == "buy"){
           $('#resultBuyContainer').css("visibility", "visible")
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResultBuy').css("background-color","rgba(238, 238, 0, 0.85)");
+          $('#buyMsg').html(msg);
         }
-        $('#saleMsg').html(msg);
-        $('#buyMsg').html(msg);
-      });
 
+      });
     },
     error: function (errorResponse) { /*() => cb(false)*/
       $('#resultContainer').css("visibility", "visible")
+      $('#resultBuyContainer').css("visibility", "visible")
       $('#divResult').css("background-color","rgba(243, 101, 101)");
+      $('#divResultBuy').css("background-color","rgba(238, 238, 0, 0.85)");
       console.log(errorResponse)
       var msg = 'Error posting the sale, probably connection error';
       console.log(msg);
       $('#saleMsg').html(msg);
+      $('#buyMsg').html(msg);
       $('#saleMsg').css("color","white");
-      cb(false);
+      $('#buyMsg').css("color","white");
     }
   })
 }

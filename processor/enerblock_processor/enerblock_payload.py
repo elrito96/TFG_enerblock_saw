@@ -113,6 +113,8 @@ class EnerblockPayload(object):
             buyName = data.get('buyName')
             buyerPubKey = transactionCreator
 
+            if not kwhAmountBuy:
+                raise InvalidTransaction('Amount to buy is required')
             if kwhAmountSell == "0":
                 raise InvalidTransaction("Can't buy when no energy is offered")
             if int(kwhAmountBuy) > int(kwhAmountSell):

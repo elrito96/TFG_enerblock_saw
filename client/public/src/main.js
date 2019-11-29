@@ -20,6 +20,7 @@ const app = { user: null, keys: [], salePetitions: [], buys: [] , buyPetitions: 
 
 // Load Sales
 app.refresh = function (){
+  console.log(" -- App.refresh function) --")
   getState(
     ({ salePetitions, buys}) => {
       this.salePetitions = salePetitions;
@@ -44,8 +45,8 @@ app.refresh = function (){
     }
   )
 }
-const updateSalesTable = () => {
-  console.log(" Ocultar Create, mostrar Sales")
+app.updateSalesTable = function(){
+  console.log(" -- Ocultar Create, mostrar Sales --")
   //window.history.pushState('', '', '/ViewSales');
   $("#CreateSalePage").css("display", "none");
   $("#CreateBuyPage").css("display", "none");
@@ -61,20 +62,25 @@ app.updateCreateSale = function (kwhAmountSell, pricePerKwh, createWritedate, va
     const operation = 'putOnSale'
     submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName },
       sellerprivatekey,
-      success => success ? console.log("Transaction submited") : null
+      success => success ? console.log("Transaction submited") : null,
+      null
     )
 }
 
 app.updateBuyFromSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey) {
     const operation = 'buy'
+    var newAmount =
     console.log("app.updateBuyFromSale -------------")
     submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName },
       buyerPrivKey,
       success => success ? console.log("Transaction submited") : null
     )
-    //app.update();
 }
-
+// function(){
+//                   console.log(" Buy succesful transaction submited ");
+//                   app.updateSalesTable();
+//                   console.log(" Buy succesful after update table ");
+//                 }
 // $.getJSON("localhost:8000/api/state?address=5a45ce00f3ecb37267b0a881da01275e1afce861eca6055216afb126d7e3b361b5ba43", function(json){
 // 	console.log(json.head);
 // 	$(".mypanel").html(json.head);
@@ -98,6 +104,7 @@ $.getScript("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.
 function pad(d) {
     return (d < 10) ? '0' + d.toString() : d.toString();
 }
+
 
 /* Jquery  that will deal with initialization of web page */
 $(document).ready(function(){
@@ -171,18 +178,24 @@ $(document).ready(function(){
 	});
 
   $("#closeButtonBuy").click(function(){
-		$("#resultBuyContainer").css("visibility", "hidden");
-	});
+    $("#resultBuyContainer").css("visibility", "hidden");
+  });
+  // Hide result container after closing modal, for it to not appear next modal open
+  $("#buyModalCloseBtn").click(function(){
+    $("#resultBuyContainer").css("visibility", "hidden");
+  });
   // Close the result container by clicking anywhere in the message, might delete later
   $("#resultBuyContainer").click(function(){
-		$("#resultBuyContainer").css("visibility", "hidden");
-	});
+    $("#resultBuyContainer").css("visibility", "hidden");
+  });
+
+
 
 
 
   // Actions to show and hide elements when View Sales is clicked in the side bar
   $("#ViewSalesSide").click(function(){
-    updateSalesTable();
+    app.updateSalesTable();
 	});
   // Actions to show and hide elements when Create Sale is clicked in the side bar
   $("#CreateSaleSide").click(function(){
@@ -266,6 +279,7 @@ $('#buyModal').modal({
   var getIdFromRow = $(event.target).closest('tr').data('id');
 
   // Ajax calls to populate modal
+  $('#resultBuyContainer').css("visibility", "hidden")
   $(this).find('#saleDetails').html(
     $('<b> Amount to sell (KwH): </b> <label id="amountSelectedSaleBuy">' + app.salePetitions[getIdFromRow].kwhAmountSell + '</label><br>'+
       '<b>Price per KhW : </b> <label id="priceSelectedSaleBuy">' + app.salePetitions[getIdFromRow].pricePerKwh + '</label><br>'+
