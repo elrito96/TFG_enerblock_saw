@@ -40000,8 +40000,8 @@ const app = { user: null, keys: [], salePetitions: [], buys: [] , buyPetitions: 
 
 
 // Load Sales
-app.refresh = function (){
-  console.log(" -- App.refresh function) --")
+app.refreshSales = function (){
+  console.log(" -- App.refreshSales function) --")
   getState(
     ({ salePetitions, buys}) => {
       this.salePetitions = salePetitions;
@@ -40026,19 +40026,75 @@ app.refresh = function (){
     }
   )
 }
+// Load Sales
+app.refreshBuyPetitions = function (){
+  console.log(" -- App.refreshBuypetitions function) --")
+  getState(
+    ({ buyPetitions, sales}) => {
+      this.buyPetitions = buyPetitions;
+      this.sales = sales;
+      // /* Clear table contents */
+      // console.log(" - Vaciar tabla de ventas y construir nueva tabla -")
+      // $('#salesData').empty();
+      // /* Construction of sales table*/
+      // for(i = 0; i<salePetitions.length; i++){
+      //   var row = $('<tr data-toggle="modal" data-id="'+i+'" data-target="#buyModal">'+
+      //                   '<td>'+salePetitions[i].kwhAmountSell+'</td>'+
+      //                   '<td>'+salePetitions[i].pricePerKwh+'</td>'+
+      //                   '<td>'+salePetitions[i].createWritedate+'</td>'+
+      //                   '<td>'+salePetitions[i].validWritedate+'</td>'+
+      //                   '<td>'+salePetitions[i].saleName+'</td>'+
+      //                   '<td>'+salePetitions[i].sellerPubKey+'</td>'+
+      //               '</tr>');
+      //   row.appendTo('#salesData')
+      // }
+
+      console.log(this.buyPetitions)
+    }
+  )
+}
+
 app.updateSalesTable = function(){
   console.log(" -- Ocultar Create, mostrar Sales --")
   //window.history.pushState('', '', '/ViewSales');
   $("#CreateSalePage").css("display", "none");
   $("#CreateBuyPage").css("display", "none");
   $("#ViewSalesPage").css("display", "block");
+  $("#ViewBuyPetitionsPage").css("display", "none");
+  $("#ViewBuyPetitionsPage").css("display", "none");
+  $("#SatisfiedBuysPage").css("display", "none");
+
 
   $("#ViewSalesA").addClass("active");
   $("#CreateSaleA").removeClass("active");
   $("#CreateBuyA").removeClass("active");
+  $("#ViewBuyPetitionsA").removeClass("active");
+  $("#ViewBuyPetitionsA").removeClass("active");
+  $("#SatisfiedBuysPage").removeClass("active");
 
-  app.refresh();
+  app.refreshSales();
 }
+app.updateBuyPetitionsTable = function(){
+  console.log(" -- Ocultar Create, mostrar Buy petitions --")
+  //window.history.pushState('', '', '/ViewSales');
+  $("#CreateSalePage").css("display", "none");
+  $("#CreateBuyPage").css("display", "none");
+  $("#ViewSalesPage").css("display", "none");
+  $("#ViewBuyPetitionsPage").css("display", "block");
+  $("#ViewBuyPetitionsPage").css("display", "none");
+  $("#SatisfiedBuysPage").css("display", "none");
+
+
+  $("#ViewSalesA").removeClass("active");
+  $("#CreateSaleA").removeClass("active");
+  $("#CreateBuyA").removeClass("active");
+  $("#ViewBuyPetitionsA").addClass("active")
+  $("#ViewBuyPetitionsA").removeClass("active");
+  $("#SatisfiedBuysPage").removeClass("active");;
+
+  app.refreshBuyPetitions();
+}
+
 app.updateCreateSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey) {
     const operation = 'putOnSale'
     submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName },
@@ -40090,7 +40146,7 @@ function pad(d) {
 /* Jquery  that will deal with initialization of web page */
 $(document).ready(function(){
   // Load sales when page loads
-  app.refresh();
+  app.refreshSales();
 
   // Update total cost when changing amount
   $('#amountBuyModal').on('keyup change',function(){
@@ -40185,22 +40241,40 @@ $(document).ready(function(){
 		$("#ViewSalesPage").css("display", "none");
     $("#CreateBuyPage").css("display", "none");
     $("#CreateSalePage").css("display", "block");
+    $("#ViewBuyPetitionsPage").css("display", "none");
+    $("#ViewBuyPetitionsPage").css("display", "none");
+    $("#SatisfiedBuysPage").css("display", "none");
 
     $("#CreateSaleA").addClass("active");
     $("#ViewSalesA").removeClass("active");
+    $("#ViewBuyPetitionsA").removeClass("active");
     $("#CreateBuyA").removeClass("active");
+    $("#ViewBuyPetitionsA").removeClass("active");
+    $("#SatisfiedBuysPage").removeClass("active");
 	});
 
+  // Actions to show and hide elements when view buy petitions is clicked in the side bar
+  $("#ViewBuyPetitionsSide").click(function(){
+    app.updateBuyPetitionsTable();
+  });
   // Actions to show and hide elements when Create Buy is clicked in the side bar
   $("#CreateBuySide").click(function(){
     //window.history.pushState('', '', '/CreateBuy');
 		$("#ViewSalesPage").css("display", "none");
     $("#CreateSalePage").css("display", "none");
     $("#CreateBuyPage").css("display", "block");
+    $("#ViewBuyPetitionsPage").css("display", "none");
+    $("#ViewBuyPetitionsPage").css("display", "none");
+    $("#SatisfiedBuysPage").css("display", "none");
 
     $("#CreateBuyA").addClass("active");
     $("#ViewSalesA").removeClass("active");
     $("#CreateSaleA").removeClass("active");
+    $("#ViewBuyPetitionsA").removeClass("active");
+    $("#ViewBuyPetitionsA").removeClass("active");
+    $("#SatisfiedBuysPage").removeClass("active");
+
+
 	});
 
 });
@@ -40271,8 +40345,8 @@ $('#buyModal').modal({
       '<b>Price per KhW : </b> <label id="priceSelectedSaleBuy">' + app.salePetitions[getIdFromRow].pricePerKwh + '</label><br>'+
       '<b>Creation Date : </b> <label id="createWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].createWritedate + '</label><br>'+
       '<b>Validity Date : </b> <label id="validWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].validWritedate + '</label><br>'+
-      '<b>Seller Public Key : </b> <label id="sellerSelectedSaleBuy">' + app.salePetitions[getIdFromRow].sellerPubKey + '</label><br>'+
-      '<label id="idSelectedSaleBuy">' + app.salePetitions[getIdFromRow].saleName + '</label>'
+      '<b style="display:none">Seller Public Key : </b> <label id="sellerSelectedSaleBuy" style="display:none">' + app.salePetitions[getIdFromRow].sellerPubKey + '</label><br>'+
+      '<label id="idSelectedSaleBuy" style="display:none">' + app.salePetitions[getIdFromRow].saleName + '</label>'
     )
   )
   $('#amountBuyModal').val("");

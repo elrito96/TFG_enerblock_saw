@@ -21,7 +21,14 @@
 				<ul id="sidebar">
 					<li class="sidebar_li" id="ViewSalesSide"><a class="active" id="ViewSalesA">View sales</a></li>
 			  	<li class="sidebar_li" id="CreateSaleSide"><a id="CreateSaleA" class="">Create sale</a></li>
-			  	<li class="sidebar_li" id="CreateBuySide"><a id="CreateBuyA" class="">Create buy petition </a></li>
+			  	<li class="sidebar_li" id="ViewBuyPetitionsSide"><a id="ViewBuyPetitionsA" class="">View buy petitions </a></li>
+					<li class="sidebar_li" id="CreateBuySide"><a id="CreateBuyA" class="">Create buy petition </a></li>
+					<li class="sidebar_li" id="BuysFromSalesSide"><a id="BuysFromSalesA" class="">History of Energy bought from sales </a></li>
+					<li class="sidebar_li" id="SatisfiedBuysSide"><a id="SatisfiedBuysA" class="">History of satisfied energy petitions </a></li>
+
+
+					<!-- All buy from sales
+					All satisfied buy petitions -->
 				</ul>
 			</div>
 
@@ -32,86 +39,73 @@
 		</div>
 
 		<!-- Section of the view sales -->
-				<div id = "ViewSalesPage">
-						<h1 style = "text-align:center"> View Sales</h1>
-						<div id ="ViewSalesTableDiv">
-							<table id="ViewSalesTable" class="table">
-								<thead class="thead-dark">
-									<tr>
-										<th>Energy to sell</th>
-										<th>Price per KhW</th>
-										<th>Sale creation date</th>
-										<th>Sale validity date</th>
-										<th>Sale ID</th>
-										<th>Seller public key</th>
-									</tr>
-								</thead>
-								<tbody id ="salesData">
-								<!-- Rows are added dynamically in main/app.refresh -->
-								</tbody>
-							</table>
-						</div>
+		<div id = "ViewSalesPage">
+				<h1 style = "text-align:center"> View energy on sale </h1>
+				<div id ="ViewSalesTableDiv">
+					<table id="ViewSalesTable" class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th>Energy to sell</th>
+								<th>Price per KhW</th>
+								<th>Sale creation date</th>
+								<th>Sale validity date</th>
+								<th>Sale ID</th>
+								<th>Seller public key</th>
+							</tr>
+						</thead>
+						<tbody id ="salesData">
+						<!-- Rows are added dynamically in main/app.refresh -->
+						</tbody>
+					</table>
 				</div>
+		</div>
 
-				<!-- Buy Modal -->
-				<div id="buyModal" class="modal fade" role="dialog" aria-labelledby="buyModal" aria-hidden="true">
-				  <div class="modal-dialog">
-				    <div class="modal-content">
-				      <div class="modal-header">
-				        <h3>Energy Buy Modal</h3>
-				      </div>
-							<div class="modal-body">
-					      <div id="saleDetails">
+		<!-- Buy Modal -->
+		<div id="buyModal" class="modal fade" role="dialog" aria-labelledby="buyModal" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h3>Energy Buy Modal</h3>
+		      </div>
+					<div class="modal-body">
+			      <div id="saleDetails">
 
-								</div>
-
-								<div class="form-group" id="divBuyModal">
-									<label> How much energy you want to buy (KwH): </label>
-									<input id="amountBuyModal" class="form-control" type="number" placeholder="0">
-									<label> Total cost of energy (Euro): </label>
-									<input id="totalCostBuyModal" class="form-control" type="text" placeholder="0" readonly="">
-									<label> Date of buy: </label>
-									<input id="writedateBuyModal" class="form-control" type="text" readonly="">
-									<label> Insert your private key: </label>
-									<input id="buyerPrivateKeyBuyModal" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
-									<label> The buy ID (UUID v4 format)</label>
-									<input id="buyIDBuyModal" class="form-control" type="text" placeholder="Press button to gen buy ID">
-									<br>
-									<span>
-										<input id="createBuySubmit" type="button" value="Buy" class="btn btn-primary">
-										<button id="genBuyId" class="btn btn-default">Click to gen buy ID</button>
-									</span>
-								</div>
-							</div>
-
-
-				      <div class="modal-footer">
-								<div id=resultBuyContainer>
-										<div id=divResultBuy>
-											<button id="closeButtonBuy">
-												<i id="closeIcon">&times;</i>
-											</button>
-											<h3 id="buyMsg"></h3>
-										</div>
-								</div>
-				        <button id="buyModalCloseBtn" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-				      </div>
-				    </div>
-				  </div>
-				</div>
-				<!-- <div id="buyModal" class="modal" role="dialog" aria-labelledby="buyModalLabel" aria-hidden="true">
-    				<div class="modal-header" style="background-color=pink">
-        				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-         				<h3>Energy Offer</h3>
 						</div>
 
-    				<div id="buyDetails" class="modal-body"></div>
-    				<div id="buyItems" class="modal-body"></div>
+						<div class="form-group" id="divBuyModal">
+							<label> How much energy you want to buy (KwH): </label>
+							<input id="amountBuyModal" class="form-control" type="number" placeholder="0">
+							<label> Total cost of energy (Euro): </label>
+							<input id="totalCostBuyModal" class="form-control" type="text" placeholder="0" readonly="">
+							<label> Date of buy: </label>
+							<input id="writedateBuyModal" class="form-control" type="text" readonly="">
+							<label> Insert your private key: </label>
+							<input id="buyerPrivateKeyBuyModal" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
+							<label> The buy ID (UUID v4 format)</label>
+							<input id="buyIDBuyModal" readonly="" class="form-control" type="text" placeholder="Press button to gen buy ID">
+							<br>
+							<span>
+								<input id="createBuySubmit" type="button" value="Buy" class="btn btn-primary">
+								<button id="genBuyId" class="btn">Click to gen buy ID</button>
+							</span>
+						</div>
+					</div>
 
-    				<div class="modal-footer">
-        				<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    				</div>
-				</div> -->
+
+		      <div class="modal-footer">
+						<div id=resultBuyContainer>
+								<div id=divResultBuy>
+									<button id="closeButtonBuy">
+										<i id="closeIcon">&times;</i>
+									</button>
+									<h3 id="buyMsg"></h3>
+								</div>
+						</div>
+		        <button id="buyModalCloseBtn" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 
 		<!-- Section of the create sale -->
 		<div id = "CreateSalePage">
@@ -147,7 +141,7 @@
 					<label> The seller's private key </label>
 					<input id="sellerprivatekey" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
 					<label> The sale ID (UUID v4 format)</label>
-					<input id="saleID" class="form-control" type="text" placeholder="Press button to gen sale ID">
+					<input id="saleID" readonly="" class="form-control" type="text" placeholder="Press button to gen sale ID">
 					<br>
 					<span>
 						<input id="createSubmit" type="button" value="Create" class="btn btn-primary">
@@ -165,21 +159,80 @@
 			</div>
 		</div>
 
-		<!-- Section of the create buy -->
-		<div id = "CreateBuyPage">
-				<h1 style = "text-align:center"> Create Buy petition</h1>
+		<!-- Section of buy petitions -->
+		<div id = "ViewBuyPetitionsPage">
+				<h1 style = "text-align:center"> View energy buy petitions</h1>
 		</div>
 
+		<!-- Section of the create buy -->
+		<div id = "CreateBuyPage">
+			<h1 style = "text-align:center"> Create buy petition</h1>
+			<div id="saleContainer" >
+				<div class="form-group" id="divSale">
+					<h2 id="saleTitle" >Create sell</h2>
 
-		<br>
-		<br>
+
+					<label> Insert amount of kWh to sell </label>
+					<input id="amount" class="form-control" type="text" placeholder="Enter sell amount ...">
+					<label> Insert price in Euro per kWh </label>
+					<input id="price" class="form-control" type="text" placeholder="Enter price...">
+					<label> The sale's creation date (YYYY-MM-DD hh:mm:ss format) </label>
+					<input id="writedate" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
+					<label> The sale's validity date (YYYY-MM-DD hh:mm:ss format) </label>
+					<div id="validWritedateDiv" class = "pull-left">
+						<div>
+							<input id="validwritedate" class="form-control" type="text" readonly="">
+						</div>
+						<div>
+							<span class="DateLabels">Date</span>
+							<input id="validWritedateDate" type="date" class="form-control" required>
+						</div>
+						<div>
+							<span class="DateLabels">Hour</span>
+							<select id="validwritedateHour" class="form-control"></select>
+						</div>
+						<div>
+							<span class="DateLabels">Minute</span>
+							<select id="validwritedateMin" class="form-control"></select>
+						</div>
+					</div>
+					<label> The seller's private key </label>
+					<input id="sellerprivatekey" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
+					<label> The sale ID (UUID v4 format)</label>
+					<input id="saleID"  class="form-control" type="text" placeholder="Press button to gen sale ID">
+					<br>
+					<span>
+						<input id="createSubmit" type="button" value="Create" class="btn btn-primary">
+						<button id="genSaleId" class="btn btn-default">Click to gen sale ID</button>
+					</span>
+				</div>
+			</div>
+			<div id=resultContainer>
+					<div id=divResult>
+						<button id="closeButton">
+							<i id="closeIcon">&times;</i>
+						</button>
+						<h3 id="saleMsg"></h3>
+					</div>
+			</div>
+		</div>
+
+		<!-- Section of buys in sales -->
+		<div id = "BuysFromSalesPage">
+				<h1 style = "text-align:center"> Energy bought from sales</h1>
+		</div>
+		<!-- Section of satisfied buy petitions -->
+		<div id = "SatisfiedBuysPage">
+				<h1 style = "text-align:center"> Satisfied buy petitions</h1>
+		</div>
+
 		<!-- <div>
 			<IMG SRC="https://media.tenor.com/images/b5d0524fbcfad4cbc2016564445a8a95/tenor.gif" align="bottom-right" width="40" height="40">
 		</div> -->
 
-    <div id="divKeys">
+    <!-- <div id="divKeys">
     <button id="show" class="btn btn-default">Click to show keys</button>
-	<button id="hide" class="btn btn-default">Click to hide keys</button>
+		<button id="hide" class="btn btn-default">Click to hide keys</button>
     </div>
 
 		<div id="keys">
@@ -207,8 +260,8 @@
 					</tr>
        	</tbody>
 			</table>
-		</div>
-		<div class="mypanel"></div>
+		</div> -->
+
 		<script src="./dist/bundle.js"></script>
 	</body>
 </html>

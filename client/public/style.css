@@ -16,6 +16,9 @@
 			#genSaleId{
 				float:right;
 			}
+			#genBuy1Id{
+				float:right;
+			}
 			h3{
 				text-align: center;
 		  }
@@ -58,8 +61,6 @@
 		    align-items: center;
 			}
 			#divResult{
-				padding-right: 15px;
-				padding-left: 15px;
 				border-radius: 10px;
 		    border: 2px solid darkgrey;
 		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
@@ -126,7 +127,7 @@
 
 			/*-- Sidebar section */
 			#sidebar {
-				width: 100%;
+
 				display: flex;
 			  list-style-type: none;
 			  margin: 0;
@@ -152,16 +153,18 @@
 			  color: white;
 			}
 			#sidebarDiv {
-				height: 100%;
 			}
 			#ViewSalesPage {
 				display: block;
 			}
 			#CreateSalePage {
-				margin-top:50px;
+				margin-top:20px;
 				display: none;
 			}
 			#CreateBuyPage {
+				display: none;
+			}
+			#ViewBuyPetitionsPage {
 				display: none;
 			}
 			#ViewSalesTableDiv{
@@ -204,6 +207,20 @@
 			#buyModal{
 
 			}
+			#BuysFromSalesSide{
+				float:right;
+			}
+			#SatisfiedBuysSide{
+				float:right;
+			}
+
+			#BuysFromSalesPage{
+				display : none;
+			}
+
+			#SatisfiedBuysPage{
+				display : none;
+			}
 
 			.modal-dialog{
 				max-width: 850px;
@@ -218,5 +235,9 @@
 				background-color: Gainsboro;
 			}
 			body{
-				background-image: radial-gradient(circle, red, yellow, green);
+				background-image: linear-gradient(to bottom right, springGreen, gainsboro);
+				background-attachment: fixed;
+			}
+			html{
+				height: 100%;
 			}
