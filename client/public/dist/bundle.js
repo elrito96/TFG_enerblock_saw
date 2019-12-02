@@ -40257,12 +40257,17 @@ $('#buyModal').modal({
   backdrop: "static",
   show:false,
 }).on('show.bs.modal', function(){
-  var getIdFromRow = $(event.target).closest('tr').data('id');
+  var closestRow = $(event.target).closest('tr')
+  var getIdFromRow = closestRow.data('id');
 
+  console.log("G e t id from R o w")
+  console.log(getIdFromRow)
+  var amountToLoadModal = closestRow.find('td:eq(0)').text();
+  console.log(amountToLoadModal)
   // Ajax calls to populate modal
   $('#resultBuyContainer').css("visibility", "hidden")
   $(this).find('#saleDetails').html(
-    $('<b> Amount to sell (KwH): </b> <label id="amountSelectedSaleBuy">' + app.salePetitions[getIdFromRow].kwhAmountSell + '</label><br>'+
+    $('<b> Amount to sell (KwH): </b> <label id="amountSelectedSaleBuy">' + amountToLoadModal + '</label><br>'+
       '<b>Price per KhW : </b> <label id="priceSelectedSaleBuy">' + app.salePetitions[getIdFromRow].pricePerKwh + '</label><br>'+
       '<b>Creation Date : </b> <label id="createWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].createWritedate + '</label><br>'+
       '<b>Validity Date : </b> <label id="validWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].validWritedate + '</label><br>'+
@@ -40459,11 +40464,17 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
           // Loop table, update the amount of the bought offer
           console.log(" UPDATING TABLE id == "+id)
           $('#ViewSalesTable > tbody  > tr').each(function(index, tr) {
+            var count = 0
             var $tr = $(tr)
             console.log(index);
             console.log(tr);
             var rowId = $tr.find('td:eq(4)').text();
+            if(rowId == $('#idSelectedSaleBuy').text()){
+              console.log(" Esta es la fila a editar ")
+              $tr.find('td:eq('+count+')').text(newAmout);
+            }
             console.log(rowId);
+            count=count+1
           });
 
 

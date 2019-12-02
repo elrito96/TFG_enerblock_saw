@@ -153,14 +153,17 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
           // Loop table, update the amount of the bought offer
           console.log(" UPDATING TABLE id == "+id)
           $('#ViewSalesTable > tbody  > tr').each(function(index, tr) {
+            var count = 0
             var $tr = $(tr)
             console.log(index);
             console.log(tr);
             var rowId = $tr.find('td:eq(4)').text();
-            if(rowId == $('#idSelectedSaleBuy').text(newAmout)){
+            if(rowId == $('#idSelectedSaleBuy').text()){
               console.log(" Esta es la fila a editar ")
+              $tr.find('td:eq('+count+')').text(newAmout);
             }
             console.log(rowId);
+            count=count+1
           });
 
 

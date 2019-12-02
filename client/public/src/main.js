@@ -276,12 +276,17 @@ $('#buyModal').modal({
   backdrop: "static",
   show:false,
 }).on('show.bs.modal', function(){
-  var getIdFromRow = $(event.target).closest('tr').data('id');
+  var closestRow = $(event.target).closest('tr')
+  var getIdFromRow = closestRow.data('id');
 
+  console.log("G e t id from R o w")
+  console.log(getIdFromRow)
+  var amountToLoadModal = closestRow.find('td:eq(0)').text();
+  console.log(amountToLoadModal)
   // Ajax calls to populate modal
   $('#resultBuyContainer').css("visibility", "hidden")
   $(this).find('#saleDetails').html(
-    $('<b> Amount to sell (KwH): </b> <label id="amountSelectedSaleBuy">' + app.salePetitions[getIdFromRow].kwhAmountSell + '</label><br>'+
+    $('<b> Amount to sell (KwH): </b> <label id="amountSelectedSaleBuy">' + amountToLoadModal + '</label><br>'+
       '<b>Price per KhW : </b> <label id="priceSelectedSaleBuy">' + app.salePetitions[getIdFromRow].pricePerKwh + '</label><br>'+
       '<b>Creation Date : </b> <label id="createWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].createWritedate + '</label><br>'+
       '<b>Validity Date : </b> <label id="validWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].validWritedate + '</label><br>'+
