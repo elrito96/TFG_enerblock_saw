@@ -379,6 +379,19 @@ $('#createSubmit').on('click', function () {
   app.updateCreateSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey)
 })
 
+$('#v').on('click', function () {
+  console.log(" Creating buy petition petition ");
+  const kwhAmountSell = $('#amount').val()
+  const pricePerKwh = $('#price').val()
+  const createWritedate = $('#writedate').val()
+  const validWritedate = $('#validwritedate').val()
+  const saleName = $('#saleID').val()
+  const sellerprivatekey = $("#sellerprivatekey").val();
+  console.log("SALE NAME ID ==================== "+saleName)
+  console.log("sellerprivatekey below ¨¨¨¨¨");
+  console.log(sellerprivatekey)
+  app.updateCreateSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey)
+})
 
 
 // Create buy sale
