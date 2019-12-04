@@ -88,7 +88,7 @@ app.updateSalesTable = function(){
   $("#CreateSaleA").removeClass("active");
   $("#CreateBuyA").removeClass("active");
   $("#ViewBuyPetitionsA").removeClass("active");
-  $("#ViewBuyPetitionsA").removeClass("active");
+  $("#BuysFromSalesA").removeClass("active");
   $("#SatisfiedBuysPage").removeClass("active");
 
   app.refreshSales();
@@ -96,20 +96,19 @@ app.updateSalesTable = function(){
 app.updateBuyPetitionsTable = function(){
   console.log(" -- Ocultar Create, mostrar Buy petitions --")
   //window.history.pushState('', '', '/ViewSales');
+  $("#ViewSalesPage").css("display", "none");
   $("#CreateSalePage").css("display", "none");
   $("#CreateBuyPage").css("display", "none");
-  $("#ViewSalesPage").css("display", "none");
   $("#ViewBuyPetitionsPage").css("display", "block");
-  $("#ViewBuyPetitionsPage").css("display", "none");
+  $("#BuysFromSalesPage").css("display", "none");
   $("#SatisfiedBuysPage").css("display", "none");
 
-
+  $("#CreateBuyA").removeClass("active");
   $("#ViewSalesA").removeClass("active");
   $("#CreateSaleA").removeClass("active");
-  $("#CreateBuyA").removeClass("active");
-  $("#ViewBuyPetitionsA").addClass("active")
-  $("#ViewBuyPetitionsA").removeClass("active");
-  $("#SatisfiedBuysPage").removeClass("active");;
+  $("#ViewBuyPetitionsA").addClass("active");
+  $("#BuysFromSalesA").removeClass("active");
+  $("#SatisfiedBuysA").removeClass("active");
 
   app.refreshBuyPetitions();
 }
@@ -151,6 +150,7 @@ $.getScript("https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.
       document.getElementById("dateday")
       .innerHTML = moment().format('MMMM Do YYYY');
       $("#writedate").val( moment().format('YYYY-MM-DD kk:mm:ss'));
+      $("#writedateBuyPetition").val( moment().format('YYYY-MM-DD kk:mm:ss'));
       $("#writedateBuyModal").val( moment().format('YYYY-MM-DD kk:mm:ss'));
 
   })();
@@ -180,6 +180,9 @@ $(document).ready(function(){
   for(var i = 11; i>=0; i--){
     $('#validwritedateMin').append(`<option value="`+pad(i*5)+`">
                                        `+pad(i*5)+`
+                                  </option>`);
+    $('#validwritedateMinBuyPetition').append(`<option value="`+pad(i*5)+`">
+                                       `+pad(i*5)+`
                                   </option>`)
   }
   // Hours
@@ -187,24 +190,32 @@ $(document).ready(function(){
     $('#validwritedateHour').append(`<option value="`+pad(i)+`">
                                        `+pad(i)+`
                                   </option>`)
+    $('#validwritedateHourBuyPetition').append(`<option value="`+pad(i)+`">
+                                       `+pad(i)+`
+                                  </option>`)
   }
 
 
 
 
-  //Load today date on create sale date picker
+  //Load today date on create sale and buy petition date picker
   var now = new Date();
   var day = ("0" + now.getDate()).slice(-2);
   var month = ("0" + (now.getMonth() + 1)).slice(-2);
   var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
   $('#validWritedateDate').val(today);
+  $('#validWritedateDateBuyPetition').val(today);
+
 
   //Load valid date in field from date, hour, min and seconds
   updateValidWritedate();
+  updateValidWritedateBuyPetition();
 
 
   // Update valid date field when changing date, hour, min or seconds
-  $('#validWritedateDate, #validwritedateHour,#validwritedateMin, #validwritedateSec').on('change',updateValidWritedate);
+  $('#validWritedateDate, #validwritedateHour,#validwritedateMin').on('change',updateValidWritedate);
+  $('#validWritedateDateBuyPetition, #validwritedateHourBuyPetition,#validwritedateMinBuyPetition').on('change',updateValidWritedateBuyPetition);
+
   // Public and private keys table
 	$("#hide").click(function(){
 		$("#keys").hide();
@@ -222,6 +233,10 @@ $(document).ready(function(){
   $("#genBuyId").click(function(){
 		$("#buyIDBuyModal").val(uuidv4());
 	});
+
+  $("#genIdBuyPetition").click(function(){
+    $("#buyPetitionID").val(uuidv4());
+  });
 
 
   // X icon to close the result container
@@ -261,15 +276,15 @@ $(document).ready(function(){
     $("#CreateBuyPage").css("display", "none");
     $("#CreateSalePage").css("display", "block");
     $("#ViewBuyPetitionsPage").css("display", "none");
-    $("#ViewBuyPetitionsPage").css("display", "none");
+    $("#BuysFromSalesPage").css("display", "none");
     $("#SatisfiedBuysPage").css("display", "none");
 
     $("#CreateSaleA").addClass("active");
     $("#ViewSalesA").removeClass("active");
     $("#ViewBuyPetitionsA").removeClass("active");
     $("#CreateBuyA").removeClass("active");
-    $("#ViewBuyPetitionsA").removeClass("active");
-    $("#SatisfiedBuysPage").removeClass("active");
+    $("#BuysFromSalesA").removeClass("active");
+    $("#SatisfiedBuysA").removeClass("active");
 	});
 
   // Actions to show and hide elements when view buy petitions is clicked in the side bar
@@ -283,17 +298,51 @@ $(document).ready(function(){
     $("#CreateSalePage").css("display", "none");
     $("#CreateBuyPage").css("display", "block");
     $("#ViewBuyPetitionsPage").css("display", "none");
-    $("#ViewBuyPetitionsPage").css("display", "none");
+    $("#BuysFromSalesPage").css("display", "none");
     $("#SatisfiedBuysPage").css("display", "none");
 
     $("#CreateBuyA").addClass("active");
     $("#ViewSalesA").removeClass("active");
     $("#CreateSaleA").removeClass("active");
     $("#ViewBuyPetitionsA").removeClass("active");
+    $("#BuysFromSalesA").removeClass("active");
+    $("#SatisfiedBuysA").removeClass("active");
+  });
+  // Actions to show and hide elements when history1 is clicked in the side bar
+
+  $("#BuysFromSalesSide").click(function(){
+    //window.history.pushState('', '', '/CreateBuy');
+		$("#ViewSalesPage").css("display", "none");
+    $("#CreateSalePage").css("display", "none");
+    $("#CreateBuyPage").css("display", "none");
+    $("#ViewBuyPetitionsPage").css("display", "none");
+    $("#BuysFromSalesPage").css("display", "block");
+    $("#SatisfiedBuysPage").css("display", "none");
+
+    $("#CreateBuyA").removeClass("active");
+    $("#ViewSalesA").removeClass("active");
+    $("#CreateSaleA").removeClass("active");
     $("#ViewBuyPetitionsA").removeClass("active");
-    $("#SatisfiedBuysPage").removeClass("active");
+    $("#BuysFromSalesA").addClass("active");
+    $("#SatisfiedBuysA").removeClass("active");
+  });
+  // Actions to show and hide elements when history2 is clicked in the side bar
 
+  $("#SatisfiedBuysSide").click(function(){
+    //window.history.pushState('', '', '/CreateBuy');
+    $("#ViewSalesPage").css("display", "none");
+    $("#CreateSalePage").css("display", "none");
+    $("#CreateBuyPage").css("display", "none");
+    $("#ViewBuyPetitionsPage").css("display", "none");
+    $("#BuysFromSalesPage").css("display", "none");
+    $("#SatisfiedBuysPage").css("display", "block");
 
+    $("#CreateBuyA").removeClass("active");
+    $("#ViewSalesA").removeClass("active");
+    $("#CreateSaleA").removeClass("active");
+    $("#ViewBuyPetitionsA").removeClass("active");
+    $("#BuysFromSalesA").removeClass("active");
+    $("#SatisfiedBuysA").addClass("active");
 	});
 
 });
@@ -307,6 +356,13 @@ function updateValidWritedate(){
   $('#validwritedate').val(validWr);
 }
 
+function updateValidWritedateBuyPetition(){
+  var dayPicked = document.getElementById("validWritedateDateBuyPetition")
+  var hourPicked = document.getElementById("validwritedateHourBuyPetition")
+  var minPicked = document.getElementById("validwritedateMinBuyPetition")
+  var validWr = dayPicked.value.substring(0,4)+"-"+dayPicked.value.substring(5,7)+"-"+dayPicked.value.substring(8,10)+" "+hourPicked.value+":"+minPicked.value+":00";
+  $('#validwritedateBuyPetition').val(validWr);
+}
 
 // Create Put on sale
 $('#createSubmit').on('click', function () {
@@ -316,9 +372,10 @@ $('#createSubmit').on('click', function () {
   const createWritedate = $('#writedate').val()
   const validWritedate = $('#validwritedate').val()
   const saleName = $('#saleID').val()
-  const sellerprivatekey = $('#sellerprivatekey').val()
+  const sellerprivatekey = $("#sellerprivatekey").val();
   console.log("SALE NAME ID ==================== "+saleName)
-  console.log("abundle main");
+  console.log("sellerprivatekey below ¨¨¨¨¨");
+  console.log(sellerprivatekey)
   app.updateCreateSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey)
 })
 

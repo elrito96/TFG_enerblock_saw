@@ -13,12 +13,10 @@
 				margin: 0 auto;
 				padding: 10px;
 			}
-			#genSaleId{
+			#genSaleId,#genBuyId,#genIdBuyPetition{
 				float:right;
 			}
-			#genBuy1Id{
-				float:right;
-			}
+
 			h3{
 				text-align: center;
 		  }
@@ -133,14 +131,15 @@
 			  margin: 0;
 			  padding: 0;
 			  background-color: #D4D3D3;
-				cursor: pointer;
 			}
+
 
 			.sidebar_li a {
 			  display: block;
 			  color: #000;
 			  padding: 8px 16px;
 			  text-decoration: none;
+				cursor: pointer;
 			}
 
 			.sidebar_li a.active {
@@ -163,6 +162,7 @@
 			}
 			#CreateBuyPage {
 				display: none;
+				margin-top:20px;
 			}
 			#ViewBuyPetitionsPage {
 				display: none;
@@ -178,25 +178,27 @@
 				border: 2px solid darkgrey;
 		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
 			}
-			#validWritedateDiv{
+			#validWritedateDiv,#validWritedateDivBuyPetition{
 				display:flex;
 				flex-flow:row;
 				align-items:center;
 			}
-			#validwritedate{
+			#validwritedate,#validwritedateBuyPetition{
 				margin-left: 3px;
 				margin-right: 3px;
 				margin-top:24px;
 			}
-			#validwritedateDate{
+			#validWritedateDate, #validWritedateDateBuyPetition{
 				margin: 3px;
 				display:block;
-				flex-flow: column;
-			}#validwritedateHour{
+				/* flex-flow: column;
+				width:100vh; */
+			}
+			#validwritedateHour,#validwritedateHourBuyPetition{
 				/*width:100px;*/
 				margin: 3px;
 			}
-			#validwritedateMin{
+			#validwritedateMin,#validwritedateMinBuyPetition{
 			  /*width:100px;*/
 				margin: 3px;
 			}
@@ -207,18 +209,32 @@
 			#buyModal{
 
 			}
+
+			/* #ViewSalesSide{
+				float:left;
+			}
+			#CreateSaleSide{
+				float:left;
+			}
+			#ViewBuyPetitionsSide{
+				float:left;
+			}
+			#CreateBuySide{
+				float:right;
+			}
 			#BuysFromSalesSide{
 				float:right;
 			}
 			#SatisfiedBuysSide{
 				float:right;
-			}
+			} */
 
 			#BuysFromSalesPage{
 				display : none;
 			}
 
 			#SatisfiedBuysPage{
+
 				display : none;
 			}
 

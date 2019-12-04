@@ -80,7 +80,10 @@
 							<label> Date of buy: </label>
 							<input id="writedateBuyModal" class="form-control" type="text" readonly="">
 							<label> Insert your private key: </label>
-							<input id="buyerPrivateKeyBuyModal" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
+							<select id="buyerPrivateKeyBuyModal" class="form-control">
+								<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+			  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+							</select>
 							<label> The buy ID (UUID v4 format)</label>
 							<input id="buyIDBuyModal" readonly="" class="form-control" type="text" placeholder="Press button to gen buy ID">
 							<br>
@@ -139,7 +142,10 @@
 						</div>
 					</div>
 					<label> The seller's private key </label>
-					<input id="sellerprivatekey" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
+					<select id="sellerprivatekey" class="form-control">
+						<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+	  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+					</select>
 					<label> The sale ID (UUID v4 format)</label>
 					<input id="saleID" readonly="" class="form-control" type="text" placeholder="Press button to gen sale ID">
 					<br>
@@ -162,48 +168,69 @@
 		<!-- Section of buy petitions -->
 		<div id = "ViewBuyPetitionsPage">
 				<h1 style = "text-align:center"> View energy buy petitions</h1>
+				<div id ="ViewSalesTableDiv">
+					<table id="ViewSalesTable" class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th>Requested energy</th>
+								<th>Price per KhW</th>
+								<th>Buy petition creation date</th>
+								<th>Buy petition validity date</th>
+								<th>Buy petition ID</th>
+								<th>Buy petition creator public key</th>
+							</tr>
+						</thead>
+						<tbody id ="salesData">
+						<!-- Rows are added dynamically in main/app.refresh -->
+						</tbody>
+					</table>
+				</div>
 		</div>
+
 
 		<!-- Section of the create buy -->
 		<div id = "CreateBuyPage">
-			<h1 style = "text-align:center"> Create buy petition</h1>
+
 			<div id="saleContainer" >
 				<div class="form-group" id="divSale">
-					<h2 id="saleTitle" >Create sell</h2>
+					<h2 id="saleTitle" >Create buy petition</h2>
 
 
-					<label> Insert amount of kWh to sell </label>
-					<input id="amount" class="form-control" type="text" placeholder="Enter sell amount ...">
-					<label> Insert price in Euro per kWh </label>
-					<input id="price" class="form-control" type="text" placeholder="Enter price...">
-					<label> The sale's creation date (YYYY-MM-DD hh:mm:ss format) </label>
-					<input id="writedate" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
-					<label> The sale's validity date (YYYY-MM-DD hh:mm:ss format) </label>
-					<div id="validWritedateDiv" class = "pull-left">
+					<label> Insert amount of kWh you desire to buy </label>
+					<input id="amountBuyPetition" class="form-control" type="text" placeholder="Enter amount ...">
+					<label> Insert price in Euro per kWh you desire to pay </label>
+					<input id="priceBuyPetition" class="form-control" type="text" placeholder="Enter price...">
+					<label> The buy petition's creation date (YYYY-MM-DD hh:mm:ss format) </label>
+					<input id="writedateBuyPetition" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
+					<label> The buy petition's validity date (YYYY-MM-DD hh:mm:ss format) </label>
+					<div id="validWritedateDivBuyPetition" class = "pull-left">
 						<div>
-							<input id="validwritedate" class="form-control" type="text" readonly="">
+							<input id="validwritedateBuyPetition" class="form-control" type="text" readonly="">
 						</div>
 						<div>
 							<span class="DateLabels">Date</span>
-							<input id="validWritedateDate" type="date" class="form-control" required>
+							<input id="validWritedateDateBuyPetition" type="date" class="form-control" required>
 						</div>
 						<div>
 							<span class="DateLabels">Hour</span>
-							<select id="validwritedateHour" class="form-control"></select>
+							<select id="validwritedateHourBuyPetition" class="form-control"></select>
 						</div>
 						<div>
 							<span class="DateLabels">Minute</span>
-							<select id="validwritedateMin" class="form-control"></select>
+							<select id="validwritedateMinBuyPetition" class="form-control"></select>
 						</div>
 					</div>
-					<label> The seller's private key </label>
-					<input id="sellerprivatekey" class="form-control" type="text" placeholder="Enter privkey..." value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338">
-					<label> The sale ID (UUID v4 format)</label>
-					<input id="saleID"  class="form-control" type="text" placeholder="Press button to gen sale ID">
+					<label> Buy petition creator's private key </label>
+					<select id="sellerprivatekeyBuyPetition" class="form-control">
+						<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+						<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+					</select>
+					<label> The buy petition ID (UUID v4 format)</label>
+					<input id="buyPetitionID"  class="form-control" type="text" placeholder="Press button to gen buy petition ID">
 					<br>
 					<span>
-						<input id="createSubmit" type="button" value="Create" class="btn btn-primary">
-						<button id="genSaleId" class="btn btn-default">Click to gen sale ID</button>
+						<input id="createSubmitBuyPetition" type="button" value="Create" class="btn btn-primary">
+						<button id="genIdBuyPetition" class="btn btn-default">Click to gen buy petition ID</button>
 					</span>
 				</div>
 			</div>
@@ -220,10 +247,44 @@
 		<!-- Section of buys in sales -->
 		<div id = "BuysFromSalesPage">
 				<h1 style = "text-align:center"> Energy bought from sales</h1>
+				<div id ="ViewSalesTableDiv">
+					<table id="ViewSalesTable" class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th>User who bought</th>
+								<th>User who sold</th>
+								<th>Amount of energy (KwH)</th>
+								<th>At a price of (Euro per KwH)</th>
+								<th>For a total of (Euro)</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody id ="salesData">
+						<!-- Rows are added dynamically in main/app.refresh -->
+						</tbody>
+					</table>
+				</div>
 		</div>
 		<!-- Section of satisfied buy petitions -->
 		<div id = "SatisfiedBuysPage">
 				<h1 style = "text-align:center"> Satisfied buy petitions</h1>
+				<div id ="ViewSalesTableDiv">
+					<table id="ViewSalesTable" class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th>User who satisfied a petition</th>
+								<th>User who created the energy petition</th>
+								<th>Amount of energy (KwH)</th>
+								<th>At a price of (Euro per KwH)</th>
+								<th>For a total of (Euro)</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody id ="salesData">
+						<!-- Rows are added dynamically in main/app.refresh -->
+						</tbody>
+					</table>
+				</div>
 		</div>
 
 		<!-- <div>
