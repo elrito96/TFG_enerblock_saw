@@ -59,12 +59,21 @@ class EnerblockTransactionHandler(TransactionHandler):
         print("Handler after getting the payload and state, will create sale")
         if payload.operation == 'putOnSale':
             _create_sale(kwhAmountSell = payload.kwhAmountSell,
-                         pricePerKwh = payload.pricePerKwh,
-                         createWritedate = payload.createWritedate,
-                         validWritedate = payload.validWritedate,
-                         saleName = payload.saleName,
-                         sellerPubKey = signer,
-                         state=state)
+                        pricePerKwh = payload.pricePerKwh,
+                        createWritedate = payload.createWritedate,
+                        validWritedate = payload.validWritedate,
+                        saleName = payload.saleName,
+                        sellerPubKey = signer,
+                        state=state)
+
+        elif payload.operation == 'createBuyPetition':
+            _create_buyPetition(kwhAmountSell = payload.kwhAmountSell,
+                        pricePerKwh = payload.pricePerKwh,
+                        createWritedate = payload.createWritedate,
+                        validWritedate = payload.validWritedate,
+                        saleName = payload.saleName,
+                        sellerPubKey = signer,
+                        state=state)
 
         elif payload.operation == 'buy':
             _create_buy(kwhAmountSell = payload.kwhAmountSell,
@@ -78,10 +87,23 @@ class EnerblockTransactionHandler(TransactionHandler):
                         buyName = payload.buyName,
                         buyerPubKey = signer,
                         state=state)
+        elif payload.operation == 'satisfyBuyPetition':
+            _create_satisfyBuyPetition(kwhAmountSell = payload.kwhAmountSell,
+                        pricePerKwh = payload.pricePerKwh,
+                        createWritedate = payload.createWritedate,
+                        validWritedate = payload.validWritedate,
+                        saleName = payload.saleName,
+                        sellerPubKey = payload.sellerPubKey,
+                        kwhAmountBuy = payload.kwhAmountBuy,
+                        buyWritedate = payload.buyWritedate,
+                        buyName = payload.buyName,
+                        buyerPubKey = signer,
+                        state=state)
+
 
         else:
             raise InvalidTransaction('Unhandled action: {}'.format(
-                payload.action))
+                payload.operation))
 
 
 def _create_sale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, state):
@@ -90,6 +112,13 @@ def _create_sale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, sa
             'Invalid action: This sell already exists: {}'.format(saleName))
     print("Set sale id: "+saleName)
     state.set_sale('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+
+def _create_buyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, state):
+    if state.get_buyPetition(saleName) is not None:
+        raise InvalidTransaction(
+            'Invalid action: This buy petition already exists: {}'.format(saleName))
+    print("Set sale id: "+saleName)
+    state.set_buyPetition('createBuyPetition', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
 
 
 def _create_buy(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey, state):
@@ -102,6 +131,17 @@ def _create_buy(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, sal
     # Change sale state, updating amount of energy
     newSaleAmount = int(kwhAmountSell) - int(kwhAmountBuy)
     state.set_sale('putOnSale', str(newSaleAmount) , pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+
+def _create_satisfyBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey, state):
+    if state.get_satisfyBuyPetition(buyName) is not None:
+        raise InvalidTransaction(
+            'Invalid action: This satisfy buy petition already exists: {}'.format(buyName))
+
+
+    state.set_satisfyBuyPetition('satisfyBuyPetition', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey)
+    # Change sale state, updating amount of energy
+    newSaleAmount = int(kwhAmountSell) - int(kwhAmountBuy)
+    state.set_buyPetition('createBuyPetition', str(newSaleAmount) , pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
 
 
 '''

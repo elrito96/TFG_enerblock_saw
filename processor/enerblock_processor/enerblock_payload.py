@@ -43,7 +43,7 @@ class EnerblockPayload(object):
         operation = data.get('operation')
         if not operation:
             raise InvalidTransaction('Not operation, operation is required')
-        if operation not in ('putOnSale', 'buy'):
+        if operation not in ('putOnSale', 'buy', 'createBuyPetition', 'satisfyBuyPetition'):
             raise InvalidTransaction('Invalid operation: {}'.format(operation))
 
         #Common section
@@ -72,7 +72,7 @@ class EnerblockPayload(object):
             #Validate that the amount to sell is not null, or anything different from a positive decimal
             if not pricePerKwh:
                 raise InvalidTransaction('Price per kwh is required')
-            if not pricePerKwh.replace('.','',1).isdigit():
+            if not pricePerKwh.replace('.','',1).isdigit() or pricePerKwh =="0":
                 raise InvalidTransaction('Price per kwh must be a positive number')
 
             #Validate creation date not null
@@ -96,6 +96,55 @@ class EnerblockPayload(object):
 
             if not saleName:
                 raise InvalidTransaction('Sale id (saleName) is required')
+
+            self._operation = operation
+            self._kwhAmountSell = kwhAmountSell
+            self._pricePerKwh = pricePerKwh
+            self._createWritedate = createWritedate
+            self._validWritedate = validWritedate
+            self._saleName = saleName
+
+        # create Buy Petition section
+        elif operation == 'createBuyPetition':
+            sellerPubKey = transactionCreator
+
+            if not sellerPubKey:
+                raise InvalidTransaction('A creator is required to create buy petition')
+
+            self._sellerPubKey = sellerPubKey
+
+            #Validate that the amount to sell is not null, or anything different from a positive int
+            if not kwhAmountSell:
+                raise InvalidTransaction('Solicited amount is required')
+            if not kwhAmountSell.isdigit() or kwhAmountSell == "0":
+                raise InvalidTransaction('Solicited amount must be a positive integer number')
+
+            #Validate that the amount to sell is not null, or anything different from a positive decimal
+            if not pricePerKwh:
+                raise InvalidTransaction('Price per kwh is required')
+            if not pricePerKwh.replace('.','',1).isdigit() or pricePerKwh =="0":
+                raise InvalidTransaction('Price per kwh must be a positive number')
+
+            #Validate creation date not null
+            if not createWritedate:
+                raise InvalidTransaction('Date of creation of petition is required')
+            #Validate creation date format
+            try:
+                datetime.strptime(createWritedate, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise InvalidTransaction("Incorrect data format, creation Date should be YYYY-MM-DD hh:mm:ss")
+
+            #Validate validity date not null
+            if not validWritedate:
+                raise InvalidTransaction('Date limit of petition is required')
+            #Validate valid date format
+            try:
+                datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                raise InvalidTransaction("Incorrect data format, validity Date should be YYYY-MM-DD hh:mm:ss")
+
+            if not saleName:
+                raise InvalidTransaction('Petition ID is required')
 
             self._operation = operation
             self._kwhAmountSell = kwhAmountSell
@@ -131,6 +180,46 @@ class EnerblockPayload(object):
                 raise InvalidTransaction('Buy id (buyName) required to buy')
             if not buyerPubKey:
                 raise InvalidTransaction('A buyer is required to buy')
+
+            self._operation = operation
+            self._kwhAmountSell = kwhAmountSell
+            self._pricePerKwh = pricePerKwh
+            self._createWritedate = createWritedate
+            self._validWritedate = validWritedate
+            self._saleName = saleName
+            self._sellerPubKey = sellerPubKey
+            self._kwhAmountBuy = kwhAmountBuy
+            self._buyWritedate = buyWritedate
+            self._buyName = buyName
+            self._buyerPubKey = buyerPubKey
+
+        # Buy section
+        elif operation == "satisfyBuyPetition":
+            sellerPubKey = data.get('sellerPubKey')
+            kwhAmountBuy = data.get('kwhAmountBuy')
+            buyWritedate = data.get('buyWritedate')
+            saleName = data.get('saleName')
+            buyName = data.get('buyName')
+            buyerPubKey = transactionCreator
+
+            if not kwhAmountBuy:
+                raise InvalidTransaction('Amount requested is required')
+            if kwhAmountSell == "0":
+                raise InvalidTransaction("The petition is already satisfied")
+            if int(kwhAmountBuy) > int(kwhAmountSell):
+                raise InvalidTransaction("Can't offer more than the requested amount")
+            if not sellerPubKey:
+                raise InvalidTransaction('There is no creator of Buy Petition in this transaction')
+            if not kwhAmountBuy:
+                raise InvalidTransaction('Amount to offer is required')
+            if not buyWritedate:
+                raise InvalidTransaction('Date is required to buy')
+            if not saleName:
+                raise InvalidTransaction('Buy Petition id required')
+            if not buyName:
+                raise InvalidTransaction('Satisfy Buy Petition id is required ')
+            if not buyerPubKey:
+                raise InvalidTransaction('A key is required to satisfy a buy petition')
 
             self._operation = operation
             self._kwhAmountSell = kwhAmountSell

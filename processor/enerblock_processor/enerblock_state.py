@@ -42,6 +42,10 @@ def _get_address(key):
 def _get_sale_address(saleName):
     return ENERBLOCK_NAMESPACE + '00' + _get_address(saleName)
 
+def _get_buyPetition_address(saleName):
+    return ENERBLOCK_NAMESPACE + '02' + _get_address(saleName)
+
+
 ''' Example of a buy, similar to previous address but changing the byte after namespace to 01
     The address of a buy with the buyName = "c9fcffcf-4fec-49e6-b7dc-af9d3ee9d029"
     will be:
@@ -49,6 +53,9 @@ def _get_sale_address(saleName):
 '''
 def _get_buy_address(buyName):
     return ENERBLOCK_NAMESPACE + '01' + _get_address(buyName)
+
+def _get_satisfyBuyPetition_address(buyName):
+    return ENERBLOCK_NAMESPACE + '03' + _get_address(buyName)
 
 
 def _deserialize(data):
@@ -71,12 +78,35 @@ class EnerblockState(object):
     def get_sale(self, name):
         return self._get_state(_get_sale_address(name))
 
+    def get_buyPetition(self, name):
+        return self._get_state(_get_buyPetition_address(name))
+
     def get_buy(self, name):
         return self._get_state(_get_buy_address(name))
+
+    def get_satisfyBuyPetition(self, name):
+        return self._get_state(_get_satisfyBuyPetition_address(name))
+
 
     def set_sale(self, operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey):
         address = _get_sale_address(saleName)
         print("./state set_sale address = "+address)
+        state_data = _serialize(
+            {
+                "operation": operation,
+                "kwhAmountSell": kwhAmountSell,
+                "pricePerKwh": pricePerKwh,
+                "createWritedate": createWritedate,
+                "validWritedate": validWritedate,
+                "saleName": saleName,
+                "sellerPubKey": sellerPubKey
+            })
+        return self._context.set_state(
+            {address: state_data}, timeout=self.TIMEOUT)
+
+    def set_buyPetition(self, operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey):
+        address = _get_buyPetition_address(saleName)
+        print("./state set_buypetition address = "+address)
         state_data = _serialize(
             {
                 "operation": operation,
@@ -109,7 +139,24 @@ class EnerblockState(object):
         return self._context.set_state(
             {address: state_data}, timeout=self.TIMEOUT)
 
-
+    def set_satisfyBuyPetition(self, operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey):
+        address = _get_satisfyBuyPetition_address(buyName)
+        state_data = _serialize(
+            {
+                "operation": operation,
+                "kwhAmountSell": kwhAmountSell,
+                "pricePerKwh": pricePerKwh,
+                "createWritedate": createWritedate,
+                "validWritedate": validWritedate,
+                "saleName": saleName,
+                "sellerPubKey": sellerPubKey,
+                "kwhAmountBuy": kwhAmountBuy,
+                "buyWritedate": buyWritedate,
+                "buyName": buyName,
+                "buyerPubKey": buyerPubKey
+            })
+        return self._context.set_state(
+            {address: state_data}, timeout=self.TIMEOUT)
 
     ''' Maybe you can't delete your sale offers, or at least after someone has bought it
     TODO: Only permit delete when no one has bought (and maybe while it's still valid, as we would like keep a history of everything)

@@ -118,9 +118,9 @@
 
 
 					<label> Insert amount of kWh to sell </label>
-					<input id="amount" class="form-control" type="text" placeholder="Enter sell amount ...">
+					<input id="amount" class="form-control" type="number" placeholder="Enter sell amount ...">
 					<label> Insert price in Euro per kWh </label>
-					<input id="price" class="form-control" type="text" placeholder="Enter price...">
+					<input id="price" class="form-control" type="number" placeholder="Enter price...">
 					<label> The sale's creation date (YYYY-MM-DD hh:mm:ss format) </label>
 					<input id="writedate" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
 					<label> The sale's validity date (YYYY-MM-DD hh:mm:ss format) </label>
@@ -168,8 +168,8 @@
 		<!-- Section of buy petitions -->
 		<div id = "ViewBuyPetitionsPage">
 				<h1 style = "text-align:center"> View energy buy petitions</h1>
-				<div id ="ViewSalesTableDiv">
-					<table id="ViewSalesTable" class="table">
+				<div id ="ViewBuyPetitionsTableDiv">
+					<table id="ViewBuyPetitionsTable" class="table">
 						<thead class="thead-dark">
 							<tr>
 								<th>Requested energy</th>
@@ -180,26 +180,72 @@
 								<th>Buy petition creator public key</th>
 							</tr>
 						</thead>
-						<tbody id ="salesData">
+						<tbody id ="buyPetitionsData">
 						<!-- Rows are added dynamically in main/app.refresh -->
 						</tbody>
 					</table>
 				</div>
 		</div>
 
+		<!-- Satisfy buy petition modal -->
+		<div id="buyModalSatisfyPetition" class="modal fade" role="dialog" aria-labelledby="buyModalSatisfyPetition" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h3>Energy Buy Modal</h3>
+		      </div>
+					<div class="modal-body">
+			      <div id="BuyPetitionDetails">
+
+						</div>
+
+						<div class="form-group" id="divBuyModalSatisfyPetition">
+							<label> How much energy you want to buy (KwH): </label>
+							<input id="amountBuyModalSatisfyPetition" class="form-control" type="number" placeholder="0">
+							<label> Total cost of energy (Euro): </label>
+							<input id="totalCostBuyModalSatisfyPetition" class="form-control" type="text" placeholder="0" readonly="">
+							<label> Date of buy: </label>
+							<input id="writedateBuyModalSatisfyPetition" class="form-control" type="text" readonly="">
+							<label> Insert your private key: </label>
+							<select id="buyerPrivateKeyBuyModalSatisfyPetition" class="form-control">
+								<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+			  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+							</select>
+							<label> The buy ID (UUID v4 format)</label>
+							<input id="buyIDBuyModalSatisfyPetition" readonly="" class="form-control" type="text" placeholder="Press button to gen buy ID">
+							<br>
+							<span>
+								<input id="createBuySubmitSatisfyPetition" type="button" value="Buy" class="btn btn-primary">
+								<button id="genIdSatisfyPetition" class="btn">Click to gen buy ID</button>
+							</span>
+						</div>
+					</div>
+
+
+		      <div class="modal-footer">
+						<div id=resultBuyContainerSatisfyPetition>
+								<div id=divResultBuySatisfyPetition>
+									<button id="closeButtonBuySatisfyPetition">
+										<i id="closeIcon">&times;</i>
+									</button>
+									<h3 id="buyMsgSatisfyPetition"></h3>
+								</div>
+						</div>
+		        <button id="buyModalCloseBtnSatisfyPetition" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 
 		<!-- Section of the create buy -->
 		<div id = "CreateBuyPage">
-
 			<div id="saleContainer" >
 				<div class="form-group" id="divSale">
 					<h2 id="saleTitle" >Create buy petition</h2>
-
-
 					<label> Insert amount of kWh you desire to buy </label>
-					<input id="amountBuyPetition" class="form-control" type="text" placeholder="Enter amount ...">
+					<input id="amountBuyPetition" class="form-control" type="number" placeholder="Enter amount ...">
 					<label> Insert price in Euro per kWh you desire to pay </label>
-					<input id="priceBuyPetition" class="form-control" type="text" placeholder="Enter price...">
+					<input id="priceBuyPetition" class="form-control" type="number" placeholder="Enter price...">
 					<label> The buy petition's creation date (YYYY-MM-DD hh:mm:ss format) </label>
 					<input id="writedateBuyPetition" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
 					<label> The buy petition's validity date (YYYY-MM-DD hh:mm:ss format) </label>
@@ -234,12 +280,12 @@
 					</span>
 				</div>
 			</div>
-			<div id=resultContainer>
-					<div id=divResult>
-						<button id="closeButton">
+			<div id=resultContainerBuyPetition>
+					<div id=divResultBuyPetition>
+						<button id="closeButtonBuyPetition">
 							<i id="closeIcon">&times;</i>
 						</button>
-						<h3 id="saleMsg"></h3>
+						<h3 id="msgBuyPetition"></h3>
 					</div>
 			</div>
 		</div>
@@ -259,7 +305,7 @@
 								<th>Date</th>
 							</tr>
 						</thead>
-						<tbody id ="salesData">
+						<tbody id ="salessData">
 						<!-- Rows are added dynamically in main/app.refresh -->
 						</tbody>
 					</table>

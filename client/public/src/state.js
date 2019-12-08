@@ -54,7 +54,6 @@ const saveKeys = keys => {
   const paired = keys.map(pair => [pair.public, pair.private].join(','))
   localStorage.setItem(KEY_NAME, paired.join(';'))
 }
-
 // Fetch current Enerblock state from validator
 const getState = cb => {
   $.get(`${API_URL}/state?address=${PREFIX}`, ({ data }) => {
@@ -62,10 +61,12 @@ const getState = cb => {
       if (datum.data !== '') {
         const parsed = JSON.parse(atob(datum.data))
         if (datum.address[7] === '0') processed.salePetitions.push(parsed)
-        if (datum.address[7] === '1') processed.buys.push(parsed)
+        if (datum.address[7] === '1') processed.buysFromSales.push(parsed)
+        if (datum.address[7] === '2') processed.buyPetitions.push(parsed)
+        if (datum.address[7] === '3') processed.satisfiedBuyPetitions.push(parsed)
       }
       return processed
-    }, {salePetitions: [], buys: []}))
+    }, {salePetitions: [], buysFromSales: [], buyPetitions: [], satisfiedBuyPetitions: []}))
   })
 }
 
@@ -137,7 +138,14 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
           msg = 'Sale posted successfully in Blockchain';
           $('#divResult').css("background-color","rgb(92,184,92)");
           $('#saleMsg').html(msg);
-        }else if(transactionStatus.status == "COMMITTED" && payload.operation == "buy"){
+        }
+        else if(transactionStatus.status == "COMMITTED" && payload.operation == "createBuyPetition"){
+          $('#resultContainerBuyPetition').css("visibility", "visible")
+          msg = 'Buy petition posted successfully in Blockchain';
+          $('#divResultBuyPetition').css("background-color","rgb(92,184,92)");
+          $('#msgBuyPetition').html(msg);
+        }
+        else if(transactionStatus.status == "COMMITTED" && payload.operation == "buy"){
           $('#resultBuyContainer').css("visibility", "visible")
           msg = 'Buy done correctly';
           $('#divResultBuy').css("background-color","rgb(92,184,92)");
@@ -179,6 +187,11 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResultBuy').css("background-color","rgba(238, 238, 0, 0.85)");
           $('#buyMsg').html(msg);
+        }else if (transactionStatus.status == "INVALID" && payload.operation == "createBuyPetition"){
+          $('#resultContainerBuyPetition').css("visibility", "visible")
+          msg = transactionStatus.invalid_transactions[0].message;
+          $('#divResultBuyPetition').css("background-color","rgba(238, 238, 0, 0.85)");
+          $('#msgBuyPetition').html(msg);
         }
 
       });

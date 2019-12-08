@@ -40,7 +40,7 @@
 		    justify-content: center;
 		    align-items: center;
 			}
-			#resultContainer{
+			#resultContainer,#resultContainerBuyPetition{
 				visibility: hidden;
 				margin-top: 20px;
 				width: 100vw;
@@ -49,7 +49,7 @@
 		    justify-content: center;
 		    align-items: center;
 			}
-			#resultBuyContainer{
+			#resultBuyContainer,#resultContainerBuyPetition{
 				visibility: hidden;
 				margin-top: 20px;
 				width: 100vw;
@@ -58,25 +58,17 @@
 		    justify-content: center;
 		    align-items: center;
 			}
-			#divResult{
+			#divResult,#divResultBuyPetition{
 				border-radius: 10px;
 		    border: 2px solid darkgrey;
 		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
 			}
 			#divResultBuy{
-				padding-right: 15px;
-				padding-left: 15px;
 				border-radius: 10px;
 		    border: 2px solid darkgrey;
 		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
 			}
-			#closeButton{
-				float: right;
-				margin-top: 10px;
-				background-color:Transparent;
-				border: 0;
-			}
-			#closeButtonBuy{
+			#closeButton, #closeButtonBuyPetition, #closeButtonBuy{
 				float: right;
 				margin-top: 10px;
 				background-color:Transparent;
@@ -93,7 +85,7 @@
 			}
 			#saleTitle{
 				text-align: center;
-    		font-size: -webkit-xxx-large;
+    		font-size: xxx-large;
     		border-bottom: 3px dashed;
 			}
 			#divKeys{
