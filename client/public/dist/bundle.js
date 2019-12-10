@@ -40052,6 +40052,61 @@ app.refreshBuyPetitions = function (){
     }
   )
 }
+// Load buys from sales
+app.refreshBuysFromSales = function (){
+  console.log(" -- App.refreshBuy from sales function) --")
+  getState(
+    ({buysFromSales}) => {
+      this.buysFromSales = buysFromSales;
+      /* Clear table contents */
+      console.log(" - Vaciar tabla de peticiones de compra y construir nueva tabla -")
+      $('#buysFromSalesData').empty();
+      /* Construction of sales table*/
+      for(i = 0; i<buyPetitions.length; i++){
+        var totalPrice = buysFromSales[i].kwhAmountBuy * buysFromSales[i].pricePerKwh;
+        var row = $('<tr data-toggle="modal" data-id="'+i+'" >'+
+                        '<td>'+buysFromSales[i].sellerPubKey+'</td>'+
+                        '<td>'+buysFromSales[i].buyerPubKey+'</td>'+
+                        '<td>'+buysFromSales[i].kwhAmountBuy+'</td>'+
+                        '<td>'+buysFromSales[i].pricePerKwh+'</td>'+
+                        '<td>'+totalPrice+'</td>'+
+                        '<td>'+buysFromSales[i].buyWritedate+'</td>'+
+                    '</tr>');
+        row.appendTo('#buyPetitionsData')
+      }
+
+      console.log(this.buyPetitions)
+    }
+  )
+}
+// Load satyisfied buy petitions
+app.refreshSatisfiedBuyPetitions = function (){
+  console.log(" -- App.refreshBuy from sales function) --")
+  getState(
+    ({satisfiedBuyPetitions}) => {
+      this.satisfiedBuyPetitions = satisfiedBuyPetitions;
+      /* Clear table contents */
+      console.log(" - Vaciar tabla de peticiones de compra y construir nueva tabla -")
+      $('#satisfiedBuysData').empty();
+      /* Construction of sales table*/
+      for(i = 0; i<buyPetitions.length; i++){
+        var totalPrice = buysFromSales[i].kwhAmountBuy * buysFromSales[i].pricePerKwh;
+        var row = $('<tr data-toggle="modal" data-id="'+i+'" >'+
+                        '<td>'+satisfiedBuyPetitions[i].sellerPubKey+'</td>'+
+                        '<td>'+satisfiedBuyPetitions[i].buyerPubKey+'</td>'+
+                        '<td>'+satisfiedBuyPetitions[i].kwhAmountBuy+'</td>'+
+                        '<td>'+satisfiedBuyPetitions[i].pricePerKwh+'</td>'+
+                        '<td>'+totalPrice+'</td>'+
+                        '<td>'+satisfiedBuyPetitions[i].buyWritedate+'</td>'+
+                    '</tr>');
+        row.appendTo('#satisfiedBuysData')
+      }
+
+      console.log(this.buyPetitions)
+    }
+  )
+}
+
 
 app.updateSalesTable = function(){
   console.log(" -- Ocultar Create, mostrar Sales --")
@@ -40091,6 +40146,40 @@ app.updateBuyPetitionsTable = function(){
   $("#SatisfiedBuysA").removeClass("active");
 
   app.refreshBuyPetitions();
+}
+
+app.updateBuysFromSalesTable = function(){
+  $("#ViewSalesPage").css("display", "none");
+  $("#CreateSalePage").css("display", "none");
+  $("#CreateBuyPage").css("display", "none");
+  $("#ViewBuyPetitionsPage").css("display", "none");
+  $("#BuysFromSalesPage").css("display", "block");
+  $("#SatisfiedBuysPage").css("display", "none");
+
+  $("#CreateBuyA").removeClass("active");
+  $("#ViewSalesA").removeClass("active");
+  $("#CreateSaleA").removeClass("active");
+  $("#ViewBuyPetitionsA").removeClass("active");
+  $("#BuysFromSalesA").addClass("active");
+  $("#SatisfiedBuysA").removeClass("active");
+  app.refreshBuysFromSales();
+}
+
+app.updateSatisfiedBuyPetitionsTable = function(){
+  $("#ViewSalesPage").css("display", "none");
+  $("#CreateSalePage").css("display", "none");
+  $("#CreateBuyPage").css("display", "none");
+  $("#ViewBuyPetitionsPage").css("display", "none");
+  $("#BuysFromSalesPage").css("display", "none");
+  $("#SatisfiedBuysPage").css("display", "block");
+
+  $("#CreateBuyA").removeClass("active");
+  $("#ViewSalesA").removeClass("active");
+  $("#CreateSaleA").removeClass("active");
+  $("#ViewBuyPetitionsA").removeClass("active");
+  $("#BuysFromSalesA").removeClass("active");
+  $("#SatisfiedBuysA").addClass("active");
+  app.refreshSatisfiedBuyPetitions();
 }
 
 app.updateCreateSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey) {
@@ -40337,37 +40426,13 @@ $(document).ready(function(){
 
   $("#BuysFromSalesSide").click(function(){
     //window.history.pushState('', '', '/CreateBuy');
-		$("#ViewSalesPage").css("display", "none");
-    $("#CreateSalePage").css("display", "none");
-    $("#CreateBuyPage").css("display", "none");
-    $("#ViewBuyPetitionsPage").css("display", "none");
-    $("#BuysFromSalesPage").css("display", "block");
-    $("#SatisfiedBuysPage").css("display", "none");
-
-    $("#CreateBuyA").removeClass("active");
-    $("#ViewSalesA").removeClass("active");
-    $("#CreateSaleA").removeClass("active");
-    $("#ViewBuyPetitionsA").removeClass("active");
-    $("#BuysFromSalesA").addClass("active");
-    $("#SatisfiedBuysA").removeClass("active");
+    app.updateBuysFromSalesTable();
   });
   // Actions to show and hide elements when history2 is clicked in the side bar
 
   $("#SatisfiedBuysSide").click(function(){
     //window.history.pushState('', '', '/CreateBuy');
-    $("#ViewSalesPage").css("display", "none");
-    $("#CreateSalePage").css("display", "none");
-    $("#CreateBuyPage").css("display", "none");
-    $("#ViewBuyPetitionsPage").css("display", "none");
-    $("#BuysFromSalesPage").css("display", "none");
-    $("#SatisfiedBuysPage").css("display", "block");
-
-    $("#CreateBuyA").removeClass("active");
-    $("#ViewSalesA").removeClass("active");
-    $("#CreateSaleA").removeClass("active");
-    $("#ViewBuyPetitionsA").removeClass("active");
-    $("#BuysFromSalesA").removeClass("active");
-    $("#SatisfiedBuysA").addClass("active");
+    app.updateSatisfiedBuyPetitionsTable();
 	});
 
 });
