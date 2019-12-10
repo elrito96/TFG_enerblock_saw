@@ -156,7 +156,6 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
           var newAmout = amountBefore - amountBought;
           $('#amountSelectedSaleBuy').text(newAmout);
           //Actualizar tabla
-
           var id = $('#idSelectedSaleBuy').text();
           // Loop table, update the amount of the bought offer
           console.log(" UPDATING TABLE id == "+id)
@@ -173,8 +172,34 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
             console.log(rowId);
             count=count+1
           });
-
-
+        }
+        else if(transactionStatus.status == "COMMITTED" && payload.operation == "satisfyBuyPetition"){
+          $('#resultBuyContainerSatisfyPetition').css("visibility", "visible")
+          msg = 'Buy petition satisfied correctly';
+          $('#divResultBuySatisfyPetition').css("background-color","rgb(92,184,92)");
+          $('#buyMsgSatisfyPetition').html(msg);
+          // Actualizar modal
+          var amountBefore = +($('#amountSelectedSaleBuySatisfyPetition').text());
+          var amountBought = $('#amountBuyModalSatisfyPetition').val();
+          var newAmout = amountBefore - amountBought;
+          $('#amountSelectedSaleBuySatisfyPetition').text(newAmout);
+          //Actualizar tabla
+          var id = $('#idSelectedSaleBuySatisfyPetition').text();
+          // Loop table, update the amount of the bought offer
+          console.log(" UPDATING TABLE id == "+id)
+          $('#ViewBuyPetitionsTable > tbody  > tr').each(function(index, tr) {
+            var count = 0
+            var $tr = $(tr)
+            console.log(index);
+            console.log(tr);
+            var rowId = $tr.find('td:eq(4)').text();
+            if(rowId == $('#idSelectedSaleBuySatisfyPetition').text()){
+              console.log(" Esta es la fila a editar ")
+              $tr.find('td:eq('+count+')').text(newAmout);
+            }
+            console.log(rowId);
+            count=count+1
+          });
         }
 
         else if (transactionStatus.status == "INVALID" && payload.operation == "putOnSale"){
@@ -192,7 +217,12 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResultBuyPetition').css("background-color","rgba(238, 238, 0, 0.85)");
           $('#msgBuyPetition').html(msg);
-        }
+        }else if (transactionStatus.status == "INVALID" && payload.operation == "satisfyBuyPetition"){
+            $('#resultBuyContainerSatisfyPetition').css("visibility", "visible")
+            msg = transactionStatus.invalid_transactions[0].message;
+            $('#divResultBuySatisfyPetition').css("background-color","rgba(238, 238, 0, 0.85)");
+            $('#buyMsgSatisfyPetition').html(msg);
+          }
 
       });
     },

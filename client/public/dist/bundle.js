@@ -40169,6 +40169,13 @@ $(document).ready(function(){
     var price = $('#priceSelectedSaleBuy').text();
     $('#totalCostBuyModal').val(amount * price)
   })
+  // Update total cost when changing amount
+  $('#amountBuyModalSatisfyPetition').on('keyup change',function(){
+    var amount = $('#amountBuyModalSatisfyPetition').val();
+    var price = $('#priceSelectedSaleBuySatisfyPetition').text();
+    $('#totalCostBuyModalSatisfyPetition').val(amount * price)
+  })
+
 
   // Load options in selected
 
@@ -40268,6 +40275,15 @@ $(document).ready(function(){
   $("#resultBuyContainer").click(function(){
     $("#resultBuyContainer").css("visibility", "hidden");
   });
+  $("#closeButtonBuySatisfyPetition").click(function(){
+    $("#resultBuyContainerSatisfyPetition").css("visibility", "hidden");
+  });
+  // Close the result container by clicking anywhere in the message, might delete later
+  $("#resultBuyContainerSatisfyPetition").click(function(){
+    $("#resultBuyContainerSatisfyPetition").css("visibility", "hidden");
+  });
+
+
 
 
 
@@ -40441,25 +40457,6 @@ $('#createBuySubmitSatisfyPetition').on('click', function () {
   app.updateSatisfyBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey)
 })
 
-
-// Create satisfy buy petition
-$('#createBuySubmitSatisfyPetition').on('click', function () {
-  console.log("Buying from sale");
-  // Info about sale
-  const kwhAmountSell = $('#amountSelectedSaleBuy').text();
-  const pricePerKwh = $('#priceSelectedSaleBuy').text();
-  const createWritedate = $('#createWdSelectedSaleBuy').text();
-  const validWritedate = $('#validWdSelectedSaleBuy').text();
-  const saleName = $('#idSelectedSaleBuy').text();
-  const sellerPubKey = $('#sellerSelectedSaleBuy').text();
-
-  // Info about buy
-  const kwhAmountBuy = $('#amountBuyModal').val()
-  const buyWritedate = $('#writedateBuyModal').val()
-  const buyName = $('#buyIDBuyModal').val()
-  const buyerPrivKey = $('#buyerPrivateKeyBuyModal').val()
-  app.updateBuyFromSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey)
-})
 
 // Buy selected sale of Energy
 $('#buyModal').modal({
@@ -40706,7 +40703,6 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
           var newAmout = amountBefore - amountBought;
           $('#amountSelectedSaleBuy').text(newAmout);
           //Actualizar tabla
-
           var id = $('#idSelectedSaleBuy').text();
           // Loop table, update the amount of the bought offer
           console.log(" UPDATING TABLE id == "+id)
@@ -40723,8 +40719,34 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
             console.log(rowId);
             count=count+1
           });
-
-
+        }
+        else if(transactionStatus.status == "COMMITTED" && payload.operation == "satisfyBuyPetition"){
+          $('#resultBuyContainerSatisfyPetition').css("visibility", "visible")
+          msg = 'Buy petition satisfied correctly';
+          $('#divResultBuySatisfyPetition').css("background-color","rgb(92,184,92)");
+          $('#buyMsgSatisfyPetition').html(msg);
+          // Actualizar modal
+          var amountBefore = +($('#amountSelectedSaleBuySatisfyPetition').text());
+          var amountBought = $('#amountBuyModalSatisfyPetition').val();
+          var newAmout = amountBefore - amountBought;
+          $('#amountSelectedSaleBuySatisfyPetition').text(newAmout);
+          //Actualizar tabla
+          var id = $('#idSelectedSaleBuySatisfyPetition').text();
+          // Loop table, update the amount of the bought offer
+          console.log(" UPDATING TABLE id == "+id)
+          $('#ViewBuyPetitionsTable > tbody  > tr').each(function(index, tr) {
+            var count = 0
+            var $tr = $(tr)
+            console.log(index);
+            console.log(tr);
+            var rowId = $tr.find('td:eq(4)').text();
+            if(rowId == $('#idSelectedSaleBuySatisfyPetition').text()){
+              console.log(" Esta es la fila a editar ")
+              $tr.find('td:eq('+count+')').text(newAmout);
+            }
+            console.log(rowId);
+            count=count+1
+          });
         }
 
         else if (transactionStatus.status == "INVALID" && payload.operation == "putOnSale"){
@@ -40742,7 +40764,12 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
           msg = transactionStatus.invalid_transactions[0].message;
           $('#divResultBuyPetition').css("background-color","rgba(238, 238, 0, 0.85)");
           $('#msgBuyPetition').html(msg);
-        }
+        }else if (transactionStatus.status == "INVALID" && payload.operation == "satisfyBuyPetition"){
+            $('#resultBuyContainerSatisfyPetition').css("visibility", "visible")
+            msg = transactionStatus.invalid_transactions[0].message;
+            $('#divResultBuySatisfyPetition').css("background-color","rgba(238, 238, 0, 0.85)");
+            $('#buyMsgSatisfyPetition').html(msg);
+          }
 
       });
     },

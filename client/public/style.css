@@ -40,7 +40,7 @@
 		    justify-content: center;
 		    align-items: center;
 			}
-			#resultContainer,#resultContainerBuyPetition{
+			#resultContainer, #resultContainerBuyPetition, #resultBuyContainer, #resultBuyContainerSatisfyPetition{
 				visibility: hidden;
 				margin-top: 20px;
 				width: 100vw;
@@ -49,26 +49,13 @@
 		    justify-content: center;
 		    align-items: center;
 			}
-			#resultBuyContainer,#resultContainerBuyPetition{
-				visibility: hidden;
-				margin-top: 20px;
-				width: 100vw;
-		    display: flex;
-		    flex-flow: row;
-		    justify-content: center;
-		    align-items: center;
-			}
-			#divResult,#divResultBuyPetition{
+
+			#divResult,#divResultBuyPetition,#divResultBuy ,#divResultBuySatisfyPetition{
 				border-radius: 10px;
 		    border: 2px solid darkgrey;
 		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
 			}
-			#divResultBuy{
-				border-radius: 10px;
-		    border: 2px solid darkgrey;
-		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
-			}
-			#closeButton, #closeButtonBuyPetition, #closeButtonBuy{
+			#closeButton, #closeButtonBuyPetition, #closeButtonBuy, #closeButtonBuySatisfyPetition{
 				float: right;
 				margin-top: 10px;
 				background-color:Transparent;
@@ -159,13 +146,13 @@
 			#ViewBuyPetitionsPage {
 				display: none;
 			}
-			#ViewSalesTableDiv{
+			#ViewSalesTableDiv,#ViewBuyPetitionsTableDiv{
 				display: flex;
 				flex-flow: row;
 				justify-content: center;
 				align-items: center;
 			}
-			#ViewSalesTable{
+			#ViewSalesTable, #ViewBuyPetitionsTable{
 				width: 75vw;
 				border: 2px solid darkgrey;
 		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);

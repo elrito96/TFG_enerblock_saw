@@ -188,6 +188,13 @@ $(document).ready(function(){
     var price = $('#priceSelectedSaleBuy').text();
     $('#totalCostBuyModal').val(amount * price)
   })
+  // Update total cost when changing amount
+  $('#amountBuyModalSatisfyPetition').on('keyup change',function(){
+    var amount = $('#amountBuyModalSatisfyPetition').val();
+    var price = $('#priceSelectedSaleBuySatisfyPetition').text();
+    $('#totalCostBuyModalSatisfyPetition').val(amount * price)
+  })
+
 
   // Load options in selected
 
@@ -287,6 +294,15 @@ $(document).ready(function(){
   $("#resultBuyContainer").click(function(){
     $("#resultBuyContainer").css("visibility", "hidden");
   });
+  $("#closeButtonBuySatisfyPetition").click(function(){
+    $("#resultBuyContainerSatisfyPetition").css("visibility", "hidden");
+  });
+  // Close the result container by clicking anywhere in the message, might delete later
+  $("#resultBuyContainerSatisfyPetition").click(function(){
+    $("#resultBuyContainerSatisfyPetition").css("visibility", "hidden");
+  });
+
+
 
 
 
@@ -460,25 +476,6 @@ $('#createBuySubmitSatisfyPetition').on('click', function () {
   app.updateSatisfyBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey)
 })
 
-
-// Create satisfy buy petition
-$('#createBuySubmitSatisfyPetition').on('click', function () {
-  console.log("Buying from sale");
-  // Info about sale
-  const kwhAmountSell = $('#amountSelectedSaleBuy').text();
-  const pricePerKwh = $('#priceSelectedSaleBuy').text();
-  const createWritedate = $('#createWdSelectedSaleBuy').text();
-  const validWritedate = $('#validWdSelectedSaleBuy').text();
-  const saleName = $('#idSelectedSaleBuy').text();
-  const sellerPubKey = $('#sellerSelectedSaleBuy').text();
-
-  // Info about buy
-  const kwhAmountBuy = $('#amountBuyModal').val()
-  const buyWritedate = $('#writedateBuyModal').val()
-  const buyName = $('#buyIDBuyModal').val()
-  const buyerPrivKey = $('#buyerPrivateKeyBuyModal').val()
-  app.updateBuyFromSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey)
-})
 
 // Buy selected sale of Energy
 $('#buyModal').modal({
