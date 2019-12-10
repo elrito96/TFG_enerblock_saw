@@ -223,7 +223,6 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
             $('#divResultBuySatisfyPetition').css("background-color","rgba(238, 238, 0, 0.85)");
             $('#buyMsgSatisfyPetition').html(msg);
           }
-
       });
     },
     error: function (errorResponse) { /*() => cb(false)*/

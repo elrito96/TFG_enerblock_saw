@@ -40062,7 +40062,7 @@ app.refreshBuysFromSales = function (){
       console.log(" - Vaciar tabla de peticiones de compra y construir nueva tabla -")
       $('#buysFromSalesData').empty();
       /* Construction of sales table*/
-      for(i = 0; i<buyPetitions.length; i++){
+      for(i = 0; i<buysFromSales.length; i++){
         var totalPrice = buysFromSales[i].kwhAmountBuy * buysFromSales[i].pricePerKwh;
         var row = $('<tr data-toggle="modal" data-id="'+i+'" >'+
                         '<td>'+buysFromSales[i].sellerPubKey+'</td>'+
@@ -40089,8 +40089,8 @@ app.refreshSatisfiedBuyPetitions = function (){
       console.log(" - Vaciar tabla de peticiones de compra y construir nueva tabla -")
       $('#satisfiedBuysData').empty();
       /* Construction of sales table*/
-      for(i = 0; i<buyPetitions.length; i++){
-        var totalPrice = buysFromSales[i].kwhAmountBuy * buysFromSales[i].pricePerKwh;
+      for(i = 0; i<satisfiedBuyPetitions.length; i++){
+        var totalPrice = satisfiedBuyPetitions[i].kwhAmountBuy * satisfiedBuyPetitions[i].pricePerKwh;
         var row = $('<tr data-toggle="modal" data-id="'+i+'" >'+
                         '<td>'+satisfiedBuyPetitions[i].sellerPubKey+'</td>'+
                         '<td>'+satisfiedBuyPetitions[i].buyerPubKey+'</td>'+
@@ -40835,7 +40835,6 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
             $('#divResultBuySatisfyPetition').css("background-color","rgba(238, 238, 0, 0.85)");
             $('#buyMsgSatisfyPetition').html(msg);
           }
-
       });
     },
     error: function (errorResponse) { /*() => cb(false)*/
