@@ -83,7 +83,7 @@ app.refreshBuysFromSales = function (){
       /* Construction of sales table*/
       for(i = 0; i<buysFromSales.length; i++){
         var totalPrice = buysFromSales[i].kwhAmountBuy * buysFromSales[i].pricePerKwh;
-        var row = $('<tr data-toggle="modal" data-id="'+i+'" >'+
+        var row = $('<tr data-id="'+i+'" >'+
                         '<td>'+buysFromSales[i].sellerPubKey+'</td>'+
                         '<td>'+buysFromSales[i].buyerPubKey+'</td>'+
                         '<td>'+buysFromSales[i].kwhAmountBuy+'</td>'+
@@ -91,10 +91,10 @@ app.refreshBuysFromSales = function (){
                         '<td>'+totalPrice+'</td>'+
                         '<td>'+buysFromSales[i].buyWritedate+'</td>'+
                     '</tr>');
-        row.appendTo('#buyPetitionsData')
+        row.appendTo('#buysFromSalesData')
       }
 
-      console.log(this.buyPetitions)
+      console.log(this.buysFromSales)
     }
   )
 }
@@ -121,7 +121,7 @@ app.refreshSatisfiedBuyPetitions = function (){
         row.appendTo('#satisfiedBuysData')
       }
 
-      console.log(this.buyPetitions)
+      console.log(this.satisfiedBuyPetitions)
     }
   )
 }
@@ -143,8 +143,7 @@ app.updateSalesTable = function(){
   $("#CreateBuyA").removeClass("active");
   $("#ViewBuyPetitionsA").removeClass("active");
   $("#BuysFromSalesA").removeClass("active");
-  $("#SatisfiedBuysPage").removeClass("active");
-
+  $("#SatisfiedBuysA").removeClass("active");
   app.refreshSales();
 }
 app.updateBuyPetitionsTable = function(){
