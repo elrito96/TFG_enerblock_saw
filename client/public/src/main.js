@@ -17,7 +17,13 @@ const uuidv4 = require('uuid/v4');
 // Application Object
 const app = { user: null, keys: [], salePetitions: [], buysFromSales: [] , buyPetitions: [], satisfiedBuyPetitions: []}
 
-
+function shorten_text(text, maxLength) {
+    var ret = text;
+    if (ret.length > maxLength) {
+        ret = ret.substr(0,maxLength-3) + "...";
+    }
+    return(ret);
+}
 // Load Sales
 app.refreshSales = function (){
   console.log(" -- App.refreshSales function) --")
@@ -36,7 +42,8 @@ app.refreshSales = function (){
                         '<td>'+salePetitions[i].createWritedate+'</td>'+
                         '<td>'+salePetitions[i].validWritedate+'</td>'+
                         '<td>'+salePetitions[i].saleName+'</td>'+
-                        '<td>'+salePetitions[i].sellerPubKey+'</td>'+
+                        '<td>'+shorten_text(salePetitions[i].sellerPubKey,20)+'</td>'+
+                        '<td><button type="button">Edit / Delete</button></td>'+
                     '</tr>');
         row.appendTo('#salesData')
       }
@@ -62,7 +69,7 @@ app.refreshBuyPetitions = function (){
                         '<td>'+buyPetitions[i].createWritedate+'</td>'+
                         '<td>'+buyPetitions[i].validWritedate+'</td>'+
                         '<td>'+buyPetitions[i].saleName+'</td>'+
-                        '<td>'+buyPetitions[i].sellerPubKey+'</td>'+
+                        '<td>'+shorten_text(buyPetitions[i].sellerPubKey,20)+'</td>'+
                     '</tr>');
         row.appendTo('#buyPetitionsData')
       }
@@ -84,8 +91,8 @@ app.refreshBuysFromSales = function (){
       for(i = 0; i<buysFromSales.length; i++){
         var totalPrice = buysFromSales[i].kwhAmountBuy * buysFromSales[i].pricePerKwh;
         var row = $('<tr data-id="'+i+'" >'+
-                        '<td>'+buysFromSales[i].sellerPubKey+'</td>'+
-                        '<td>'+buysFromSales[i].buyerPubKey+'</td>'+
+                        '<td>'+shorten_text(buysFromSales[i].sellerPubKey,20)+'</td>'+
+                        '<td>'+shorten_text(buysFromSales[i].buyerPubKey,20)+'</td>'+
                         '<td>'+buysFromSales[i].kwhAmountBuy+'</td>'+
                         '<td>'+buysFromSales[i].pricePerKwh+'</td>'+
                         '<td>'+totalPrice+'</td>'+
@@ -111,8 +118,8 @@ app.refreshSatisfiedBuyPetitions = function (){
       for(i = 0; i<satisfiedBuyPetitions.length; i++){
         var totalPrice = satisfiedBuyPetitions[i].kwhAmountBuy * satisfiedBuyPetitions[i].pricePerKwh;
         var row = $('<tr data-toggle="modal" data-id="'+i+'" >'+
-                        '<td>'+satisfiedBuyPetitions[i].sellerPubKey+'</td>'+
-                        '<td>'+satisfiedBuyPetitions[i].buyerPubKey+'</td>'+
+                        '<td>'+shorten_text(satisfiedBuyPetitions[i].sellerPubKey,20)+'</td>'+
+                        '<td>'+shorten_text(satisfiedBuyPetitions[i].buyerPubKey,20)+'</td>'+
                         '<td>'+satisfiedBuyPetitions[i].kwhAmountBuy+'</td>'+
                         '<td>'+satisfiedBuyPetitions[i].pricePerKwh+'</td>'+
                         '<td>'+totalPrice+'</td>'+
@@ -134,7 +141,7 @@ app.updateSalesTable = function(){
   $("#CreateBuyPage").css("display", "none");
   $("#ViewSalesPage").css("display", "block");
   $("#ViewBuyPetitionsPage").css("display", "none");
-  $("#ViewBuyPetitionsPage").css("display", "none");
+  $("#BuysFromSalesPage").css("display", "none");
   $("#SatisfiedBuysPage").css("display", "none");
 
 

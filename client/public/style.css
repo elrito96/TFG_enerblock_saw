@@ -146,7 +146,13 @@
 			#ViewBuyPetitionsPage {
 				display: none;
 			}
-			#ViewSalesTableDiv,#ViewBuyPetitionsTableDiv, #ViewSatisfiedBuysTableDiv, #ViewBuysFromSalesTableDiv{
+			#ViewSalesTableDiv,#ViewBuyPetitionsTableDiv{
+				display: flex;
+				flex-flow: row;
+				justify-content: center;
+				align-items: center;
+			}
+			#ViewSatisfiedBuysTableDiv, #ViewBuysFromSalesTableDiv{
 				display: flex;
 				flex-flow: row;
 				justify-content: center;
