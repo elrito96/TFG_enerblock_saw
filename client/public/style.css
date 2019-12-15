@@ -191,8 +191,14 @@
 				/*width:100px;*/
 				margin: 3px;
 			}
-			#buyModal{
 
+			#editDeleteSaleButsDiv, #editDeleteBuyButsDiv{
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			#deleteSaleBut,#editSaleBut{
+				margin: 7px;
 			}
 
 			/* #ViewSalesSide{

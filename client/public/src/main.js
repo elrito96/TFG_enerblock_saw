@@ -43,11 +43,15 @@ app.refreshSales = function (){
                         '<td>'+salePetitions[i].validWritedate+'</td>'+
                         '<td>'+salePetitions[i].saleName+'</td>'+
                         '<td>'+shorten_text(salePetitions[i].sellerPubKey,20)+'</td>'+
-                        '<td><button type="button">Edit / Delete</button></td>'+
+                        '<td><button class="editDeleteSale btn border border-secondary" type="button">Edit / Delete</button></td>'+
                     '</tr>');
         row.appendTo('#salesData')
       }
-
+      $('.editDeleteSale').on('click',function(e){
+        e.stopPropagation();
+        console.log(" Click al boton edit delete1");
+        $('#editDeleteModalSale').modal('show');
+      })
       console.log(this.salePetitions)
     }
   )
@@ -70,10 +74,15 @@ app.refreshBuyPetitions = function (){
                         '<td>'+buyPetitions[i].validWritedate+'</td>'+
                         '<td>'+buyPetitions[i].saleName+'</td>'+
                         '<td>'+shorten_text(buyPetitions[i].sellerPubKey,20)+'</td>'+
+                        '<td><button class="editDeleteBuy btn border border-secondary" type="button">Edit / Delete</button></td>'+
                     '</tr>');
         row.appendTo('#buyPetitionsData')
       }
-
+      $('.editDeleteBuy').on('click',function(e){
+        e.stopPropagation();
+        console.log(" Click al boton edit delete1");
+        $('#editDeleteModalBuy').modal('show');
+      })
       console.log(this.buyPetitions)
     }
   )
@@ -289,9 +298,6 @@ $(document).ready(function(){
     var price = $('#priceSelectedSaleBuySatisfyPetition').text();
     $('#totalCostBuyModalSatisfyPetition').val(amount * price)
   })
-
-
-  // Load options in selected
 
   // Minutes
   for(var i = 11; i>=0; i--){
@@ -574,6 +580,35 @@ $('#buyModal').modal({
   )
   $('#amountBuyModal').val("");
   $('#totalCostBuyModal').val(0);
+
+});
+
+// Buy selected sale of Energy
+$('#editDeleteModalSale').modal({
+  keyboarnd: true,
+  backdrop: "static",
+  show:false,
+}).on('show.bs.modal', function(){
+  var closestRow = $(event.target).closest('tr')
+  var getIdFromRow = closestRow.data('id');
+  console.log("G e t id from R o w")
+  console.log(getIdFromRow)
+  var amountToLoadModal = closestRow.find('td:eq(0)').text();
+  console.log(amountToLoadModal)
+  // Ajax calls to populate modal
+  $('#resultBuyContainer').css("visibility", "hidden")
+  $(this).find('#editDeleteModalSaleDetails').html(
+    $('<b> Amount to sell (KwH): </b> <input id="amountSelectedSaleBuy" class="form-control" type="number" ></input><br>'+
+      '<b>Price per KhW :</b> <input id="priceSelectedSaleBuy" class="form-control" type="number"></input><br>'+
+      '<b>Creation Date : </b> <label id="createWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].createWritedate + '</label><br>'+
+      '<b>Validity Date : </b> <label id="validWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].validWritedate + '</label><br>'+
+      '<b>Seller Public Key : </b> <label id="sellerSelectedSaleBuy" style=>' + app.salePetitions[getIdFromRow].sellerPubKey + '</label><br>'+
+      '<b>Sale ID : </b><label id="idSelectedSaleBuy" >' + app.salePetitions[getIdFromRow].saleName + '</label>'
+    )
+  )
+  $('#amountSelectedSaleBuy').val(amountToLoadModal);
+  $('#priceSelectedSaleBuy').val(app.salePetitions[getIdFromRow].pricePerKwh);
+
 
 });
 

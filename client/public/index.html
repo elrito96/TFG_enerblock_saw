@@ -120,6 +120,50 @@
 		  </div>
 		</div>
 
+		<!-- edit / delete -->
+		<div id="editDeleteModalSale" class="modal fade" role="dialog" aria-labelledby="editDeleteModalSale" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3>Modal for editing / deleting Sale</h3>
+					</div>
+					<div class="modal-body">
+						<b> Select your private key </b>
+						<select id="buyerPrivateKeyBuyModal" class="form-control">
+							<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+							<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+						</select>
+						<br>
+						<div id="editDeleteModalSaleDetails">
+
+						</div>
+
+						<hr>
+						<div id="editDeleteSaleButsDiv">
+							<button id="editSaleBut" class="btn btn-primary">Save Changes</button>
+							<button id="deleteSaleBut" class="btn btn-danger">Delete Sale</button>
+						</div>
+
+
+					</div>
+
+
+
+					<div class="modal-footer">
+						<!-- <div id=resultBuyContainer>
+								<div id=divResultBuy>
+									<button id="closeButtonBuy">
+										<i id="closeIcon">&times;</i>
+									</button>
+									<h3 id="buyMsg"></h3>
+								</div>
+						</div> -->
+						<button id="buyModalCloseBtn" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<!-- Section of the create sale -->
 		<div id = "CreateSalePage">
 			<div id="saleContainer" >
@@ -188,6 +232,7 @@
 								<th>Buy petition validity date</th>
 								<th>Buy petition ID</th>
 								<th>Buy petition creator public key</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody id ="buyPetitionsData">
@@ -245,6 +290,50 @@
 		      </div>
 		    </div>
 		  </div>
+		</div>
+
+		<!-- edit / delete -->
+		<div id="editDeleteModalBuy" class="modal fade" role="dialog" aria-labelledby="editDeleteModalBuy" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3>Modal for editing / deleting Buy petition</h3>
+					</div>
+					<div class="modal-body">
+						<b> Select your private key </b>
+						<select id="buyerPrivateKeyBuyModal" class="form-control">
+							<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+							<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+						</select>
+						<br>
+						<div id="editDeleteModalBuyDetails">
+
+						</div>
+
+						<hr>
+						<div id="editDeleteSaleButsDiv">
+							<button id="editSaleBut" class="btn btn-primary">Save Changes</button>
+							<button id="deleteSaleBut" class="btn btn-danger">Delete Sale</button>
+						</div>
+
+
+					</div>
+
+
+
+					<div class="modal-footer">
+						<!-- <div id=resultBuyContainer>
+								<div id=divResultBuy>
+									<button id="closeButtonBuy">
+										<i id="closeIcon">&times;</i>
+									</button>
+									<h3 id="buyMsg"></h3>
+								</div>
+						</div> -->
+						<button id="buyModalCloseBtn" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<!-- Section of the create buy -->
