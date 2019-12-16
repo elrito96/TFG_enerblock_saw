@@ -112,7 +112,6 @@ class EnerblockPayload(object):
         # create Buy Petition section
         elif operation == 'createBuyPetition' or operation == 'editBuyPetition' or operation == 'deleteBuyPetition' :
 
-
             sellerPubKey = transactionCreator
 
             if operation == 'createBuyPetition' or operation == 'editBuyPetition':
@@ -129,8 +128,6 @@ class EnerblockPayload(object):
                 raise InvalidTransaction('A creator is required to create buy petition')
 
             self._sellerPubKey = sellerPubKey
-
-
 
             #Validate that the amount to sell is not null, or anything different from a positive decimal
             if not pricePerKwh:
