@@ -641,10 +641,10 @@ $('#editBuyPetitionBut').on('click', function () {
   // Info about sale
   const kwhAmountSell = $('#amountSelectedSaleBuyEDBuyPetition').val();
   const pricePerKwh = $('#priceSelectedSaleBuyEDBuyPetition').val();
-  const createWritedate = $('#createWdSelectedSaleBuy').text();
-  const validWritedate = $('#validWdSelectedSaleBuy').text();
-  const saleName = $('#idSelectedSaleBuy').text();
-  const sellerPubKey = $('#sellerSelectedSaleBuy').text();
+  const createWritedate = $('#createWdSelectedSaleBuyEDBuyPetition').text();
+  const validWritedate = $('#validWdSelectedSaleBuyEDBuyPetition').text();
+  const saleName = $('#idSelectedSaleBuyEDBuyPetition').text();
+  const sellerPubKey = $('#sellerSelectedSaleBuyEDBuyPetition').text();
   // User that tries to edit the sale, must be the one who created it
   const buyerPrivKey = $('#buyerPrivateKeyBuyModalEditDeleteBuyPetition').val();
   console.log("Owner pub key: "+sellerPubKey+ "\n editer priv key:"+buyerPrivKey);
@@ -658,10 +658,10 @@ $('#deleteBuyPetitionBut').on('click', function () {
   // Info about sale
   const kwhAmountSell = $('#amountSelectedSaleBuyEDBuyPetition').val();
   const pricePerKwh = $('#priceSelectedSaleBuyEDBuyPetition').val();
-  const createWritedate = $('#createWdSelectedSaleBuy').text();
-  const validWritedate = $('#validWdSelectedSaleBuy').text();
-  const saleName = $('#idSelectedSaleBuy').text();
-  const sellerPubKey = $('#sellerSelectedSaleBuy').text();
+  const createWritedate = $('#createWdSelectedSaleBuyEDBuyPetition').text();
+  const validWritedate = $('#validWdSelectedSaleBuyEDBuyPetition').text();
+  const saleName = $('#idSelectedSaleBuyEDBuyPetition').text();
+  const sellerPubKey = $('#sellerSelectedSaleBuyEDBuyPetition').text();
   // User that tries to delete the sale, must be the one who created it
   const buyerPrivKey = $('#buyerPrivateKeyBuyModalEditDeleteBuyPetition').val();
 
@@ -775,10 +775,10 @@ $('#editDeleteModalBuyPetition').modal({
   $(this).find('#editDeleteModalBuyPetitionDetails').html(
     $('<b> Amount to sell (KwH): </b> <input id="amountSelectedSaleBuyEDBuyPetition" class="form-control" type="number" ></input><br>'+
       '<b>Price per KhW :</b> <input id="priceSelectedSaleBuyEDBuyPetition" class="form-control" type="number"></input><br>'+
-      '<b>Creation Date : </b> <label id="createWdSelectedSaleBuy">' + app.buyPetitions[getIdFromRow].createWritedate + '</label><br>'+
-      '<b>Validity Date : </b> <label id="validWdSelectedSaleBuy">' + app.buyPetitions[getIdFromRow].validWritedate + '</label><br>'+
-      '<b>Seller Public Key : </b> <label id="sellerSelectedSaleBuy" style=>' + app.buyPetitions[getIdFromRow].sellerPubKey + '</label><br>'+
-      '<b>Sale ID : </b><label id="idSelectedSaleBuy" >' + app.buyPetitions[getIdFromRow].saleName + '</label>'
+      '<b>Creation Date : </b> <label id="createWdSelectedSaleBuyEDBuyPetition">' + app.buyPetitions[getIdFromRow].createWritedate + '</label><br>'+
+      '<b>Validity Date : </b> <label id="validWdSelectedSaleBuyEDBuyPetition">' + app.buyPetitions[getIdFromRow].validWritedate + '</label><br>'+
+      '<b>Seller Public Key : </b> <label id="sellerSelectedSaleBuyEDBuyPetition" style=>' + app.buyPetitions[getIdFromRow].sellerPubKey + '</label><br>'+
+      '<b>Sale ID : </b><label id="idSelectedSaleBuyEDBuyPetition" >' + app.buyPetitions[getIdFromRow].saleName + '</label>'
     )
   )
   $('#amountSelectedSaleBuyEDBuyPetition').val(amountToLoadModal);
@@ -790,27 +790,3 @@ $('#editDeleteModalBuyPetition').modal({
 module.exports = {
   app
 }
-
-//
-// $(function(){
-//           $('#buyModal').modal({
-//               keyboard : true,
-//               backdrop : "static",
-//               show     : false,
-//           }).on('show.bs.modal', function(){
-//               var getIdFromRow = $(this).data('id');
-//               console.log("idFromRow");
-//               console.log(getIdFromRow);
-//
-//               getIdFromRow = 0;
-//               //make your ajax call populate items or what even you need
-//               $(this).find('#saleDetails').html($('<b> Energy Id selected: ' + getIdFromRow  + '</b>'))
-//               $(this).find('#saleDetails').append($('<b> Amount to sell: ' + app.salePetitions[getIdFromRow].kwhAmountSell  + '</b>'))
-//
-//           });
-//
-//           $(".table-striped").find('tr[data-target]').on('click', function(){
-//              //or do your operations here instead of on show of modal to populate values to modal.
-//               $('#buyModal').data('saleid',$(this).data('id'));
-//           });
-//       });
