@@ -43,7 +43,7 @@ class EnerblockPayload(object):
         operation = data.get('operation')
         if not operation:
             raise InvalidTransaction('Not operation, operation is required')
-        if operation not in ('putOnSale', 'buy', 'createBuyPetition', 'satisfyBuyPetition'):
+        if operation not in ('putOnSale', 'buy', 'createBuyPetition', 'satisfyBuyPetition', 'editSale', 'deleteSale', 'editBuyPetition', 'deleteBuyPetition'):
             raise InvalidTransaction('Invalid operation: {}'.format(operation))
 
         #Common section
@@ -54,20 +54,25 @@ class EnerblockPayload(object):
         saleName = data.get('saleName')
 
         # Sell section
-        if operation == 'putOnSale':
-            LOGGER.info('Entra if operation putonsale')
+        if operation == 'putOnSale' or operation == 'editSale' or operation == 'deleteSale' :
+
             sellerPubKey = transactionCreator
+
+            if operation == 'putOnSale' or operation == 'editSale':
+                #Validate that the amount to sell is not null, or anything different from a positive int
+                if not kwhAmountSell:
+                    raise InvalidTransaction('Amount to sell is required')
+                if not kwhAmountSell.isdigit() or kwhAmountSell == "0":
+                    raise InvalidTransaction('Amount to sell must be a positive integer number')
+            if operation == 'editSale' or operation == 'deleteSale':
+                sellerPubKey = data.get('sellerPubKey')
+
+
 
             if not sellerPubKey:
                 raise InvalidTransaction('A seller is required to sell')
 
             self._sellerPubKey = sellerPubKey
-
-            #Validate that the amount to sell is not null, or anything different from a positive int
-            if not kwhAmountSell:
-                raise InvalidTransaction('Amount to sell is required')
-            if not kwhAmountSell.isdigit() or kwhAmountSell == "0":
-                raise InvalidTransaction('Amount to sell must be a positive integer number')
 
             #Validate that the amount to sell is not null, or anything different from a positive decimal
             if not pricePerKwh:
@@ -105,19 +110,27 @@ class EnerblockPayload(object):
             self._saleName = saleName
 
         # create Buy Petition section
-        elif operation == 'createBuyPetition':
+        elif operation == 'createBuyPetition' or operation == 'editBuyPetition' or operation == 'deleteBuyPetition' :
+
+
             sellerPubKey = transactionCreator
+
+            if operation == 'createBuyPetition' or operation == 'editBuyPetition':
+                #Validate that the amount to sell is not null, or anything different from a positive int
+                if not kwhAmountSell:
+                    raise InvalidTransaction('Solicited amount is required')
+                if not kwhAmountSell.isdigit() or kwhAmountSell == "0":
+                    raise InvalidTransaction('Solicited amount must be a positive integer number')
+            if operation == 'editBuyPetition' or operation == 'deleteBuyPetition':
+                sellerPubKey = data.get('sellerPubKey')
+
 
             if not sellerPubKey:
                 raise InvalidTransaction('A creator is required to create buy petition')
 
             self._sellerPubKey = sellerPubKey
 
-            #Validate that the amount to sell is not null, or anything different from a positive int
-            if not kwhAmountSell:
-                raise InvalidTransaction('Solicited amount is required')
-            if not kwhAmountSell.isdigit() or kwhAmountSell == "0":
-                raise InvalidTransaction('Solicited amount must be a positive integer number')
+
 
             #Validate that the amount to sell is not null, or anything different from a positive decimal
             if not pricePerKwh:

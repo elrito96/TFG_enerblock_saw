@@ -40,7 +40,7 @@
 		    justify-content: center;
 		    align-items: center;
 			}
-			#resultContainer, #resultContainerBuyPetition, #resultBuyContainer, #resultBuyContainerSatisfyPetition{
+			#resultContainer, #resultContainerBuyPetition, #resultBuyContainer, #resultBuyContainerSatisfyPetition, #resultBuyContainerED, #resultBuyContainerEDBuyPetition{
 				visibility: hidden;
 				margin-top: 20px;
 				width: 100vw;
@@ -50,12 +50,12 @@
 		    align-items: center;
 			}
 
-			#divResult,#divResultBuyPetition,#divResultBuy ,#divResultBuySatisfyPetition{
+			#divResult,#divResultBuyPetition,#divResultBuy ,#divResultBuySatisfyPetition, #divResultBuyED, #divResultBuyEDBuyPetition{
 				border-radius: 10px;
 		    border: 2px solid darkgrey;
 		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
 			}
-			#closeButton, #closeButtonBuyPetition, #closeButtonBuy, #closeButtonBuySatisfyPetition{
+			#closeButton, #closeButtonBuyPetition, #closeButtonBuy, #closeButtonBuySatisfyPetition, #closeButtonBuyED, #closeButtonBuyEDBuyPetition{
 				float: right;
 				margin-top: 10px;
 				background-color:Transparent;
@@ -192,12 +192,12 @@
 				margin: 3px;
 			}
 
-			#editDeleteSaleButsDiv, #editDeleteBuyButsDiv{
+			#editDeleteSaleButsDiv, #editDeleteBuyPetitionButsDiv{
 				display: flex;
 				align-items: center;
 				justify-content: center;
 			}
-			#deleteSaleBut,#editSaleBut{
+			#deleteSaleBut,#editSaleBut,#deleteBuyPetitionBut,#editBuyPetitionBut {
 				margin: 7px;
 			}
 

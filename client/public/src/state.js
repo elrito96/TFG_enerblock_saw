@@ -172,8 +172,17 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
             console.log(rowId);
             count=count+1
           });
-        }
-        else if(transactionStatus.status == "COMMITTED" && payload.operation == "satisfyBuyPetition"){
+        }else if(transactionStatus.status == "COMMITTED" && (payload.operation == "deleteSale" || payload.operation == "editSale")){
+          // hide Modal
+          $('#editDeleteModalSale').modal('hide');
+          //trigger
+          $('#ViewSalesSide').trigger("click");
+        }else if(transactionStatus.status == "COMMITTED" && (payload.operation == "deleteBuyPetition" || payload.operation == "editBuyPetition")){
+          // hide Modal
+          $('#editDeleteModalBuyPetition').modal('hide');
+          //trigger
+          $('#ViewBuyPetitionsSide').trigger("click");
+        }else if(transactionStatus.status == "COMMITTED" && payload.operation == "satisfyBuyPetition"){
           $('#resultBuyContainerSatisfyPetition').css("visibility", "visible")
           msg = 'Buy petition satisfied correctly';
           $('#divResultBuySatisfyPetition').css("background-color","rgb(92,184,92)");
@@ -222,7 +231,17 @@ const submitUpdate = (payload, privateKeyHex, cb, saleId, newAmount) => {
             msg = transactionStatus.invalid_transactions[0].message;
             $('#divResultBuySatisfyPetition').css("background-color","rgba(238, 238, 0, 0.85)");
             $('#buyMsgSatisfyPetition').html(msg);
-          }
+        }else if (transactionStatus.status == "INVALID" && (payload.operation == "deleteSale" || payload.operation == "editSale")){
+            $('#resultBuyContainerED').css("visibility", "visible")
+            msg = transactionStatus.invalid_transactions[0].message;
+            $('#divResultBuyED').css("background-color","rgba(238, 238, 0, 0.85)");
+            $('#buyMsgED').html(msg);
+        }else if (transactionStatus.status == "INVALID" && (payload.operation == "deleteBuyPetition" || payload.operation == "editBuyPetition")){
+            $('#resultBuyContainerEDBuyPetition').css("visibility", "visible")
+            msg = transactionStatus.invalid_transactions[0].message;
+            $('#divResultBuyEDBuyPetition').css("background-color","rgba(238, 238, 0, 0.85)");
+            $('#buyMsgEDBuyPetition').html(msg);
+        }
       });
     },
     error: function (errorResponse) { /*() => cb(false)*/

@@ -58,6 +58,7 @@ class EnerblockTransactionHandler(TransactionHandler):
                     payload.pricePerKwh)
         print("Handler after getting the payload and state, will create sale")
         if payload.operation == 'putOnSale':
+
             _create_sale(kwhAmountSell = payload.kwhAmountSell,
                         pricePerKwh = payload.pricePerKwh,
                         createWritedate = payload.createWritedate,
@@ -87,6 +88,7 @@ class EnerblockTransactionHandler(TransactionHandler):
                         buyName = payload.buyName,
                         buyerPubKey = signer,
                         state=state)
+
         elif payload.operation == 'satisfyBuyPetition':
             _create_satisfyBuyPetition(kwhAmountSell = payload.kwhAmountSell,
                         pricePerKwh = payload.pricePerKwh,
@@ -98,6 +100,38 @@ class EnerblockTransactionHandler(TransactionHandler):
                         buyWritedate = payload.buyWritedate,
                         buyName = payload.buyName,
                         buyerPubKey = signer,
+                        state=state)
+
+        elif payload.operation == 'editSale':
+            _edit_sale(kwhAmountSell = payload.kwhAmountSell,
+                        pricePerKwh = payload.pricePerKwh,
+                        createWritedate = payload.createWritedate,
+                        validWritedate = payload.validWritedate,
+                        saleName = payload.saleName,
+                        sellerPubKey = payload.sellerPubKey,
+                        transactionCreator = signer,
+                        state=state)
+
+        elif payload.operation == 'deleteSale':
+            _delete_sale(saleName = payload.saleName,
+                        sellerPubKey = payload.sellerPubKey,
+                        transactionCreator = signer,
+                        state=state)
+
+        elif payload.operation == 'editBuyPetition':
+            _edit_buyPetition(kwhAmountSell = payload.kwhAmountSell,
+                        pricePerKwh = payload.pricePerKwh,
+                        createWritedate = payload.createWritedate,
+                        validWritedate = payload.validWritedate,
+                        saleName = payload.saleName,
+                        sellerPubKey = payload.sellerPubKey,
+                        transactionCreator = signer,
+                        state=state)
+
+        elif payload.operation == 'deleteBuyPetition':
+            _delete_buyPetition(saleName = payload.saleName,
+                        sellerPubKey = payload.sellerPubKey,
+                        transactionCreator = signer,
                         state=state)
 
 
@@ -113,6 +147,28 @@ def _create_sale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, sa
     print("Set sale id: "+saleName)
     state.set_sale('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
 
+def _edit_sale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, transactionCreator, state):
+    if state.get_sale(saleName) is None:
+        raise InvalidTransaction(
+            'This sell doesnt exist: {}'.format(saleName))
+    print("Set sale id: "+saleName)
+    if sellerPubKey != transactionCreator:
+        raise InvalidTransaction("Only the sale creator can edit the sale")
+
+    state.set_sale('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+
+def _delete_sale(saleName, sellerPubKey, transactionCreator, state):
+    if state.get_sale(saleName) is None:
+        raise InvalidTransaction(
+            'This sell doesnt exist: {}'.format(saleName))
+    print(" selelr ")
+    if sellerPubKey != transactionCreator:
+        raise InvalidTransaction("Only the sale creator can delete the sale")
+
+    print("Set sale id: "+saleName)
+    state.delete_sale(saleName)
+
+
 def _create_buyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, state):
     if state.get_buyPetition(saleName) is not None:
         raise InvalidTransaction(
@@ -120,6 +176,25 @@ def _create_buyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWrited
     print("Set sale id: "+saleName)
     state.set_buyPetition('createBuyPetition', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
 
+def _edit_buyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, transactionCreator, state):
+    if state.get_buyPetition(saleName) is None:
+        raise InvalidTransaction(
+            'This buyPetition doesnt exist: {}'.format(saleName))
+    print("Set sale id: "+saleName)
+    if sellerPubKey != transactionCreator:
+        raise InvalidTransaction("Only the buy petition creator can edit the buy petition")
+
+    state.set_buyPetition('createBuyPetition', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+
+def _delete_buyPetition(saleName, sellerPubKey, transactionCreator, state):
+    if state.get_buyPetition(saleName) is None:
+        raise InvalidTransaction(
+            'This buy Petition doesnt exist: {}'.format(saleName))
+    print(" selelr ")
+    if sellerPubKey != transactionCreator:
+        raise InvalidTransaction("Only the buy petition creator can delete the buy petition")
+
+    state.delete_buyPetition(saleName)
 
 def _create_buy(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey, state):
     if state.get_buy(buyName) is not None:

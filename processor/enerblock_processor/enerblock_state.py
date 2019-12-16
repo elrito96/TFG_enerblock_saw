@@ -176,9 +176,14 @@ class EnerblockState(object):
 	the same and changes the sale state from 90 to 40 ...
     '''
 
-    def delete_sell(self, saleName):
+    def delete_sale(self, saleName):
         return self._context.delete_state(
-            [_get_transfer_address(salleName)],
+            [_get_sale_address(saleName)],
+            timeout=self.TIMEOUT)
+
+    def delete_buyPetition(self, saleName):
+        return self._context.delete_state(
+            [_get_buyPetition_address(saleName)],
             timeout=self.TIMEOUT)
 
     def _get_state(self, address):
