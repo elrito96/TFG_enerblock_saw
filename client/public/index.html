@@ -5,9 +5,9 @@
 	  <!-- Bootstrap css -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<!-- My style css -->
-		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="./mystyle.css">
 		<!-- Icons css -->
-		<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+		<link rel="stylesheet" href="./font-awesome.css">
 		<!-- Favicon image -->
 		<link rel="shortcut icon" type="image/png" href="./favicon.png">
 
@@ -16,17 +16,22 @@
 	<body>
 		<div id="bars">
 			<div id="topbar">
+					<!-- <select name="select">
+						<option value="value1">Value 1</option>
+						<option value="value2" selected>Value 2</option>
+						<option value="value3">Value 3</option>
+					</select> -->
 				<h2 id = "topbar_h2"> Sawtooth - Energy exchange application </h2>
 			</div>
 
 			<div class="sidebarDiv">
 				<ul id="sidebar">
-					<li class="sidebar_li" id="ViewSalesSide"><a class="active" id="ViewSalesA">View sales</a></li>
+					<li class="sidebar_li" id="ViewSalesSide"><a class="active" id="ViewSalesA">Sales</a></li>
 			  	<li class="sidebar_li" id="CreateSaleSide"><a id="CreateSaleA" class="">Create sale</a></li>
-			  	<li class="sidebar_li" id="ViewBuyPetitionsSide"><a id="ViewBuyPetitionsA" class="">View buy petitions </a></li>
-					<li class="sidebar_li" id="CreateBuySide"><a id="CreateBuyA" class="">Create buy petition </a></li>
-					<li class="sidebar_li" id="BuysFromSalesSide"><a id="BuysFromSalesA" class="">History of Energy bought from sales </a></li>
-					<li class="sidebar_li" id="SatisfiedBuysSide"><a id="SatisfiedBuysA" class="">History of satisfied energy petitions </a></li>
+			  	<li class="sidebar_li" id="ViewBuyPetitionsSide"><a id="ViewBuyPetitionsA" class="">Buy petitions</a></li>
+					<li class="sidebar_li" id="CreateBuySide"><a id="CreateBuyA" class="">Create buy petition</a></li>
+					<li class="sidebar_li" id="BuysFromSalesSide"><a id="BuysFromSalesA" class="">History of Energy bought from sales</a></li>
+					<li class="sidebar_li" id="SatisfiedBuysSide"><a id="SatisfiedBuysA" class="">History of satisfied energy petitions</a></li>
 
 
 					<!-- All buy from sales
@@ -101,7 +106,7 @@
 							<br>
 							<span>
 								<input id="createBuySubmit" type="button" value="Buy" class="btn btn-primary">
-								<button id="genBuyId" class="btn">Click to gen buy ID</button>
+								<button id="genBuyId" class="btn border border-secondary">Click to gen buy ID</button>
 							</span>
 						</div>
 					</div>
@@ -135,6 +140,7 @@
 							<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
 							<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
 						</select>
+
 						<br>
 						<div id="editDeleteModalSaleDetails">
 
@@ -180,12 +186,12 @@
 					<label> The sale's creation date (YYYY-MM-DD hh:mm:ss format) </label>
 					<input id="writedate" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
 					<label> The sale's validity date (YYYY-MM-DD hh:mm:ss format) </label>
-					<div id="validWritedateDiv" class = "pull-left">
+					<div id="validWritedateDiv" >
 						<div>
 							<input id="validwritedate" class="form-control" type="text" readonly="">
 						</div>
 						<div>
-							<i class="fa fa-calendar" aria-hidden="true"></i>
+
 							<span class="DateLabels">
 								<i class="fa fa-calendar" aria-hidden="true"></i>
 								Date
@@ -193,25 +199,35 @@
 							<input id="validWritedateDate" type="date" class="form-control" required>
 						</div>
 						<div>
-							<span class="DateLabels">Hour</span>
+							<span class="DateLabels">
+								<i class="fa fa-clock-o" aria-hidden="true"></i>
+								Hour
+							</span>
 							<select id="validwritedateHour" class="form-control"></select>
 						</div>
 						<div>
-							<span class="DateLabels">Minute</span>
+							<span class="DateLabels">
+								<i class="fa fa-clock-o" aria-hidden="true"></i>
+								Minute
+							</span>
 							<select id="validwritedateMin" class="form-control"></select>
 						</div>
 					</div>
-					<label> The seller's private key </label>
+					<label> The seller's private key select</label>
 					<select id="sellerprivatekey" class="form-control">
 						<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
 	  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
 					</select>
+					<label> The seller's private key written</label>
+					<!-- For real use case, delete or hide previous select
+					and add the following id: id="sellerprivatekey" in the input below-->
+					<input class="form-control" placeholder="Enter your private key...">
 					<label> The sale ID (UUID v4 format)</label>
 					<input id="saleID" readonly="" class="form-control" type="text" placeholder="Press button to gen sale ID">
 					<br>
 					<span>
 						<input id="createSubmit" type="button" value="Create" class="btn btn-primary">
-						<button id="genSaleId" class="btn btn-default">Click to gen sale ID</button>
+						<button id="genSaleId" class="btn btn-default border border-secondary">Click to gen sale ID</button>
 					</span>
 				</div>
 			</div>
@@ -277,7 +293,7 @@
 							<br>
 							<span>
 								<input id="createBuySubmitSatisfyPetition" type="button" value="Buy" class="btn btn-primary">
-								<button id="genIdSatisfyPetition" class="btn">Click to gen buy ID</button>
+								<button id="genIdSatisfyPetition" class="btn border border-secondary">Click to gen buy ID</button>
 							</span>
 						</div>
 					</div>
@@ -354,34 +370,47 @@
 					<label> The buy petition's creation date (YYYY-MM-DD hh:mm:ss format) </label>
 					<input id="writedateBuyPetition" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
 					<label> The buy petition's validity date (YYYY-MM-DD hh:mm:ss format) </label>
-					<div id="validWritedateDivBuyPetition" class = "pull-left">
+					<div id="validWritedateDivBuyPetition">
 						<div>
 							<input id="validwritedateBuyPetition" class="form-control" type="text" readonly="">
 						</div>
 						<div>
-							<span class="DateLabels">Date</span>
+							<span class="DateLabels">
+								<i class="fa fa-calendar" aria-hidden="true"></i>
+								Date
+							</span>
 							<input id="validWritedateDateBuyPetition" type="date" class="form-control" required>
 						</div>
 						<div>
-							<span class="DateLabels">Hour</span>
+							<span class="DateLabels">
+								<i class="fa fa-clock-o" aria-hidden="true"></i>
+								Hour
+							</span>
 							<select id="validwritedateHourBuyPetition" class="form-control"></select>
 						</div>
 						<div>
-							<span class="DateLabels">Minute</span>
+							<span class="DateLabels">
+								<i class="fa fa-clock-o" aria-hidden="true"></i>
+								Minute
+							</span>
 							<select id="validwritedateMinBuyPetition" class="form-control"></select>
 						</div>
 					</div>
-					<label> Buy petition creator's private key </label>
+					<label> Buy petition creator's private key select</label>
 					<select id="sellerprivatekeyBuyPetition" class="form-control">
 						<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
 						<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
 					</select>
+					<label> Buy petition creator's private key written</label>
+					<!-- For real use case, delete or hide previous select
+					and add the following id: id="sellerprivatekeyBuyPetition" in the input below-->
+					<input class="form-control" placeholder="Enter your private key...">
 					<label> The buy petition ID (UUID v4 format)</label>
 					<input id="buyPetitionID"  class="form-control" type="text" placeholder="Press button to gen buy petition ID">
 					<br>
 					<span>
 						<input id="createSubmitBuyPetition" type="button" value="Create" class="btn btn-primary">
-						<button id="genIdBuyPetition" class="btn btn-default">Click to gen buy petition ID</button>
+						<button id="genIdBuyPetition" class="btn btn-default border border-secondary">Click to gen buy petition ID</button>
 					</span>
 				</div>
 			</div>

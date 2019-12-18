@@ -40418,18 +40418,18 @@ $(document).ready(function(){
   });
 
   $("#closeButtonBuyED").click(function(){
-    $("#divResultBuyED").css("visibility", "hidden");
+    $("#resultBuyContainerED").css("visibility", "hidden");
   });
   // Close the result container by clicking anywhere in the message, might delete later
-  $("#divResultBuyED").click(function(){
-    $("#divResultBuyED").css("visibility", "hidden");
+  $("#resultBuyContainerED").click(function(){
+    $("#resultBuyContainerED").css("visibility", "hidden");
   });
   $("#closeButtonBuyEDBuyPetition").click(function(){
-    $("#divResultBuyEDBuyPetition").css("visibility", "hidden");
+    $("#resultBuyContainerEDBuyPetition").css("visibility", "hidden");
   });
   // Close the result container by clicking anywhere in the message, might delete later
-  $("#divResultBuyEDBuyPetition").click(function(){
-    $("#divResultBuyEDBuyPetition").css("visibility", "hidden");
+  $("#resultBuyContainerEDBuyPetition").click(function(){
+    $("#resultBuyContainerEDBuyPetition").css("visibility", "hidden");
   });
 
 
@@ -40444,6 +40444,7 @@ $(document).ready(function(){
   // Actions to show and hide elements when Create Sale is clicked in the side bar
   $("#CreateSaleSide").click(function(){
     //window.history.pushState('', '', '/CreateSale');
+    $("#resultContainer").css("visibility", "hidden");
 
 		$("#ViewSalesPage").css("display", "none");
     $("#CreateBuyPage").css("display", "none");
@@ -40467,6 +40468,8 @@ $(document).ready(function(){
   // Actions to show and hide elements when Create Buy is clicked in the side bar
   $("#CreateBuySide").click(function(){
     //window.history.pushState('', '', '/CreateBuy');
+    $("#resultContainerBuyPetition").css("visibility", "hidden");
+
 		$("#ViewSalesPage").css("display", "none");
     $("#CreateSalePage").css("display", "none");
     $("#CreateBuyPage").css("display", "block");

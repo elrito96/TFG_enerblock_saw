@@ -13,7 +13,7 @@
 				margin: 0 auto;
 				padding: 10px;
 			}
-			#genSaleId,#genBuyId,#genIdBuyPetition{
+			#genSaleId,#genBuyId,#genIdBuyPetition,#genIdSatisfyPetition{
 				float:right;
 			}
 
@@ -54,6 +54,7 @@
 				border-radius: 10px;
 		    border: 2px solid darkgrey;
 		    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+				cursor: pointer;
 			}
 			#closeButton, #closeButtonBuyPetition, #closeButtonBuy, #closeButtonBuySatisfyPetition, #closeButtonBuyED, #closeButtonBuyEDBuyPetition{
 				float: right;
@@ -167,6 +168,7 @@
 				display:flex;
 				flex-flow:row;
 				align-items:center;
+				flex-wrap: nowrap;
 			}
 			#validwritedate,#validwritedateBuyPetition{
 				margin-left: 3px;
@@ -233,7 +235,12 @@
 				max-width: 850px;
 			}
 			.DateLabels{
-				color: magenta;
+				color: white;
+			  background-color: #868686;
+			  padding: 5px;
+			  border-top-left-radius: 5px;
+			  border-top-right-radius: 5px;
+			  font-weight: bold;
 			}
 			th{
 				text-align: center;
@@ -242,7 +249,7 @@
 				background-color: Gainsboro;
 			}
 			body{
-				background-image: linear-gradient(to bottom right, springGreen, gainsboro);
+				background-image: linear-gradient(to bottom right, springgreen, darkgreen);
 				background-attachment: fixed;
 			}
 			html{
