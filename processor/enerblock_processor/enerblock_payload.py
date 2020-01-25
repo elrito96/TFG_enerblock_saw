@@ -98,6 +98,12 @@ class EnerblockPayload(object):
                 datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
             except ValueError:
                 raise InvalidTransaction("Incorrect data format, validity Date should be YYYY-MM-DD hh:mm:ss")
+            # Validate valid date after creation date
+            createDate = datetime.strptime(createWritedate, '%Y-%m-%d %H:%M:%S')
+            validDate = datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
+            if validDate < createDate:
+                raise InvalidTransaction("Validity date can't be earlier than creation date")
+
 
             if not saleName:
                 raise InvalidTransaction('Sale id (saleName) is required')
@@ -152,7 +158,11 @@ class EnerblockPayload(object):
                 datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
             except ValueError:
                 raise InvalidTransaction("Incorrect data format, validity Date should be YYYY-MM-DD hh:mm:ss")
-
+            # Validate valid date after creation date
+            createDate = datetime.strptime(createWritedate, '%Y-%m-%d %H:%M:%S')
+            validDate = datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
+            if validDate < createDate:
+                raise InvalidTransaction("Validity date can't be earlier than creation date")
             if not saleName:
                 raise InvalidTransaction('Petition ID is required')
 
@@ -191,6 +201,10 @@ class EnerblockPayload(object):
             if not buyerPubKey:
                 raise InvalidTransaction('A buyer is required to buy')
 
+            limitDate = datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
+            buyDate = datetime.strptime(buyWritedate, '%Y-%m-%d %H:%M:%S')
+            if limitDate < buyDate:
+                raise InvalidTransaction("Can't buy after validity date")
             self._operation = operation
             self._kwhAmountSell = kwhAmountSell
             self._pricePerKwh = pricePerKwh
@@ -230,7 +244,10 @@ class EnerblockPayload(object):
                 raise InvalidTransaction('Satisfy Buy Petition id is required ')
             if not buyerPubKey:
                 raise InvalidTransaction('A key is required to satisfy a buy petition')
-
+            limitDate = datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
+            buyDate = datetime.strptime(buyWritedate, '%Y-%m-%d %H:%M:%S')
+            if limitDate < buyDate:
+                raise InvalidTransaction("Can't satisfy buy petition after validity date")
             self._operation = operation
             self._kwhAmountSell = kwhAmountSell
             self._pricePerKwh = pricePerKwh

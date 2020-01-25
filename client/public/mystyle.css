@@ -202,6 +202,17 @@
 			#deleteSaleBut,#editSaleBut,#deleteBuyPetitionBut,#editBuyPetitionBut {
 				margin: 7px;
 			}
+			#hideInvalidSales, #hideInvalidPetitions{
+				margin: 7px;
+			}
+			.pageTitle{
+				text-align:center;
+			}
+			.topDiv{
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 
 			/* #ViewSalesSide{
 				float:left;

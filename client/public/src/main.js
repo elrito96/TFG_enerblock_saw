@@ -362,6 +362,10 @@ $(document).ready(function(){
   $('#validWritedateDate').val(today);
   $('#validWritedateDateBuyPetition').val(today);
 
+  // modify date min
+  $("#validWritedateDate").attr("min",today);
+  $('#validWritedateDateBuyPetition').attr("min",today);
+
 
   //Load valid date in field from date, hour, min and seconds
   updateValidWritedate();
@@ -451,11 +455,6 @@ $(document).ready(function(){
     $("#resultBuyContainerEDBuyPetition").css("visibility", "hidden");
   });
 
-
-
-
-
-
   // Actions to show and hide elements when View Sales is clicked in the side bar
   $("#ViewSalesSide").click(function(){
     app.updateSalesTable();
@@ -463,6 +462,7 @@ $(document).ready(function(){
   // Actions to show and hide elements when Create Sale is clicked in the side bar
   $("#CreateSaleSide").click(function(){
     //window.history.pushState('', '', '/CreateSale');
+
     $("#resultContainer").css("visibility", "hidden");
 
 		$("#ViewSalesPage").css("display", "none");
@@ -515,6 +515,40 @@ $(document).ready(function(){
     //window.history.pushState('', '', '/CreateBuy');
     app.updateSatisfiedBuyPetitionsTable();
 	});
+   // hide sales with 0 amount of energy and unvalid dates
+  $("#hideInvalidSales").click(function(){
+    $('#ViewSalesTable > tbody  > tr').each(function(index, tr) {
+
+      var $tr = $(tr)
+      console.log(index);
+      console.log(tr);
+      var amountToSell = $tr.find('td:eq(0)').text();
+      var validDateTabe = $tr.find('td:eq(3)').text();
+
+      if(amountToSell == "0"){
+        console.log(" Esta es la fila a eliminar ")
+        $tr.remove();
+      }
+
+    });
+  })
+  // hide buy petitions with 0 energy solicited and passed validity date
+  $("#hideInvalidPetitions").click(function(){
+    $('#ViewBuyPetitionsTable > tbody  > tr').each(function(index, tr) {
+
+      var $tr = $(tr)
+      console.log(index);
+      console.log(tr);
+      var amountToSell = $tr.find('td:eq(0)').text();
+      var validDateTabe = $tr.find('td:eq(3)').text();
+
+      if(amountToSell == "0"){
+        console.log(" Esta es la fila a eliminar ")
+        $tr.remove();
+      }
+
+    });
+  })
 
 });
 

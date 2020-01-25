@@ -47,7 +47,10 @@
 
 		<!-- Section of the view sales -->
 		<div id = "ViewSalesPage">
-				<h1 style = "text-align:center"> View energy on sale </h1>
+			<h1 class="pageTitle"> View energy on sale </h1>
+			<div class="topDiv">
+				<button type="button" class="btn border border-secondary" id="hideInvalidSales">Hide invalid sales</button>
+			</div>
 				<div id ="ViewSalesTableDiv">
 					<table id="ViewSalesTable" class="table">
 						<thead class="thead-dark">
@@ -196,7 +199,7 @@
 								<i class="fa fa-calendar" aria-hidden="true"></i>
 								Date
 							</span>
-							<input id="validWritedateDate" type="date" class="form-control" required>
+							<input id="validWritedateDate" type="date" class="form-control" max="2099-01-01" onkeydown="return false" required>
 						</div>
 						<div>
 							<span class="DateLabels">
@@ -243,7 +246,10 @@
 
 		<!-- Section of buy petitions -->
 		<div id = "ViewBuyPetitionsPage">
-				<h1 style = "text-align:center"> View energy buy petitions</h1>
+				<h1 class="pageTitle"> View energy buy petitions</h1>
+				<div class="topDiv">
+					<button type="button" class="btn border border-secondary" id="hideInvalidPetitions">Hide invalid buy Petitions</button>
+				</div>
 				<div id ="ViewBuyPetitionsTableDiv">
 					<table id="ViewBuyPetitionsTable" class="table">
 						<thead class="thead-dark">
@@ -292,7 +298,7 @@
 							<input id="buyIDBuyModalSatisfyPetition" readonly="" class="form-control" type="text" placeholder="Press button to gen buy ID">
 							<br>
 							<span>
-								<input id="createBuySubmitSatisfyPetition" type="button" value="Buy" class="btn btn-primary">
+								<input id="createBuySubmitSatisfyPetition" type="button" value="Satisfy petition" class="btn btn-primary">
 								<button id="genIdSatisfyPetition" class="btn border border-secondary">Click to gen buy ID</button>
 							</span>
 						</div>
@@ -379,7 +385,7 @@
 								<i class="fa fa-calendar" aria-hidden="true"></i>
 								Date
 							</span>
-							<input id="validWritedateDateBuyPetition" type="date" class="form-control" required>
+							<input id="validWritedateDateBuyPetition" type="date"  max="2099-01-01" class="form-control" onkeydown="return false" required>
 						</div>
 						<div>
 							<span class="DateLabels">
