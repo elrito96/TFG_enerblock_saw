@@ -1,0 +1,514 @@
+<!doctype html>
+<html><head>
+		<meta charset="UTF-8">
+		<title>My Web Page</title>
+	  <!-- Bootstrap css -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<!-- My style css -->
+		<link rel="stylesheet" type="text/css" href="./mystyle.css">
+		<!-- Icons css -->
+		<link rel="stylesheet" href="./font-awesome.css">
+		<!-- Favicon image -->
+		<link rel="shortcut icon" type="image/png" href="./favicon.png">
+
+	</head>
+	<!-- <body background="https://media.tenor.com/images/b5d0524fbcfad4cbc2016564445a8a95/tenor.gif")> -->
+	<body>
+		<div id="bars">
+			<div id="topbar">
+					<!-- <select name="select">
+						<option value="value1">Value 1</option>
+						<option value="value2" selected>Value 2</option>
+						<option value="value3">Value 3</option>
+					</select> -->
+				<h2 id = "topbar_h2"> Sawtooth - Energy exchange application </h2>
+			</div>
+
+			<div class="sidebarDiv">
+				<ul id="sidebar">
+					<li class="sidebar_li" id="ViewSalesSide"><a class="active" id="ViewSalesA">Sales</a></li>
+			  	<li class="sidebar_li" id="CreateSaleSide"><a id="CreateSaleA" class="">Create sale</a></li>
+			  	<li class="sidebar_li" id="ViewBuyPetitionsSide"><a id="ViewBuyPetitionsA" class="">Buy petitions</a></li>
+					<li class="sidebar_li" id="CreateBuySide"><a id="CreateBuyA" class="">Create buy petition</a></li>
+					<li class="sidebar_li" id="BuysFromSalesSide"><a id="BuysFromSalesA" class="">History of Energy bought from sales</a></li>
+					<li class="sidebar_li" id="SatisfiedBuysSide"><a id="SatisfiedBuysA" class="">History of satisfied energy petitions</a></li>
+
+
+					<!-- All buy from sales
+					All satisfied buy petitions -->
+				</ul>
+			</div>
+
+		</div>
+		<div id="clock" align="center">
+			<div id="datehour">11:36:02 am</div>
+		  <div id="dateday">July 30th 2019</div>
+		</div>
+
+		<!-- Section of the view sales -->
+		<div id = "ViewSalesPage">
+			<h1 class="pageTitle"> View energy on sale </h1>
+			<div class="topDiv">
+				<button type="button" class="btn border border-secondary" id="hideInvalidSales">Hide invalid sales</button>
+			</div>
+				<div id ="ViewSalesTableDiv">
+					<table id="ViewSalesTable" class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th>Energy to sell</th>
+								<th>Price per KhW</th>
+								<th>Sale creation date</th>
+								<th>Sale validity date</th>
+								<th>Sale ID</th>
+								<th>Seller public key</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id ="salesData">
+							<!-- <tr data-toggle="modal" data-id="1" data-target="#buyModal">
+			                        <td>2</td>
+			                        <td>1</td>
+			                        <td>2-222-50</td>
+			                        <td>1-1-2019</td>
+			                        <td>00001</td>'+
+			                        <td>123478457345</td>
+			                        <td ><button type="button">Edit / Delete</button></td>
+			                    </tr> -->
+						<!-- Rows are added dynamically in main/app.refresh -->
+						</tbody>
+					</table>
+				</div>
+		</div>
+
+		<!-- Buy Modal -->
+		<div id="buyModal" class="modal fade" role="dialog" aria-labelledby="buyModal" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h3>Energy Buy Modal</h3>
+		      </div>
+					<div class="modal-body">
+			      <div id="saleDetails">
+
+						</div>
+
+						<div class="form-group" id="divBuyModal">
+							<label> How much energy you want to buy (KwH): </label>
+							<input id="amountBuyModal" class="form-control" type="number" placeholder="0">
+							<label> Total cost of energy (Euro): </label>
+							<input id="totalCostBuyModal" class="form-control" type="text" placeholder="0" readonly="">
+							<label> Date of buy: </label>
+							<input id="writedateBuyModal" class="form-control" type="text" readonly="">
+							<label> Insert your private key: </label>
+							<select id="buyerPrivateKeyBuyModal" class="form-control">
+								<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+			  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+							</select>
+							<label> The buy ID (UUID v4 format)</label>
+							<input id="buyIDBuyModal" readonly="" class="form-control" type="text" placeholder="Press button to gen buy ID">
+							<br>
+							<span>
+								<input id="createBuySubmit" type="button" value="Buy" class="btn btn-primary">
+								<button id="genBuyId" class="btn border border-secondary">Click to gen buy ID</button>
+							</span>
+						</div>
+					</div>
+
+
+		      <div class="modal-footer">
+						<div id=resultBuyContainer>
+								<div id=divResultBuy>
+									<button id="closeButtonBuy">
+										<i id="closeIcon">&times;</i>
+									</button>
+									<h3 id="buyMsg"></h3>
+								</div>
+						</div>
+		        <button id="buyModalCloseBtn" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- edit / delete -->
+		<div id="editDeleteModalSale" class="modal fade" role="dialog" aria-labelledby="editDeleteModalSale" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3>Modal for editing / deleting Sale</h3>
+					</div>
+					<div class="modal-body">
+						<b> Select your private key </b>
+						<select id="buyerPrivateKeyBuyModalEditDeleteSale" class="form-control">
+							<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+							<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+						</select>
+
+						<br>
+						<div id="editDeleteModalSaleDetails">
+
+						</div>
+
+						<hr>
+						<div id="editDeleteSaleButsDiv">
+							<button id="editSaleBut" class="btn btn-primary">Save Changes</button>
+							<button id="deleteSaleBut" class="btn btn-danger">Delete Sale</button>
+						</div>
+
+
+					</div>
+
+
+
+					<div class="modal-footer">
+						<div id=resultBuyContainerED>
+								<div id=divResultBuyED>
+									<button id="closeButtonBuyED">
+										<i id="closeIcon">&times;</i>
+									</button>
+									<h3 id="buyMsgED"></h3>
+								</div>
+						</div>
+						<button id="buyModalCloseBtnED" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Section of the create sale -->
+		<div id = "CreateSalePage">
+			<div id="saleContainer" >
+				<div class="form-group" id="divSale">
+					<h2 id="saleTitle" >Create sell</h2>
+
+
+					<label> Insert amount of kWh to sell </label>
+					<input id="amount" class="form-control" type="number" placeholder="Enter sell amount ...">
+					<label> Insert price in Euro per kWh </label>
+					<input id="price" class="form-control" type="number" placeholder="Enter price...">
+					<label> The sale's creation date (YYYY-MM-DD hh:mm:ss format) </label>
+					<input id="writedate" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
+					<label> The sale's validity date (YYYY-MM-DD hh:mm:ss format) </label>
+					<div id="validWritedateDiv" >
+						<div>
+							<input id="validwritedate" class="form-control" type="text" readonly="">
+						</div>
+						<div>
+
+							<span class="DateLabels">
+								<i class="fa fa-calendar" aria-hidden="true"></i>
+								Date
+							</span>
+							<input id="validWritedateDate" type="date" class="form-control" max="2099-01-01" onkeydown="return false" required>
+						</div>
+						<div>
+							<span class="DateLabels">
+								<i class="fa fa-clock-o" aria-hidden="true"></i>
+								Hour
+							</span>
+							<select id="validwritedateHour" class="form-control"></select>
+						</div>
+						<div>
+							<span class="DateLabels">
+								<i class="fa fa-clock-o" aria-hidden="true"></i>
+								Minute
+							</span>
+							<select id="validwritedateMin" class="form-control"></select>
+						</div>
+					</div>
+					<label> The seller's private key select</label>
+					<select id="sellerprivatekey" class="form-control">
+						<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+	  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+					</select>
+					<label> The seller's private key written</label>
+					<!-- For real use case, delete or hide previous select
+					and add the following id: id="sellerprivatekey" in the input below-->
+					<input class="form-control" placeholder="Enter your private key...">
+					<label> The sale ID (UUID v4 format)</label>
+					<input id="saleID" readonly="" class="form-control" type="text" placeholder="Press button to gen sale ID">
+					<br>
+					<span>
+						<input id="createSubmit" type="button" value="Create" class="btn btn-primary">
+						<button id="genSaleId" class="btn btn-default border border-secondary">Click to gen sale ID</button>
+					</span>
+				</div>
+			</div>
+			<div id=resultContainer>
+					<div id=divResult>
+						<button id="closeButton">
+							<i id="closeIcon">&times;</i>
+						</button>
+						<h3 id="saleMsg"></h3>
+					</div>
+			</div>
+		</div>
+
+		<!-- Section of buy petitions -->
+		<div id = "ViewBuyPetitionsPage">
+				<h1 class="pageTitle"> View energy buy petitions</h1>
+				<div class="topDiv">
+					<button type="button" class="btn border border-secondary" id="hideInvalidPetitions">Hide invalid buy Petitions</button>
+				</div>
+				<div id ="ViewBuyPetitionsTableDiv">
+					<table id="ViewBuyPetitionsTable" class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th>Requested energy</th>
+								<th>Price per KhW</th>
+								<th>Buy petition creation date</th>
+								<th>Buy petition validity date</th>
+								<th>Buy petition ID</th>
+								<th>Buy petition creator public key</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody id ="buyPetitionsData">
+						<!-- Rows are added dynamically in main/app.refresh -->
+						</tbody>
+					</table>
+				</div>
+		</div>
+
+		<!-- Satisfy buy petition modal -->
+		<div id="buyModalSatisfyPetition" class="modal fade" role="dialog" aria-labelledby="buyModalSatisfyPetition" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h3>Satisfy Energy Petition Modal</h3>
+		      </div>
+					<div class="modal-body">
+			      <div id="BuyPetitionDetails">
+
+						</div>
+
+						<div class="form-group" id="divBuyModalSatisfyPetition">
+							<label> How much energy you want to offer (KwH): </label>
+							<input id="amountBuyModalSatisfyPetition" class="form-control" type="number" placeholder="0">
+							<label> Total gain (Euro): </label>
+							<input id="totalCostBuyModalSatisfyPetition" class="form-control" type="text" placeholder="0" readonly="">
+							<label> Date of buy: </label>
+							<input id="writedateBuyModalSatisfyPetition" class="form-control" type="text" readonly="">
+							<label> Insert your private key: </label>
+							<select id="buyerPrivateKeyBuyModalSatisfyPetition" class="form-control">
+								<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+			  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+							</select>
+							<label> The buy ID (UUID v4 format)</label>
+							<input id="buyIDBuyModalSatisfyPetition" readonly="" class="form-control" type="text" placeholder="Press button to gen buy ID">
+							<br>
+							<span>
+								<input id="createBuySubmitSatisfyPetition" type="button" value="Satisfy petition" class="btn btn-primary">
+								<button id="genIdSatisfyPetition" class="btn border border-secondary">Click to gen buy ID</button>
+							</span>
+						</div>
+					</div>
+
+
+		      <div class="modal-footer">
+						<div id=resultBuyContainerSatisfyPetition>
+								<div id=divResultBuySatisfyPetition>
+									<button id="closeButtonBuySatisfyPetition">
+										<i id="closeIcon">&times;</i>
+									</button>
+									<h3 id="buyMsgSatisfyPetition"></h3>
+								</div>
+						</div>
+		        <button id="buyModalCloseBtnSatisfyPetition" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- edit / delete buy petition -->
+		<div id="editDeleteModalBuyPetition" class="modal fade" role="dialog" aria-labelledby="editDeleteModalBuyPetition" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3>Modal for editing / deleting Buy petition</h3>
+					</div>
+					<div class="modal-body">
+						<b> Select your private key </b>
+						<select id="buyerPrivateKeyBuyModalEditDeleteBuyPetition" class="form-control">
+							<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+							<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+						</select>
+						<br>
+						<div id="editDeleteModalBuyPetitionDetails">
+
+						</div>
+
+						<hr>
+						<div id="editDeleteBuyPetitionButsDiv">
+							<button id="editBuyPetitionBut" class="btn btn-primary">Save Changes</button>
+							<button id="deleteBuyPetitionBut" class="btn btn-danger">Delete Buy Petition</button>
+						</div>
+
+
+					</div>
+
+
+
+					<div class="modal-footer">
+						<div id=resultBuyContainerEDBuyPetition>
+								<div id=divResultBuyEDBuyPetition>
+									<button id="closeButtonBuyEDBuyPetition">
+										<i id="closeIcon">&times;</i>
+									</button>
+									<h3 id="buyMsgEDBuyPetition"></h3>
+								</div>
+						</div>
+						<button id="buyModalCloseBtnEDBuyPetition" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Section of the create buy -->
+		<div id = "CreateBuyPage">
+			<div id="saleContainer" >
+				<div class="form-group" id="divSale">
+					<h2 id="saleTitle" >Create buy petition</h2>
+					<label> Insert amount of kWh you desire to buy </label>
+					<input id="amountBuyPetition" class="form-control" type="number" placeholder="Enter amount ...">
+					<label> Insert price in Euro per kWh you desire to pay </label>
+					<input id="priceBuyPetition" class="form-control" type="number" placeholder="Enter price...">
+					<label> The buy petition's creation date (YYYY-MM-DD hh:mm:ss format) </label>
+					<input id="writedateBuyPetition" class="form-control" type="text" placeholder="Enter writedate..." readonly="">
+					<label> The buy petition's validity date (YYYY-MM-DD hh:mm:ss format) </label>
+					<div id="validWritedateDivBuyPetition">
+						<div>
+							<input id="validwritedateBuyPetition" class="form-control" type="text" readonly="">
+						</div>
+						<div>
+							<span class="DateLabels">
+								<i class="fa fa-calendar" aria-hidden="true"></i>
+								Date
+							</span>
+							<input id="validWritedateDateBuyPetition" type="date"  max="2099-01-01" class="form-control" onkeydown="return false" required>
+						</div>
+						<div>
+							<span class="DateLabels">
+								<i class="fa fa-clock-o" aria-hidden="true"></i>
+								Hour
+							</span>
+							<select id="validwritedateHourBuyPetition" class="form-control"></select>
+						</div>
+						<div>
+							<span class="DateLabels">
+								<i class="fa fa-clock-o" aria-hidden="true"></i>
+								Minute
+							</span>
+							<select id="validwritedateMinBuyPetition" class="form-control"></select>
+						</div>
+					</div>
+					<label> Buy petition creator's private key select</label>
+					<select id="sellerprivatekeyBuyPetition" class="form-control">
+						<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
+						<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+					</select>
+					<label> Buy petition creator's private key written</label>
+					<!-- For real use case, delete or hide previous select
+					and add the following id: id="sellerprivatekeyBuyPetition" in the input below-->
+					<input class="form-control" placeholder="Enter your private key...">
+					<label> The buy petition ID (UUID v4 format)</label>
+					<input id="buyPetitionID"  class="form-control" type="text" placeholder="Press button to gen buy petition ID">
+					<br>
+					<span>
+						<input id="createSubmitBuyPetition" type="button" value="Create" class="btn btn-primary">
+						<button id="genIdBuyPetition" class="btn btn-default border border-secondary">Click to gen buy petition ID</button>
+					</span>
+				</div>
+			</div>
+			<div id=resultContainerBuyPetition>
+					<div id=divResultBuyPetition>
+						<button id="closeButtonBuyPetition">
+							<i id="closeIcon">&times;</i>
+						</button>
+						<h3 id="msgBuyPetition"></h3>
+					</div>
+			</div>
+		</div>
+
+		<!-- Section of buys in sales -->
+		<div id = "BuysFromSalesPage">
+				<h1 style = "text-align:center"> Energy bought from sales</h1>
+				<div id ="ViewBuysFromSalesTableDiv">
+					<table id="ViewBuysFromSalesTable" class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th>User who bought</th>
+								<th>User who sold</th>
+								<th>Amount of energy (KwH)</th>
+								<th>At a price of (Euro per KwH)</th>
+								<th>For a total of (Euro)</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody id ="buysFromSalesData">
+						<!-- Rows are added dynamically in main/app.refresh -->
+						</tbody>
+					</table>
+				</div>
+		</div>
+		<!-- Section of satisfied buy petitions -->
+		<div id = "SatisfiedBuysPage">
+				<h1 style = "text-align:center"> Satisfied buy petitions</h1>
+				<div id ="ViewSatisfiedBuysTableDiv">
+					<table id="ViewSatisfiedBuysTable" class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th>User who satisfied a petition</th>
+								<th>User who created the energy petition</th>
+								<th>Amount of energy (KwH)</th>
+								<th>At a price of (Euro per KwH)</th>
+								<th>For a total of (Euro)</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody id ="satisfiedBuysData">
+						<!-- Rows are added dynamically in main/app.refresh -->
+						</tbody>
+					</table>
+				</div>
+		</div>
+
+		<!-- <div>
+			<IMG SRC="https://media.tenor.com/images/b5d0524fbcfad4cbc2016564445a8a95/tenor.gif" align="bottom-right" width="40" height="40">
+		</div> -->
+
+    <!-- <div id="divKeys">
+    <button id="show" class="btn btn-default">Click to show keys</button>
+		<button id="hide" class="btn btn-default">Click to hide keys</button>
+    </div>
+
+		<div id="keys">
+			<table>
+				<tbody><tr>
+					<th>Name</th>
+					<th colspan="2">Key</th>
+				</tr>
+				<tr>
+					<td rowspan="2">Alice</td>
+					<td>public</td>
+					<td>03a4c7aa44de643b71b7a929c06d6e64a5409e2e96552e84ecb058d44e4950cc5d</td>
+					</tr><tr>
+					<td>private</td>
+					<td>cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338</td>
+					</tr>
+
+				<tr>
+					<td rowspan="2">Bob</td>
+					<td>public</td>
+					<td>039bc48a60b714e6d0836d06ef13f39e1ce7a419fbff15e37bad911f800e1ceb3c</td>
+					</tr><tr>
+					<td>private</td>
+					<td>58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef</td>
+					</tr>
+       	</tbody>
+			</table>
+		</div> -->
+
+		<script src="./dist/bundle.js"></script>
+	</body>
+</html>

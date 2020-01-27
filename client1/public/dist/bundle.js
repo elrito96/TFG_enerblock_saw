@@ -40844,7 +40844,7 @@ const app = require('./main')
 
 // Config variables
 const KEY_NAME = 'transfer-chain.keys'
-const API_URL = 'http://localhost:8000/api'
+const API_URL = 'http://localhost:8001/api'
 
 const FAMILY = 'enerblock'
 const VERSION = '1.0'

@@ -523,13 +523,18 @@ $(document).ready(function(){
       console.log(index);
       console.log(tr);
       var amountToSell = $tr.find('td:eq(0)').text();
-      var validDateTabe = $tr.find('td:eq(3)').text();
+      var validDateTable = $tr.find('td:eq(3)').text();
+      console.log(validDateTable);
+      var yearTable = validDateTable.substring(0,4);
+      var monthTable = validDateTable.substring(5,7);
+      var dayTable = validDateTable.substring(8,10);
+      var validDate = new Date(yearTable,parseInt(monthTable)-1,parseInt(dayTable),validDateTable.substring(11,13), validDateTable.substring(14,16),validDateTable.substring(17,19),"00");
+      var now = new Date();
 
-      if(amountToSell == "0"){
-        console.log(" Esta es la fila a eliminar ")
+      if(amountToSell == "0" || validDate < now){
+        console.log(" Esta es la fila a eliminar")
         $tr.remove();
       }
-
     });
   })
   // hide buy petitions with 0 energy solicited and passed validity date
@@ -540,12 +545,19 @@ $(document).ready(function(){
       console.log(index);
       console.log(tr);
       var amountToSell = $tr.find('td:eq(0)').text();
-      var validDateTabe = $tr.find('td:eq(3)').text();
+      var validDateTable = $tr.find('td:eq(3)').text();
+      console.log(validDateTable);
+      var yearTable = validDateTable.substring(0,4);
+      var monthTable = validDateTable.substring(5,7);
+      var dayTable = validDateTable.substring(8,10);
+      var validDate = new Date(yearTable,parseInt(monthTable)-1,parseInt(dayTable),validDateTable.substring(11,13), validDateTable.substring(14,16),validDateTable.substring(17,19),"00");
+      var now = new Date();
 
-      if(amountToSell == "0"){
-        console.log(" Esta es la fila a eliminar ")
+      if(amountToSell == "0" || validDate < now){
+        console.log(" Esta es la fila a eliminar")
         $tr.remove();
       }
+
 
     });
   })
