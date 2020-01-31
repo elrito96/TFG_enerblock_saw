@@ -40758,34 +40758,7 @@ $('#editDeleteModalSale').modal({
 
 });
 
-// Buy selected sale of Energy
-$('#buyModalSatisfyPetition').modal({
-  keyboarnd: true,
-  backdrop: "static",
-  show:false,
-}).on('show.bs.modal', function(){
-  var closestRow = $(event.target).closest('tr')
-  var getIdFromRow = closestRow.data('id');
-  $('#buyIDBuyModalSatisfyPetition').val("");
-  console.log("G e t id from R o w")
-  console.log(getIdFromRow)
-  var amountToLoadModal = closestRow.find('td:eq(0)').text();
-  console.log(amountToLoadModal)
-  // Ajax calls to populate modal
-  $('#resultBuyContainerSatisfyPetition').css("visibility", "hidden")
-  $(this).find('#BuyPetitionDetails').html(
-    $('<b> Amount requested (KwH): </b> <label id="amountSelectedSaleBuySatisfyPetition">' + amountToLoadModal + '</label><br>'+
-      '<b>Price per KhW : </b> <label id="priceSelectedSaleBuySatisfyPetition">' + app.buyPetitions[getIdFromRow].pricePerKwh + '</label><br>'+
-      '<b>Creation Date : </b> <label id="createWdSelectedSaleBuySatisfyPetition">' + app.buyPetitions[getIdFromRow].createWritedate + '</label><br>'+
-      '<b>Validity Date : </b> <label id="validWdSelectedSaleBuySatisfyPetition">' + app.buyPetitions[getIdFromRow].validWritedate + '</label><br>'+
-      '<b style="display:none">Buy petition creator Public Key : </b> <label id="sellerSelectedSaleBuySatisfyPetition" style="display:none">' + app.buyPetitions[getIdFromRow].sellerPubKey + '</label><br>'+
-      '<label id="idSelectedSaleBuySatisfyPetition" style="display:none">' + app.buyPetitions[getIdFromRow].saleName + '</label>'
-    )
-  )
-  $('#amountBuyModalSatisfyPetition').val("");
-  $('#totalCostBuyModalSatisfyPetition').val(0);
 
-});
 
 
 // edit - delete petition of Energy
@@ -40844,7 +40817,7 @@ const app = require('./main')
 
 // Config variables
 const KEY_NAME = 'transfer-chain.keys'
-const API_URL = 'http://localhost:8000/api'
+const API_URL = 'http://localhost:8002/api'
 
 const FAMILY = 'enerblock'
 const VERSION = '1.0'

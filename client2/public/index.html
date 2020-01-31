@@ -21,13 +21,12 @@
 						<option value="value2" selected>Value 2</option>
 						<option value="value3">Value 3</option>
 					</select> -->
-				<h2 id = "topbar_h2"> Sawtooth - Energy exchange application </h2>
+				<h2 id = "topbar_h2"> Sawtooth - Energy exchange application (Consumer)</h2>
 			</div>
 
 			<div class="sidebarDiv">
 				<ul id="sidebar">
 					<li class="sidebar_li" id="ViewSalesSide"><a class="active" id="ViewSalesA">Sales</a></li>
-			  	<li class="sidebar_li" id="CreateSaleSide"><a id="CreateSaleA" class="">Create sale</a></li>
 			  	<li class="sidebar_li" id="ViewBuyPetitionsSide"><a id="ViewBuyPetitionsA" class="">Buy petitions</a></li>
 					<li class="sidebar_li" id="CreateBuySide"><a id="CreateBuyA" class="">Create buy petition</a></li>
 					<li class="sidebar_li" id="BuysFromSalesSide"><a id="BuysFromSalesA" class="">History of Energy bought from sales</a></li>
@@ -101,8 +100,7 @@
 							<input id="writedateBuyModal" class="form-control" type="text" readonly="">
 							<label> Insert your private key: </label>
 							<select id="buyerPrivateKeyBuyModal" class="form-control">
-								<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
-			  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+								<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
 							</select>
 							<label> The buy ID (UUID v4 format)</label>
 							<input id="buyIDBuyModal" readonly="" class="form-control" type="text" placeholder="Press button to gen buy ID">
@@ -140,7 +138,6 @@
 					<div class="modal-body">
 						<b> Select your private key </b>
 						<select id="buyerPrivateKeyBuyModalEditDeleteSale" class="form-control">
-							<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
 							<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
 						</select>
 
@@ -218,13 +215,8 @@
 					</div>
 					<label> The seller's private key select</label>
 					<select id="sellerprivatekey" class="form-control">
-						<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
-	  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
-					</select>
-					<label> The seller's private key written</label>
-					<!-- For real use case, delete or hide previous select
-					and add the following id: id="sellerprivatekey" in the input below-->
-					<input class="form-control" placeholder="Enter your private key...">
+					<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+	  			</select>
 					<label> The sale ID (UUID v4 format)</label>
 					<input id="saleID" readonly="" class="form-control" type="text" placeholder="Press button to gen sale ID">
 					<br>
@@ -271,54 +263,7 @@
 		</div>
 
 		<!-- Satisfy buy petition modal -->
-		<div id="buyModalSatisfyPetition" class="modal fade" role="dialog" aria-labelledby="buyModalSatisfyPetition" aria-hidden="true">
-		  <div class="modal-dialog">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h3>Satisfy Energy Petition Modal</h3>
-		      </div>
-					<div class="modal-body">
-			      <div id="BuyPetitionDetails">
-
-						</div>
-
-						<div class="form-group" id="divBuyModalSatisfyPetition">
-							<label> How much energy you want to offer (KwH): </label>
-							<input id="amountBuyModalSatisfyPetition" class="form-control" type="number" placeholder="0">
-							<label> Total gain (Euro): </label>
-							<input id="totalCostBuyModalSatisfyPetition" class="form-control" type="text" placeholder="0" readonly="">
-							<label> Date of buy: </label>
-							<input id="writedateBuyModalSatisfyPetition" class="form-control" type="text" readonly="">
-							<label> Insert your private key: </label>
-							<select id="buyerPrivateKeyBuyModalSatisfyPetition" class="form-control">
-								<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
-			  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
-							</select>
-							<label> The buy ID (UUID v4 format)</label>
-							<input id="buyIDBuyModalSatisfyPetition" readonly="" class="form-control" type="text" placeholder="Press button to gen buy ID">
-							<br>
-							<span>
-								<input id="createBuySubmitSatisfyPetition" type="button" value="Satisfy petition" class="btn btn-primary">
-								<button id="genIdSatisfyPetition" class="btn border border-secondary">Click to gen buy ID</button>
-							</span>
-						</div>
-					</div>
-
-
-		      <div class="modal-footer">
-						<div id=resultBuyContainerSatisfyPetition>
-								<div id=divResultBuySatisfyPetition>
-									<button id="closeButtonBuySatisfyPetition">
-										<i id="closeIcon">&times;</i>
-									</button>
-									<h3 id="buyMsgSatisfyPetition"></h3>
-								</div>
-						</div>
-		        <button id="buyModalCloseBtnSatisfyPetition" class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
+		
 
 		<!-- edit / delete buy petition -->
 		<div id="editDeleteModalBuyPetition" class="modal fade" role="dialog" aria-labelledby="editDeleteModalBuyPetition" aria-hidden="true">
@@ -330,7 +275,6 @@
 					<div class="modal-body">
 						<b> Select your private key </b>
 						<select id="buyerPrivateKeyBuyModalEditDeleteBuyPetition" class="form-control">
-							<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
 							<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
 						</select>
 						<br>
@@ -404,13 +348,9 @@
 					</div>
 					<label> Buy petition creator's private key select</label>
 					<select id="sellerprivatekeyBuyPetition" class="form-control">
-						<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
 						<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
 					</select>
-					<label> Buy petition creator's private key written</label>
-					<!-- For real use case, delete or hide previous select
-					and add the following id: id="sellerprivatekeyBuyPetition" in the input below-->
-					<input class="form-control" placeholder="Enter your private key...">
+
 					<label> The buy petition ID (UUID v4 format)</label>
 					<input id="buyPetitionID"  class="form-control" type="text" placeholder="Press button to gen buy petition ID">
 					<br>

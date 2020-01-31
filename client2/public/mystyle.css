@@ -123,7 +123,7 @@
 			}
 
 			.sidebar_li a.active {
-			  background-color: #4CAF50;
+			  background-color: #5499C7;
 			  color: white;
 			}
 
@@ -260,7 +260,7 @@
 				background-color: Gainsboro;
 			}
 			body{
-				background-image: linear-gradient(to bottom right, blue, darkgreen);
+				background-image: linear-gradient(to bottom right, #7FB3D5, #5499C7);
 				background-attachment: fixed;
 			}
 			html{
