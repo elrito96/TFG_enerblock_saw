@@ -81,3 +81,30 @@ services:
           --bind network:tcp://eth0:8800
       "
 
+  my-web-page-1:
+    build: ./client1
+    image: enerblock-client-1
+    container_name: web-client-proxy-1
+    volumes:
+      - ./client1/public:/usr/local/apache2/htdocs/
+    expose:
+      - 80
+    ports:
+      - '8001:80'
+    depends_on:
+      - sawtooth-rest-api
+
+  my-web-page-2:
+    build: ./client2
+    image: enerblock-client-2
+    container_name: web-client-proxy-2
+    volumes:
+      - ./client2/public:/usr/local/apache2/htdocs/
+    expose:
+      - 80
+    ports:
+      - '8002:80'
+    depends_on:
+      - sawtooth-rest-api
+
+  

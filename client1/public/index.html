@@ -21,7 +21,7 @@
 						<option value="value2" selected>Value 2</option>
 						<option value="value3">Value 3</option>
 					</select> -->
-				<h2 id = "topbar_h2"> Sawtooth - Prosumer </h2>
+				<h2 id = "topbar_h2"> Sawtooth - Energy exchange application (Prosumer)</h2>
 			</div>
 
 			<div class="sidebarDiv">
@@ -102,7 +102,7 @@
 							<label> Insert your private key: </label>
 							<select id="buyerPrivateKeyBuyModal" class="form-control">
 								<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
-			  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+
 							</select>
 							<label> The buy ID (UUID v4 format)</label>
 							<input id="buyIDBuyModal" readonly="" class="form-control" type="text" placeholder="Press button to gen buy ID">
@@ -141,7 +141,7 @@
 						<b> Select your private key </b>
 						<select id="buyerPrivateKeyBuyModalEditDeleteSale" class="form-control">
 							<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
-							<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+
 						</select>
 
 						<br>
@@ -219,12 +219,9 @@
 					<label> The seller's private key select</label>
 					<select id="sellerprivatekey" class="form-control">
 						<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
-	  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+
 					</select>
-					<label> The seller's private key written</label>
-					<!-- For real use case, delete or hide previous select
-					and add the following id: id="sellerprivatekey" in the input below-->
-					<input class="form-control" placeholder="Enter your private key...">
+
 					<label> The sale ID (UUID v4 format)</label>
 					<input id="saleID" readonly="" class="form-control" type="text" placeholder="Press button to gen sale ID">
 					<br>
@@ -292,7 +289,7 @@
 							<label> Insert your private key: </label>
 							<select id="buyerPrivateKeyBuyModalSatisfyPetition" class="form-control">
 								<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
-			  				<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+
 							</select>
 							<label> The buy ID (UUID v4 format)</label>
 							<input id="buyIDBuyModalSatisfyPetition" readonly="" class="form-control" type="text" placeholder="Press button to gen buy ID">
@@ -331,7 +328,7 @@
 						<b> Select your private key </b>
 						<select id="buyerPrivateKeyBuyModalEditDeleteBuyPetition" class="form-control">
 							<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
-							<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+
 						</select>
 						<br>
 						<div id="editDeleteModalBuyPetitionDetails">
@@ -405,14 +402,11 @@
 					<label> Buy petition creator's private key select</label>
 					<select id="sellerprivatekeyBuyPetition" class="form-control">
 						<option value="cce602205aa709a73f6dc481b583e831f64ce19b6480114f27ddb8ddd2359338" selected>Alice Private key</option>
-						<option value="58cc666e5c4145f59193e8fca6e8afa62b87addd986f2cb4a37322ed5f4804ef">Bob Private key</option>
+
 					</select>
-					<label> Buy petition creator's private key written</label>
-					<!-- For real use case, delete or hide previous select
-					and add the following id: id="sellerprivatekeyBuyPetition" in the input below-->
-					<input class="form-control" placeholder="Enter your private key...">
+
 					<label> The buy petition ID (UUID v4 format)</label>
-					<input id="buyPetitionID"  class="form-control" type="text" placeholder="Press button to gen buy petition ID">
+					<input id="buyPetitionID"  class="form-control" readonly="" type="text" placeholder="Press button to gen buy petition ID">
 					<br>
 					<span>
 						<input id="createSubmitBuyPetition" type="button" value="Create" class="btn btn-primary">

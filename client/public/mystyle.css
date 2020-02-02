@@ -242,6 +242,23 @@
 				display : none;
 			}
 
+			#textInfo{
+				font-weight: 800;
+				text-align:center;
+			  vertical-align: middle;
+			  display: table-cell;
+
+			}
+			#keyInfo{
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				
+			}
+			#keyInfo:hover{
+				visibility:visible;
+			}
+
 			.modal-dialog{
 				max-width: 850px;
 			}
