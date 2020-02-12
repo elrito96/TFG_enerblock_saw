@@ -40022,7 +40022,7 @@ app.refreshSales = function (){
                         '<td>'+salePetitions[i].pricePerKwh+'</td>'+
                         '<td>'+salePetitions[i].createWritedate+'</td>'+
                         '<td>'+salePetitions[i].validWritedate+'</td>'+
-                        '<td>'+salePetitions[i].saleName+'</td>'+
+                        '<td>'+salePetitions[i].elementID+'</td>'+
                         '<td>'+shorten_text(salePetitions[i].sellerPubKey,20)+'</td>'+
                         '<td><button class="editDeleteSale btn border border-secondary" type="button">Edit / Delete</button></td>'+
                     '</tr>');
@@ -40053,7 +40053,7 @@ app.refreshBuyPetitions = function (){
                         '<td>'+buyPetitions[i].pricePerKwh+'</td>'+
                         '<td>'+buyPetitions[i].createWritedate+'</td>'+
                         '<td>'+buyPetitions[i].validWritedate+'</td>'+
-                        '<td>'+buyPetitions[i].saleName+'</td>'+
+                        '<td>'+buyPetitions[i].elementID+'</td>'+
                         '<td>'+shorten_text(buyPetitions[i].sellerPubKey,20)+'</td>'+
                         '<td><button class="editDeleteBuyPetition btn border border-secondary" type="button">Edit / Delete</button></td>'+
                     '</tr>');
@@ -40163,6 +40163,13 @@ app.updateBuyPetitionsTable = function(){
   app.refreshBuyPetitions();
 }
 
+app.updateIds = function(){
+  $("#saleID").val(uuidv4());
+  $("#buyIDBuyModal").val(uuidv4());
+  $("#buyIDBuyModalSatisfyPetition").val(uuidv4());
+  $("#buyPetitionID").val(uuidv4());
+}
+
 app.updateBuysFromSalesTable = function(){
   $("#ViewSalesPage").css("display", "none");
   $("#CreateSalePage").css("display", "none");
@@ -40197,69 +40204,69 @@ app.updateSatisfiedBuyPetitionsTable = function(){
   app.refreshSatisfiedBuyPetitions();
 }
 
-app.updateCreateSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey) {
+app.updateCreateSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerprivatekey) {
     const operation = 'putOnSale'
-    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName },
+    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID },
       sellerprivatekey,
       success => success ? console.log("Transaction submited") : null,
       null
     )
 }
 
-app.updateCreateBuyPetition = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey) {
+app.updateCreateBuyPetition = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerprivatekey) {
     const operation = 'createBuyPetition'
-    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName },
+    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID },
       sellerprivatekey,
       success => success ? console.log("Transaction submited") : null,
       null
     )
 }
 
-app.updateBuyFromSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey) {
+app.updateBuyFromSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, kwhAmountBuy, buyWritedate, counterpartID, buyerPrivKey) {
     const operation = 'buy'
     console.log("app.updateBuyFromSale -------------")
-    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName },
+    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, kwhAmountBuy, buyWritedate, counterpartID },
       buyerPrivKey,
       success => success ? console.log("Transaction submited") : null
     )
 }
-app.updateEditSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, buyerPrivKey) {
+app.updateEditSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, buyerPrivKey) {
     const operation = 'editSale'
     console.log("app.updateEditSale -------------")
-    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey },
+    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey },
       buyerPrivKey,
       success => success ? console.log("Transaction submited") : null
     )
 }
-app.updateDeleteSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, buyerPrivKey) {
+app.updateDeleteSale = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, buyerPrivKey) {
     const operation = 'deleteSale'
     console.log("app.updateDeleteSale -------------")
-    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey },
+    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey },
       buyerPrivKey,
       success => success ? console.log("Transaction submited") : null
     )
 }
-app.updateEditBuyPetition = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, buyerPrivKey) {
+app.updateEditBuyPetition = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, buyerPrivKey) {
     const operation = 'editBuyPetition'
     console.log("app.updateEditSale -------------")
-    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey },
+    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey },
       buyerPrivKey,
       success => success ? console.log("Transaction submited") : null
     )
 }
-app.updateDeleteBuyPetition = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, buyerPrivKey) {
+app.updateDeleteBuyPetition = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, buyerPrivKey) {
     const operation = 'deleteBuyPetition'
     console.log("app.updateDeleteSale -------------")
-    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey },
+    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey },
       buyerPrivKey,
       success => success ? console.log("Transaction submited") : null
     )
 }
 
-app.updateSatisfyBuyPetition = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey) {
+app.updateSatisfyBuyPetition = function (kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, kwhAmountBuy, buyWritedate, counterpartID, buyerPrivKey) {
     const operation = 'satisfyBuyPetition'
     console.log("app.updateSatisfyBuyPetition -------------")
-    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName },
+    submitUpdate({ operation, kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, kwhAmountBuy, buyWritedate, counterpartID },
       buyerPrivKey,
       success => success ? console.log("Transaction submited") : null
     )
@@ -40459,6 +40466,7 @@ $(document).ready(function(){
     $("#CreateBuyA").removeClass("active");
     $("#BuysFromSalesA").removeClass("active");
     $("#SatisfiedBuysA").removeClass("active");
+    app.updateIds();
 	});
 
   // Actions to show and hide elements when view buy petitions is clicked in the side bar
@@ -40483,6 +40491,8 @@ $(document).ready(function(){
     $("#ViewBuyPetitionsA").removeClass("active");
     $("#BuysFromSalesA").removeClass("active");
     $("#SatisfiedBuysA").removeClass("active");
+    app.updateIds();
+
   });
   // Actions to show and hide elements when history1 is clicked in the side bar
 
@@ -40569,12 +40579,13 @@ $('#createSubmit').on('click', function () {
   const pricePerKwh = $('#price').val()
   const createWritedate = $('#writedate').val()
   const validWritedate = $('#validwritedate').val()
-  const saleName = $('#saleID').val()
+  const elementID = $('#saleID').val()
   const sellerprivatekey = $("#sellerprivatekey").val();
-  console.log("SALE NAME ID ==================== "+saleName)
+  console.log("SALE NAME ID ==================== "+elementID)
   console.log("sellerprivatekey below ¨¨¨¨¨");
   console.log(sellerprivatekey)
-  app.updateCreateSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey)
+  app.updateCreateSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerprivatekey)
+  app.updateIds();
 })
 
 $('#createSubmitBuyPetition').on('click', function () {
@@ -40583,12 +40594,13 @@ $('#createSubmitBuyPetition').on('click', function () {
   const pricePerKwh = $('#priceBuyPetition').val()
   const createWritedate = $('#writedateBuyPetition').val()
   const validWritedate = $('#validwritedateBuyPetition').val()
-  const saleName = $('#buyPetitionID').val()
+  const elementID = $('#buyPetitionID').val()
   const sellerprivatekey = $("#sellerprivatekeyBuyPetition").val();
-  console.log("SALE NAME ID ==================== "+saleName)
+  console.log("SALE NAME ID ==================== "+elementID)
   console.log("sellerprivatekey below ¨¨¨¨¨");
   console.log(sellerprivatekey)
-  app.updateCreateBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerprivatekey)
+  app.updateCreateBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerprivatekey)
+  app.updateIds();
 })
 
 
@@ -40600,15 +40612,16 @@ $('#createBuySubmit').on('click', function () {
   const pricePerKwh = $('#priceSelectedSaleBuy').text();
   const createWritedate = $('#createWdSelectedSaleBuy').text();
   const validWritedate = $('#validWdSelectedSaleBuy').text();
-  const saleName = $('#idSelectedSaleBuy').text();
+  const elementID = $('#idSelectedSaleBuy').text();
   const sellerPubKey = $('#sellerSelectedSaleBuy').text();
 
   // Info about buy
   const kwhAmountBuy = $('#amountBuyModal').val()
   const buyWritedate = $('#writedateBuyModal').val()
-  const buyName = $('#buyIDBuyModal').val()
+  const counterpartID = $('#buyIDBuyModal').val()
   const buyerPrivKey = $('#buyerPrivateKeyBuyModal').val()
-  app.updateBuyFromSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey)
+  app.updateBuyFromSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, kwhAmountBuy, buyWritedate, counterpartID, buyerPrivKey)
+  app.updateIds();
 })
 
 
@@ -40620,13 +40633,13 @@ $('#editSaleBut').on('click', function () {
   const pricePerKwh = $('#priceSelectedSaleBuyED').val();
   const createWritedate = $('#createWdSelectedSaleBuy').text();
   const validWritedate = $('#validWdSelectedSaleBuy').text();
-  const saleName = $('#idSelectedSaleBuy').text();
+  const elementID = $('#idSelectedSaleBuy').text();
   const sellerPubKey = $('#sellerSelectedSaleBuy').text();
   // User that tries to edit the sale, must be the one who created it
   const buyerPrivKey = $('#buyerPrivateKeyBuyModalEditDeleteSale').val();
   console.log("Owner pub key: "+sellerPubKey+ "\n editer priv key:"+buyerPrivKey);
 
-  app.updateEditSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, buyerPrivKey)
+  app.updateEditSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, buyerPrivKey)
 })
 
 // Delete sale
@@ -40637,13 +40650,13 @@ $('#deleteSaleBut').on('click', function () {
   const pricePerKwh = $('#priceSelectedSaleBuyED').val();
   const createWritedate = $('#createWdSelectedSaleBuy').text();
   const validWritedate = $('#validWdSelectedSaleBuy').text();
-  const saleName = $('#idSelectedSaleBuy').text();
+  const elementID = $('#idSelectedSaleBuy').text();
   const sellerPubKey = $('#sellerSelectedSaleBuy').text();
   // User that tries to delete the sale, must be the one who created it
   const buyerPrivKey = $('#buyerPrivateKeyBuyModalEditDeleteSale').val();
 
   console.log("Owner pub key: "+sellerPubKey+ "\n deleter priv key:"+buyerPrivKey);
-  app.updateDeleteSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, buyerPrivKey)
+  app.updateDeleteSale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, buyerPrivKey)
 })
 
 // Create satisfy buy petition
@@ -40654,15 +40667,16 @@ $('#createBuySubmitSatisfyPetition').on('click', function () {
   const pricePerKwh = $('#priceSelectedSaleBuySatisfyPetition').text();
   const createWritedate = $('#priceSelectedSaleBuySatisfyPetition').text();
   const validWritedate = $('#validWdSelectedSaleBuySatisfyPetition').text();
-  const saleName = $('#idSelectedSaleBuySatisfyPetition').text();
+  const elementID = $('#idSelectedSaleBuySatisfyPetition').text();
   const sellerPubKey = $('#sellerSelectedSaleBuySatisfyPetition').text();
 
   // Info about buy
   const kwhAmountBuy = $('#amountBuyModalSatisfyPetition').val()
   const buyWritedate = $('#writedateBuyModalSatisfyPetition').val()
-  const buyName = $('#buyIDBuyModalSatisfyPetition').val()
+  const counterpartID = $('#buyIDBuyModalSatisfyPetition').val()
   const buyerPrivKey = $('#buyerPrivateKeyBuyModalSatisfyPetition').val()
-  app.updateSatisfyBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPrivKey)
+  app.updateSatisfyBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, kwhAmountBuy, buyWritedate, counterpartID, buyerPrivKey)
+  app.updateIds();
 })
 
 // Edit BuyPetition
@@ -40673,13 +40687,13 @@ $('#editBuyPetitionBut').on('click', function () {
   const pricePerKwh = $('#priceSelectedSaleBuyEDBuyPetition').val();
   const createWritedate = $('#createWdSelectedSaleBuyEDBuyPetition').text();
   const validWritedate = $('#validWdSelectedSaleBuyEDBuyPetition').text();
-  const saleName = $('#idSelectedSaleBuyEDBuyPetition').text();
+  const elementID = $('#idSelectedSaleBuyEDBuyPetition').text();
   const sellerPubKey = $('#sellerSelectedSaleBuyEDBuyPetition').text();
   // User that tries to edit the sale, must be the one who created it
   const buyerPrivKey = $('#buyerPrivateKeyBuyModalEditDeleteBuyPetition').val();
   console.log("Owner pub key: "+sellerPubKey+ "\n editer priv key:"+buyerPrivKey);
 
-  app.updateEditBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, buyerPrivKey)
+  app.updateEditBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, buyerPrivKey)
 })
 
 // Delete BuyPetition
@@ -40690,13 +40704,13 @@ $('#deleteBuyPetitionBut').on('click', function () {
   const pricePerKwh = $('#priceSelectedSaleBuyEDBuyPetition').val();
   const createWritedate = $('#createWdSelectedSaleBuyEDBuyPetition').text();
   const validWritedate = $('#validWdSelectedSaleBuyEDBuyPetition').text();
-  const saleName = $('#idSelectedSaleBuyEDBuyPetition').text();
+  const elementID = $('#idSelectedSaleBuyEDBuyPetition').text();
   const sellerPubKey = $('#sellerSelectedSaleBuyEDBuyPetition').text();
   // User that tries to delete the sale, must be the one who created it
   const buyerPrivKey = $('#buyerPrivateKeyBuyModalEditDeleteBuyPetition').val();
 
   console.log("Owner pub key: "+sellerPubKey+ "\n deleter priv key:"+buyerPrivKey);
-  app.updateDeleteBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, buyerPrivKey)
+  app.updateDeleteBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, buyerPrivKey)
 })
 
 
@@ -40709,6 +40723,7 @@ $('#buyModal').modal({
   var closestRow = $(event.target).closest('tr')
   var getIdFromRow = closestRow.data('id');
   $('#buyIDBuyModal').val("");
+  app.updateIds();
   console.log("G e t id from R o w")
   console.log(getIdFromRow)
   var amountToLoadModal = closestRow.find('td:eq(0)').text();
@@ -40721,7 +40736,7 @@ $('#buyModal').modal({
       '<b>Creation Date : </b> <label id="createWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].createWritedate + '</label><br>'+
       '<b>Validity Date : </b> <label id="validWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].validWritedate + '</label><br>'+
       '<b style="display:none">Seller Public Key : </b> <label id="sellerSelectedSaleBuy" style="display:none">' + app.salePetitions[getIdFromRow].sellerPubKey + '</label><br>'+
-      '<label id="idSelectedSaleBuy" style="display:none">' + app.salePetitions[getIdFromRow].saleName + '</label>'
+      '<label id="idSelectedSaleBuy" style="display:none">' + app.salePetitions[getIdFromRow].elementID + '</label>'
     )
   )
   $('#amountBuyModal').val("");
@@ -40749,7 +40764,7 @@ $('#editDeleteModalSale').modal({
       '<b>Creation Date : </b> <label id="createWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].createWritedate + '</label><br>'+
       '<b>Validity Date : </b> <label id="validWdSelectedSaleBuy">' + app.salePetitions[getIdFromRow].validWritedate + '</label><br>'+
       '<b>Seller Public Key : </b> <label id="sellerSelectedSaleBuy" style=>' + app.salePetitions[getIdFromRow].sellerPubKey + '</label><br>'+
-      '<b>Sale ID : </b><label id="idSelectedSaleBuy" >' + app.salePetitions[getIdFromRow].saleName + '</label>'
+      '<b>Sale ID : </b><label id="idSelectedSaleBuy" >' + app.salePetitions[getIdFromRow].elementID + '</label>'
     )
   )
   $('#amountSelectedSaleBuyED').val(amountToLoadModal);
@@ -40758,7 +40773,35 @@ $('#editDeleteModalSale').modal({
 
 });
 
+// Buy selected sale of Energy
+$('#buyModalSatisfyPetition').modal({
+  keyboarnd: true,
+  backdrop: "static",
+  show:false,
+}).on('show.bs.modal', function(){
+  var closestRow = $(event.target).closest('tr')
+  var getIdFromRow = closestRow.data('id');
+  $('#buyIDBuyModalSatisfyPetition').val("");
+  app.updateIds();
+  console.log("G e t id from R o w")
+  console.log(getIdFromRow)
+  var amountToLoadModal = closestRow.find('td:eq(0)').text();
+  console.log(amountToLoadModal)
+  // Ajax calls to populate modal
+  $('#resultBuyContainerSatisfyPetition').css("visibility", "hidden")
+  $(this).find('#BuyPetitionDetails').html(
+    $('<b> Amount requested (KwH): </b> <label id="amountSelectedSaleBuySatisfyPetition">' + amountToLoadModal + '</label><br>'+
+      '<b>Price per KhW : </b> <label id="priceSelectedSaleBuySatisfyPetition">' + app.buyPetitions[getIdFromRow].pricePerKwh + '</label><br>'+
+      '<b>Creation Date : </b> <label id="createWdSelectedSaleBuySatisfyPetition">' + app.buyPetitions[getIdFromRow].createWritedate + '</label><br>'+
+      '<b>Validity Date : </b> <label id="validWdSelectedSaleBuySatisfyPetition">' + app.buyPetitions[getIdFromRow].validWritedate + '</label><br>'+
+      '<b style="display:none">Buy petition creator Public Key : </b> <label id="sellerSelectedSaleBuySatisfyPetition" style="display:none">' + app.buyPetitions[getIdFromRow].sellerPubKey + '</label><br>'+
+      '<label id="idSelectedSaleBuySatisfyPetition" style="display:none">' + app.buyPetitions[getIdFromRow].elementID + '</label>'
+    )
+  )
+  $('#amountBuyModalSatisfyPetition').val("");
+  $('#totalCostBuyModalSatisfyPetition').val(0);
 
+});
 
 
 // edit - delete petition of Energy
@@ -40781,7 +40824,7 @@ $('#editDeleteModalBuyPetition').modal({
       '<b>Creation Date : </b> <label id="createWdSelectedSaleBuyEDBuyPetition">' + app.buyPetitions[getIdFromRow].createWritedate + '</label><br>'+
       '<b>Validity Date : </b> <label id="validWdSelectedSaleBuyEDBuyPetition">' + app.buyPetitions[getIdFromRow].validWritedate + '</label><br>'+
       '<b>Seller Public Key : </b> <label id="sellerSelectedSaleBuyEDBuyPetition" style=>' + app.buyPetitions[getIdFromRow].sellerPubKey + '</label><br>'+
-      '<b>Sale ID : </b><label id="idSelectedSaleBuyEDBuyPetition" >' + app.buyPetitions[getIdFromRow].saleName + '</label>'
+      '<b>Sale ID : </b><label id="idSelectedSaleBuyEDBuyPetition" >' + app.buyPetitions[getIdFromRow].elementID + '</label>'
     )
   )
   $('#amountSelectedSaleBuyEDBuyPetition').val(amountToLoadModal);

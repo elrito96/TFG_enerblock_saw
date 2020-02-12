@@ -52,7 +52,7 @@ class EnerblockTransactionHandler(TransactionHandler):
         state = EnerblockState(context)
 
         LOGGER.info('Handling transaction: Name: %s, Operation: %s , Amount: %s, Price %s',
-                    payload.saleName,
+                    payload.elementID,
                     payload.operation,
                     payload.kwhAmountSell,
                     payload.pricePerKwh)
@@ -63,7 +63,7 @@ class EnerblockTransactionHandler(TransactionHandler):
                         pricePerKwh = payload.pricePerKwh,
                         createWritedate = payload.createWritedate,
                         validWritedate = payload.validWritedate,
-                        saleName = payload.saleName,
+                        elementID = payload.elementID,
                         sellerPubKey = signer,
                         state=state)
 
@@ -72,7 +72,7 @@ class EnerblockTransactionHandler(TransactionHandler):
                         pricePerKwh = payload.pricePerKwh,
                         createWritedate = payload.createWritedate,
                         validWritedate = payload.validWritedate,
-                        saleName = payload.saleName,
+                        elementID = payload.elementID,
                         sellerPubKey = signer,
                         state=state)
 
@@ -81,11 +81,11 @@ class EnerblockTransactionHandler(TransactionHandler):
                         pricePerKwh = payload.pricePerKwh,
                         createWritedate = payload.createWritedate,
                         validWritedate = payload.validWritedate,
-                        saleName = payload.saleName,
+                        elementID = payload.elementID,
                         sellerPubKey = payload.sellerPubKey,
                         kwhAmountBuy = payload.kwhAmountBuy,
                         buyWritedate = payload.buyWritedate,
-                        buyName = payload.buyName,
+                        counterpartID = payload.counterpartID,
                         buyerPubKey = signer,
                         state=state)
 
@@ -94,11 +94,11 @@ class EnerblockTransactionHandler(TransactionHandler):
                         pricePerKwh = payload.pricePerKwh,
                         createWritedate = payload.createWritedate,
                         validWritedate = payload.validWritedate,
-                        saleName = payload.saleName,
+                        elementID = payload.elementID,
                         sellerPubKey = payload.sellerPubKey,
                         kwhAmountBuy = payload.kwhAmountBuy,
                         buyWritedate = payload.buyWritedate,
-                        buyName = payload.buyName,
+                        counterpartID = payload.counterpartID,
                         buyerPubKey = signer,
                         state=state)
 
@@ -107,13 +107,13 @@ class EnerblockTransactionHandler(TransactionHandler):
                         pricePerKwh = payload.pricePerKwh,
                         createWritedate = payload.createWritedate,
                         validWritedate = payload.validWritedate,
-                        saleName = payload.saleName,
+                        elementID = payload.elementID,
                         sellerPubKey = payload.sellerPubKey,
                         transactionCreator = signer,
                         state=state)
 
         elif payload.operation == 'deleteSale':
-            _delete_sale(saleName = payload.saleName,
+            _delete_sale(elementID = payload.elementID,
                         sellerPubKey = payload.sellerPubKey,
                         transactionCreator = signer,
                         state=state)
@@ -123,13 +123,13 @@ class EnerblockTransactionHandler(TransactionHandler):
                         pricePerKwh = payload.pricePerKwh,
                         createWritedate = payload.createWritedate,
                         validWritedate = payload.validWritedate,
-                        saleName = payload.saleName,
+                        elementID = payload.elementID,
                         sellerPubKey = payload.sellerPubKey,
                         transactionCreator = signer,
                         state=state)
 
         elif payload.operation == 'deleteBuyPetition':
-            _delete_buyPetition(saleName = payload.saleName,
+            _delete_buyPetition(elementID = payload.elementID,
                         sellerPubKey = payload.sellerPubKey,
                         transactionCreator = signer,
                         state=state)
@@ -140,83 +140,83 @@ class EnerblockTransactionHandler(TransactionHandler):
                 payload.operation))
 
 
-def _create_sale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, state):
-    if state.get_sale(saleName) is not None:
+def _create_sale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, state):
+    if state.get_sale(elementID) is not None:
         raise InvalidTransaction(
-            'Invalid action: This sell already exists: {}'.format(saleName))
-    print("Set sale id: "+saleName)
-    state.set_sale('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+            'Invalid action: This sell already exists: {}'.format(elementID))
+    print("Set sale id: "+elementID)
+    state.set_sale('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey)
 
-def _edit_sale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, transactionCreator, state):
-    if state.get_sale(saleName) is None:
+def _edit_sale(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, transactionCreator, state):
+    if state.get_sale(elementID) is None:
         raise InvalidTransaction(
-            'This sell doesnt exist: {}'.format(saleName))
-    print("Set sale id: "+saleName)
+            'This sell doesnt exist: {}'.format(elementID))
+    print("Set sale id: "+elementID)
     if sellerPubKey != transactionCreator:
         raise InvalidTransaction("Only the sale creator can edit the sale")
 
-    state.set_sale('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+    state.set_sale('putOnSale', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey)
 
-def _delete_sale(saleName, sellerPubKey, transactionCreator, state):
-    if state.get_sale(saleName) is None:
+def _delete_sale(elementID, sellerPubKey, transactionCreator, state):
+    if state.get_sale(elementID) is None:
         raise InvalidTransaction(
-            'This sell doesnt exist: {}'.format(saleName))
+            'This sell doesnt exist: {}'.format(elementID))
     print(" selelr ")
     if sellerPubKey != transactionCreator:
         raise InvalidTransaction("Only the sale creator can delete the sale")
 
-    print("Set sale id: "+saleName)
-    state.delete_sale(saleName)
+    print("Set sale id: "+elementID)
+    state.delete_sale(elementID)
 
 
-def _create_buyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, state):
-    if state.get_buyPetition(saleName) is not None:
+def _create_buyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, state):
+    if state.get_buyPetition(elementID) is not None:
         raise InvalidTransaction(
-            'Invalid action: This buy petition already exists: {}'.format(saleName))
-    print("Set sale id: "+saleName)
-    state.set_buyPetition('createBuyPetition', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+            'Invalid action: This buy petition already exists: {}'.format(elementID))
+    print("Set sale id: "+elementID)
+    state.set_buyPetition('createBuyPetition', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey)
 
-def _edit_buyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, transactionCreator, state):
-    if state.get_buyPetition(saleName) is None:
+def _edit_buyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, transactionCreator, state):
+    if state.get_buyPetition(elementID) is None:
         raise InvalidTransaction(
-            'This buyPetition doesnt exist: {}'.format(saleName))
-    print("Set sale id: "+saleName)
+            'This buyPetition doesnt exist: {}'.format(elementID))
+    print("Set sale id: "+elementID)
     if sellerPubKey != transactionCreator:
         raise InvalidTransaction("Only the buy petition creator can edit the buy petition")
 
-    state.set_buyPetition('createBuyPetition', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+    state.set_buyPetition('createBuyPetition', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey)
 
-def _delete_buyPetition(saleName, sellerPubKey, transactionCreator, state):
-    if state.get_buyPetition(saleName) is None:
+def _delete_buyPetition(elementID, sellerPubKey, transactionCreator, state):
+    if state.get_buyPetition(elementID) is None:
         raise InvalidTransaction(
-            'This buy Petition doesnt exist: {}'.format(saleName))
+            'This buy Petition doesnt exist: {}'.format(elementID))
     print(" selelr ")
     if sellerPubKey != transactionCreator:
         raise InvalidTransaction("Only the buy petition creator can delete the buy petition")
 
-    state.delete_buyPetition(saleName)
+    state.delete_buyPetition(elementID)
 
-def _create_buy(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey, state):
-    if state.get_buy(buyName) is not None:
+def _create_buy(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, kwhAmountBuy, buyWritedate, counterpartID, buyerPubKey, state):
+    if state.get_buy(counterpartID) is not None:
         raise InvalidTransaction(
-            'Invalid action: This buy already exists: {}'.format(buyName))
+            'Invalid action: This buy already exists: {}'.format(counterpartID))
 
-    print("-* Buying, buy id *-: "+buyName)
-    state.set_buy('buy', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey)
+    print("-* Buying, buy id *-: "+counterpartID)
+    state.set_buy('buy', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, kwhAmountBuy, buyWritedate, counterpartID, buyerPubKey)
     # Change sale state, updating amount of energy
     newSaleAmount = int(kwhAmountSell) - int(kwhAmountBuy)
-    state.set_sale('putOnSale', str(newSaleAmount) , pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+    state.set_sale('putOnSale', str(newSaleAmount) , pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey)
 
-def _create_satisfyBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey, state):
-    if state.get_satisfyBuyPetition(buyName) is not None:
+def _create_satisfyBuyPetition(kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, kwhAmountBuy, buyWritedate, counterpartID, buyerPubKey, state):
+    if state.get_satisfyBuyPetition(counterpartID) is not None:
         raise InvalidTransaction(
-            'Invalid action: This satisfy buy petition already exists: {}'.format(buyName))
+            'Invalid action: This satisfy buy petition already exists: {}'.format(counterpartID))
 
 
-    state.set_satisfyBuyPetition('satisfyBuyPetition', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey, kwhAmountBuy, buyWritedate, buyName, buyerPubKey)
+    state.set_satisfyBuyPetition('satisfyBuyPetition', kwhAmountSell, pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey, kwhAmountBuy, buyWritedate, counterpartID, buyerPubKey)
     # Change sale state, updating amount of energy
     newSaleAmount = int(kwhAmountSell) - int(kwhAmountBuy)
-    state.set_buyPetition('createBuyPetition', str(newSaleAmount) , pricePerKwh, createWritedate, validWritedate, saleName, sellerPubKey)
+    state.set_buyPetition('createBuyPetition', str(newSaleAmount) , pricePerKwh, createWritedate, validWritedate, elementID, sellerPubKey)
 
 
 '''

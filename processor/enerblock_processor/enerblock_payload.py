@@ -51,7 +51,7 @@ class EnerblockPayload(object):
         pricePerKwh = data.get('pricePerKwh')
         createWritedate = data.get('createWritedate')
         validWritedate = data.get('validWritedate')
-        saleName = data.get('saleName')
+        elementID = data.get('elementID')
 
         # Sell section
         if operation == 'putOnSale' or operation == 'editSale' or operation == 'deleteSale' :
@@ -105,15 +105,15 @@ class EnerblockPayload(object):
                 raise InvalidTransaction("Validity date can't be earlier than creation date")
 
 
-            if not saleName:
-                raise InvalidTransaction('Sale id (saleName) is required')
+            if not elementID:
+                raise InvalidTransaction('Sale id (elementID) is required')
 
             self._operation = operation
             self._kwhAmountSell = kwhAmountSell
             self._pricePerKwh = pricePerKwh
             self._createWritedate = createWritedate
             self._validWritedate = validWritedate
-            self._saleName = saleName
+            self._elementID = elementID
 
         # create Buy Petition section
         elif operation == 'createBuyPetition' or operation == 'editBuyPetition' or operation == 'deleteBuyPetition' :
@@ -163,7 +163,7 @@ class EnerblockPayload(object):
             validDate = datetime.strptime(validWritedate, '%Y-%m-%d %H:%M:%S')
             if validDate < createDate:
                 raise InvalidTransaction("Validity date can't be earlier than creation date")
-            if not saleName:
+            if not elementID:
                 raise InvalidTransaction('Petition ID is required')
 
             self._operation = operation
@@ -171,15 +171,15 @@ class EnerblockPayload(object):
             self._pricePerKwh = pricePerKwh
             self._createWritedate = createWritedate
             self._validWritedate = validWritedate
-            self._saleName = saleName
+            self._elementID = elementID
 
         # Buy section
         elif operation == "buy":
             sellerPubKey = data.get('sellerPubKey')
             kwhAmountBuy = data.get('kwhAmountBuy')
             buyWritedate = data.get('buyWritedate')
-            saleName = data.get('saleName')
-            buyName = data.get('buyName')
+            elementID = data.get('elementID')
+            counterpartID = data.get('counterpartID')
             buyerPubKey = transactionCreator
 
             if not kwhAmountBuy:
@@ -194,10 +194,10 @@ class EnerblockPayload(object):
                 raise InvalidTransaction('Amount to buy is required to buy')
             if not buyWritedate:
                 raise InvalidTransaction('Date of buy is required to buy')
-            if not saleName:
-                raise InvalidTransaction('Sale id (saleName) required to buy')
-            if not buyName:
-                raise InvalidTransaction('Buy id (buyName) required to buy')
+            if not elementID:
+                raise InvalidTransaction('Sale id (elementID) required to buy')
+            if not counterpartID:
+                raise InvalidTransaction('Buy id (counterpartID) required to buy')
             if not buyerPubKey:
                 raise InvalidTransaction('A buyer is required to buy')
 
@@ -210,11 +210,11 @@ class EnerblockPayload(object):
             self._pricePerKwh = pricePerKwh
             self._createWritedate = createWritedate
             self._validWritedate = validWritedate
-            self._saleName = saleName
+            self._elementID = elementID
             self._sellerPubKey = sellerPubKey
             self._kwhAmountBuy = kwhAmountBuy
             self._buyWritedate = buyWritedate
-            self._buyName = buyName
+            self._counterpartID = counterpartID
             self._buyerPubKey = buyerPubKey
 
         # Buy section
@@ -222,8 +222,8 @@ class EnerblockPayload(object):
             sellerPubKey = data.get('sellerPubKey')
             kwhAmountBuy = data.get('kwhAmountBuy')
             buyWritedate = data.get('buyWritedate')
-            saleName = data.get('saleName')
-            buyName = data.get('buyName')
+            elementID = data.get('elementID')
+            counterpartID = data.get('counterpartID')
             buyerPubKey = transactionCreator
 
             if not kwhAmountBuy:
@@ -238,9 +238,9 @@ class EnerblockPayload(object):
                 raise InvalidTransaction('Amount to offer is required')
             if not buyWritedate:
                 raise InvalidTransaction('Date is required to buy')
-            if not saleName:
+            if not elementID:
                 raise InvalidTransaction('Buy Petition id required')
-            if not buyName:
+            if not counterpartID:
                 raise InvalidTransaction('Satisfy Buy Petition id is required ')
             if not buyerPubKey:
                 raise InvalidTransaction('A key is required to satisfy a buy petition')
@@ -253,11 +253,11 @@ class EnerblockPayload(object):
             self._pricePerKwh = pricePerKwh
             self._createWritedate = createWritedate
             self._validWritedate = validWritedate
-            self._saleName = saleName
+            self._elementID = elementID
             self._sellerPubKey = sellerPubKey
             self._kwhAmountBuy = kwhAmountBuy
             self._buyWritedate = buyWritedate
-            self._buyName = buyName
+            self._counterpartID = counterpartID
             self._buyerPubKey = buyerPubKey
 
     @property
@@ -283,8 +283,8 @@ class EnerblockPayload(object):
         return self._validWritedate
 
     @property
-    def saleName(self):
-        return self._saleName
+    def elementID(self):
+        return self._elementID
 
     @property
     def sellerPubKey(self):
@@ -301,8 +301,8 @@ class EnerblockPayload(object):
         return self._buyWritedate
 
     @property
-    def buyName(self):
-            return self._buyName
+    def counterpartID(self):
+            return self._counterpartID
 
     @property
     def buyerPubKey(self):
